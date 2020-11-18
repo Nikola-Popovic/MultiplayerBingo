@@ -1,16 +1,45 @@
 package com.ift604.bingo.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 
 public class Card implements Serializable {
-    private List<Column> columns;
+    private HashMap<Coordinate, Box> number;
+    private int maxX;
+    private int maxY;
 
-    public Card(List<Column> columns) {
-        this.columns = columns;
+    public Card(HashMap<Coordinate, Box> numbers, int maxX, int maxY) {
+        this.number = numbers;
+        this.maxX = maxX;
+        this.maxY = maxY;
     }
 
-    public List<Column> getColumns() {
-        return columns;
+    public int getMaxX() {
+        return maxX;
+    }
+
+    public void setMaxX(int maxX) {
+        this.maxX = maxX;
+    }
+
+    public int getMaxY() {
+        return maxY;
+    }
+
+    public void setMaxY(int maxY) {
+        this.maxY = maxY;
+    }
+
+    public Card(HashMap<Coordinate, Box> number) {
+        this.number = number;
+    }
+
+    public HashMap<Coordinate, Box> getNumber() {
+        return number;
+    }
+
+    public void setNumber(HashMap<Coordinate, Box> number) {
+        this.number = number;
     }
 }

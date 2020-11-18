@@ -36,7 +36,7 @@ public class PlayerCardService extends IntentService {
         Bundle b = new Bundle();
         b.putSerializable("generatedCard", card);
         Intent i = new Intent();
-        i.setAction("RECEIVE");
+        i.setAction("PLAYER_CARD_RECEIVER");
         //TODO set action, if needed
         i.putExtra("playerCard", b);
         sendBroadcast(i);

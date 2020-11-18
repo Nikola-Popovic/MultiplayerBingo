@@ -1,22 +1,21 @@
 package com.ift604.bingo;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import com.ift604.bingo.controller.IListener;
 import com.ift604.bingo.model.Card;
-import com.ift604.bingo.model.Column;
+import com.ift604.bingo.model.Coordinate;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,15 +25,17 @@ import com.ift604.bingo.model.Column;
 public class CardFragment extends Fragment {
 
     private static final String CARD = "card";
-
+    private static final String LISTENER = "listener";
+    private IListener listener;
     public CardFragment() {
         // Required empty public constructor
     }
 
-    public static CardFragment newInstance(Card card) {
+    public static CardFragment newInstance(Card card, IListener listener) {
         CardFragment fragment = new CardFragment();
         Bundle args = new Bundle();
         args.putSerializable(CARD, card);
+        args.putSerializable(LISTENER, listener);
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,8 +43,6 @@ public class CardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Card card = DummyCard.generateDummyCard();
-
     }
 
     @Override
@@ -53,6 +52,7 @@ public class CardFragment extends Fragment {
         TableLayout table = cardFragment.findViewById(R.id.cardTable);
 
         Card card = (Card) getArguments().getSerializable(CARD);
+        listener = (IListener) getArguments().getSerializable(LISTENER);
         createCard(table, card);
         return cardFragment;
     }
@@ -66,34 +66,31 @@ public class CardFragment extends Fragment {
 
 
     private void createCardHeader(TableLayout table, Card card, int id) {
-        for (Column col : card.getColumns()) {
-            TableRow row = new TableRow(getContext());
-            row.setId(id);
+        for (int i = 0; i < card.getMaxX(); i++) {
+            final ArrayList<String> bingo = new ArrayList<>(Arrays.asList("B", "I", "N", "G", "O"));
+            TableRow tableRow = new TableRow(getContext());
+            tableRow.setId(id);
             TableLayout.LayoutParams p = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1f);
-            row.setLayoutParams(p);
-            getFragmentManager().beginTransaction().add(row.getId(), CardHeaderFragment.newInstance(col.getLetter()), "joli tag" + id).commit();
-            table.addView(row);
+            tableRow.setLayoutParams(p);
+            getFragmentManager().beginTransaction().add(tableRow.getId(), CardHeaderFragment.newInstance(bingo.get(i)), "joli tag" + id).commit();
+            table.addView(tableRow);
         }
     }
 
     private void createCardColumns(TableLayout table, Card card, int id) {
-        for (int cardColumnIndex = 0; cardColumnIndex < card.getColumns().get(0).getNumber().size(); cardColumnIndex++) {
-            TableRow row = createCardRows(card, id, cardColumnIndex);
-            table.addView(row);
+        //Card must be a square. Otherwise, diagonal makes no sense
+        for (int y = 0; y < card.getMaxY(); y++) {
+            for (int x = 0; x < card.getMaxX(); x++) {
+                TableRow tableRow = new TableRow(getContext());
+                tableRow.setId(id);
+                TableLayout.LayoutParams p = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+                tableRow.setLayoutParams(p);
+                Coordinate coordinate = new Coordinate(x, y);
+                getFragmentManager().beginTransaction().add(tableRow.getId(), CardNumberFragment.newInstance(coordinate, card.getNumber().get(coordinate), listener), "joli tag" + id).commit();
+                table.addView(tableRow);
+            }
             id++;
         }
-    }
-
-    private TableRow createCardRows(Card card, int id, int cardColumnIndex) {
-        TableRow row = new TableRow(getContext());
-        row.setId(id);
-        TableLayout.LayoutParams p = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
-        row.setLayoutParams(p);
-        for (int cardRowIndex = 0; cardRowIndex < card.getColumns().size(); cardRowIndex++) {
-            Integer number = card.getColumns().get(cardRowIndex).getNumber().get(cardColumnIndex);
-            getFragmentManager().beginTransaction().add(row.getId(), CardNumberFragment.newInstance(number), "joli tag" + id).commit();
-        }
-        return row;
     }
 
     @Override

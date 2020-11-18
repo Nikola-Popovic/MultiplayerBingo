@@ -13,15 +13,22 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.ift604.bingo.controller.GameController;
+import com.ift604.bingo.controller.IListener;
 import com.ift604.bingo.model.Card;
+import com.ift604.bingo.model.Coordinate;
 
-public class MainActivity extends AppCompatActivity {
+//TODO THIS WILL BE CALLED QUAND LA GAME VA ETRE LANCÉ, pas dans le main activity. SO THIS CLASS WILL BE RENAMED TO GAME ACTIVITY
+public class MainActivity extends AppCompatActivity implements IListener {
 
-    FrameLayout playerCard;
+    FrameLayout playerCardFrameLayout;
+    public GameController gameController;
+    MainActivity mainActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO THIS WILL BE CALLED QUAND LA GAME VA ETRE LANCÉ
+        mainActivity = this;
         Intent generateCardService = new Intent(this, PlayerCardService.class);
         setContentView(R.layout.activity_main);
         Button previousNumberButton = findViewById(R.id.previous_number_button);
@@ -33,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 previousNumberGrid.show(fm, "");
             }
         });
-        playerCard = findViewById(R.id.player_card_frame_layout);
+        playerCardFrameLayout = findViewById(R.id.player_card_frame_layout);
         startService(generateCardService);
         registerPlayerCardReceiver();
         ImageView c = findViewById(R.id.player_game_background_image);
@@ -43,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private void registerPlayerCardReceiver() {
         PlayerCardReceiver receiver = new PlayerCardReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("RECEIVE");
+        intentFilter.addAction("PLAYER_CARD_RECEIVER");
         registerReceiver(receiver, intentFilter);
     }
 
@@ -51,7 +58,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Card card = (Card) intent.getBundleExtra("playerCard").getSerializable("generatedCard");
-            getSupportFragmentManager().beginTransaction().add(playerCard.getId(), CardFragment.newInstance(card), "un autre joli tag").commit();
+            gameController = new GameController(card);
+            getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, mainActivity), "un autre joli tag").commit();
+        }
+    }
+
+    @Override
+    public void onBoxClick(Coordinate coordinate) {
+        gameController.markBoxForPlayer(coordinate);
+        if (gameController.verifyIfBingo(coordinate)) {
+            findViewById(R.id.bingo_button).setEnabled(true);
         }
     }
 }
