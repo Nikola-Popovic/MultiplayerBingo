@@ -3,8 +3,12 @@ package com.ift604.bingo;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Box;
 import com.ift604.bingo.model.Coordinate;
+import com.ift604.bingo.model.Lobby;
+import com.ift604.bingo.model.Participant;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 //TODO this class will have no purpose. His purpose for now is because there is no backend
@@ -52,5 +56,21 @@ public class DummyCard {
         bColList.putAll(oColList);
 
         return new Card(bColList, 5, 5);
+    }
+
+    private static List<Participant> dummyParticipant(int lobbyId) {
+        List<Participant> participants = new ArrayList();
+        for (int i = 0; i < 5; i++) {
+            participants.add(new Participant(lobbyId + i, "Luc", "Lavoie " + i + lobbyId));
+        }
+        return participants;
+    }
+
+    public static ArrayList<Lobby> dummyLobby() {
+        ArrayList<Lobby> lobbies = new ArrayList();
+        for (int i = 0; i < 10; i++) {
+            lobbies.add(new Lobby(i, "Lobby " + i, dummyParticipant(i), "Location vide"));
+        }
+        return lobbies;
     }
 }
