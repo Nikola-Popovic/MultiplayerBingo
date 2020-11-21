@@ -7,4 +7,7 @@
     <string name="create_lobby">Create Lobby</string>
     <string name="join_lobby">Join Lobby</string>
     <string name="name">Lobby Name</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
+    <string name="join">Join</string>
 </resources>
