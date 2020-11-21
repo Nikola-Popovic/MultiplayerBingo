@@ -11,4 +11,9 @@ public class Datasource implements IBingoRepository {
     public Card getPlayerCard() {
         return todorename.buildCard("");
     }
+
+    @Override
+    public void sendWinnerCardForValidation() {
+
+    }
 }

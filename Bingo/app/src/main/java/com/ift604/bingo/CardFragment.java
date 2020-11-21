@@ -78,7 +78,6 @@ public class CardFragment extends Fragment {
     }
 
     private void createCardColumns(TableLayout table, Card card, int id) {
-        //Card must be a square. Otherwise, diagonal makes no sense
         for (int y = 0; y < card.getMaxY(); y++) {
             for (int x = 0; x < card.getMaxX(); x++) {
                 TableRow tableRow = new TableRow(getContext());

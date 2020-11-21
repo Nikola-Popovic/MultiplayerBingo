@@ -4,50 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main_screen"
     tools:context=".MainActivity">
 
 
-    <ImageView
-        android:id="@+id/player_game_background_image"
+    <!--    todo make the height responsive-->
+    <Button
+        android:id="@+id/lobby_create_game_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_lobby"
+        tools:layout_editor_absoluteX="25dp"
+        tools:layout_editor_absoluteY="77dp" />
+
+    <Button
+        android:id="@+id/lobby_join_game_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/join_lobby"
+        tools:layout_editor_absoluteX="293dp"
+        tools:layout_editor_absoluteY="77dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/box_number"
-        tools:layout_editor_absoluteX="73dp"
-        tools:layout_editor_absoluteY="126dp" />
-
-    <FrameLayout
-        android:id="@+id/player_card_frame_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </FrameLayout>
-
-    <Button
-        android:id="@+id/bingo_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="97dp"
-        android:enabled="false"
-        android:text="@string/bingo_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player_card_frame_layout" />
-
-    <Button
-        android:id="@+id/previous_number_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/see_previous_number"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
+        android:layout_height="605dp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="125dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

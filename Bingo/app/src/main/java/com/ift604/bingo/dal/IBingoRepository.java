@@ -5,4 +5,5 @@ import com.ift604.bingo.model.Card;
 
 public interface IBingoRepository {
   public Card getPlayerCard();
+  public void sendWinnerCardForValidation();
 }
