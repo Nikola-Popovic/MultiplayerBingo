@@ -21,6 +21,4 @@ public class WaitLobbyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wait_lobby);
     }
-
-
 }

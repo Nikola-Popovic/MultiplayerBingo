@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WaitLobbyActivity"></activity>
+        <service
+            android:name=".service.JoinLobbyService"
+            android:exported="false"></service>
+
+        <activity android:name=".WaitLobbyActivity" />
         <activity android:name=".GameActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -20,10 +24,13 @@
         </activity>
 
         <service
-            android:name=".PlayerCardService"
+            android:name=".service.PlayerCardService"
             android:enabled="true" />
         <service
-            android:name=".FindLobbyNearMeService"
+            android:name=".service.FindLobbyNearMeService"
+            android:enabled="true" />
+        <service
+            android:name=".service.CreateLobbyService"
             android:enabled="true" />
     </application>
 

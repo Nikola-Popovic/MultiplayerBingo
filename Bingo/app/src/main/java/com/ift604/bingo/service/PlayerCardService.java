@@ -1,4 +1,4 @@
-package com.ift604.bingo;
+package com.ift604.bingo.service;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -14,14 +14,15 @@ import com.ift604.bingo.model.Lobby;
 
 import java.util.ArrayList;
 
-public class FindLobbyNearMeService extends IntentService {
+//TODO MOVE DANS SERVICE
+public class PlayerCardService extends IntentService {
     IBingoRepository bingoRepository;
 
-    public FindLobbyNearMeService(String name) {
+    public PlayerCardService(String name) {
         super(name);
     }
 
-    public FindLobbyNearMeService() {
+    public PlayerCardService() {
         super("");
         bingoRepository = new Datasource();
     }
@@ -34,15 +35,13 @@ public class FindLobbyNearMeService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
-        ArrayList<Lobby> lobbies = bingoRepository.getLobbiesNearMe();
+        Card card = bingoRepository.getPlayerCard();
         Bundle b = new Bundle();
-        b.putSerializable("lobbiesNearMeBundle", lobbies);
+        b.putSerializable("generatedCard", card);
         Intent i = new Intent();
-        //TODO MAKE THIS IN A VAR
-        i.setAction("LOBBIES");
+        i.setAction("PLAYER_CARD_RECEIVER");
         //TODO set action, if needed
-        i.putExtra("lobbiesNearMe", b);
+        i.putExtra("playerCard", b);
         sendBroadcast(i);
     }
 }

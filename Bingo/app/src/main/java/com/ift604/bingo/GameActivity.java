@@ -17,6 +17,7 @@ import com.ift604.bingo.controller.GameController;
 import com.ift604.bingo.controller.IListener;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Coordinate;
+import com.ift604.bingo.service.PlayerCardService;
 
 //TODO THIS WILL BE CALLED QUAND LA GAME VA ETRE LANCÉ, pas dans le main activity. SO THIS CLASS WILL BE RENAMED TO GAME ACTIVITY
 public class GameActivity extends AppCompatActivity implements IListener {

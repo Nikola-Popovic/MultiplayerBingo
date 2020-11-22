@@ -1,6 +1,9 @@
 package com.ift604.bingo;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
@@ -9,6 +12,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.ift604.bingo.model.Lobby;
+import com.ift604.bingo.service.CreateLobbyService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,11 +58,12 @@ public class CreateLobbyFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_lobby, container, false);
+        final DialogFragment dialog = this;
         view.findViewById(R.id.create_lobby_create_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO CALL LE SERVEUR QUI VA RETOURNER UN LOBBY_ID
-                startWaitLobbyFragment();
+                registerCreateLobbyReceiver();
+                startCreateLobbyService();
             }
         });
 
@@ -64,14 +71,40 @@ public class CreateLobbyFragment extends DialogFragment {
 
             @Override
             public void onClick(View v) {
-                //TODO DISMISS DIALOG;
+                dialog.dismiss();
             }
         });
         return view;
     }
 
-    private void startWaitLobbyFragment() {
-        Intent lobby = new Intent(getActivity(), WaitLobbyActivity.class);
-        startActivity(lobby);
+    private void startCreateLobbyService() {
+        Intent createLobbyService = new Intent(getActivity(), CreateLobbyService.class);
+        getActivity().startService(createLobbyService);
+    }
+
+    private void registerCreateLobbyReceiver() {
+        CreateLobbyReceiver receiver = new CreateLobbyReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("LOBBY");
+        requireActivity().registerReceiver(receiver, intentFilter);
+    }
+
+    private void startWaitLobbyFragment(Lobby lobby) {
+        Intent lobbyIntent = new Intent(getActivity(), WaitLobbyActivity.class);
+        lobbyIntent.putExtra("LOBBY", lobby);
+        startActivity(lobbyIntent);
+    }
+
+
+    public class CreateLobbyReceiver extends BroadcastReceiver {
+
+        public CreateLobbyReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Lobby lobby  = (Lobby) intent.getSerializableExtra("CREATED_LOBBY");
+            startWaitLobbyFragment(lobby);
+        }
     }
 }

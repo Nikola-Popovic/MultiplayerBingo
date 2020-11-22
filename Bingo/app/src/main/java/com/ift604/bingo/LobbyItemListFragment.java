@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ift604.bingo.model.Lobby;
+import com.ift604.bingo.service.FindLobbyNearMeService;
 
 import java.util.ArrayList;
 
