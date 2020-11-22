@@ -56,14 +56,13 @@ public class CreateLobbyFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_lobby, container, false);
         final DialogFragment dialog = this;
         view.findViewById(R.id.create_lobby_create_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registerCreateLobbyReceiver();
-                startCreateLobbyService();
+                startCreateLobbyService(dialog);
+                registerCreateLobbyReceiver(dialog);
             }
         });
 
@@ -77,16 +76,16 @@ public class CreateLobbyFragment extends DialogFragment {
         return view;
     }
 
-    private void startCreateLobbyService() {
-        Intent createLobbyService = new Intent(getActivity(), CreateLobbyService.class);
-        getActivity().startService(createLobbyService);
+    private void startCreateLobbyService(DialogFragment dialogFragment) {
+        Intent createLobbyService = new Intent(dialogFragment.getActivity(), CreateLobbyService.class);
+        dialogFragment.getActivity().startService(createLobbyService);
     }
 
-    private void registerCreateLobbyReceiver() {
+    private void registerCreateLobbyReceiver(DialogFragment dialogFragment) {
         CreateLobbyReceiver receiver = new CreateLobbyReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("LOBBY");
-        requireActivity().registerReceiver(receiver, intentFilter);
+        intentFilter.addAction("CREATE_LOBBY_RECEIVER");
+        dialogFragment.requireActivity().registerReceiver(receiver, intentFilter);
     }
 
     private void startWaitLobbyFragment(Lobby lobby) {
@@ -97,13 +96,9 @@ public class CreateLobbyFragment extends DialogFragment {
 
 
     public class CreateLobbyReceiver extends BroadcastReceiver {
-
-        public CreateLobbyReceiver() {
-        }
-
         @Override
         public void onReceive(Context context, Intent intent) {
-            Lobby lobby  = (Lobby) intent.getSerializableExtra("CREATED_LOBBY");
+            Lobby lobby  = (Lobby) intent.getSerializableExtra(CreateLobbyService.CREATED_LOBBY_EXTRA);
             startWaitLobbyFragment(lobby);
         }
     }

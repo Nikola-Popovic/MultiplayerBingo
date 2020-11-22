@@ -10,20 +10,12 @@ import androidx.annotation.Nullable;
 import com.ift604.bingo.dal.Datasource;
 import com.ift604.bingo.dal.IBingoRepository;
 import com.ift604.bingo.model.Card;
-import com.ift604.bingo.model.Lobby;
 
-import java.util.ArrayList;
-
-//TODO MOVE DANS SERVICE
 public class PlayerCardService extends IntentService {
     IBingoRepository bingoRepository;
 
-    public PlayerCardService(String name) {
-        super(name);
-    }
-
     public PlayerCardService() {
-        super("");
+        super("playerCardService");
         bingoRepository = new Datasource();
     }
 
