@@ -7,36 +7,75 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-
-<!--TODO CONSTRAINTLAYOUT-->
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/bingo_background">
 
-        <Button
-            android:id="@+id/lobby_create_game_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="265dp"
+            android:layout_height="405dp"
+            android:layout_marginTop="60sp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal|center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            android:text="@string/create_lobby" />
+            <Button
+                android:id="@+id/menu_find_lobby_button"
+                android:layout_width="180sp"
+                android:layout_height="60sp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20sp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="30dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/find_lobby"
+                android:background="@drawable/white_btn"
+                android:textColor="#363636"
+                android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/lobby_join_game_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/join_lobby" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/menu_create_game_button"
+                android:layout_width="180sp"
+                android:layout_height="60sp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="30dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/create_game"
+                android:textColor="#feffec"
+                android:background="@drawable/black_btn"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/menu_join_game_button"
+                android:layout_width="180sp"
+                android:layout_height="60sp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/white_btn"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/join_lobby"
+                android:textColor="#363636"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <fragment
         android:id="@+id/lobby_item_current_game_list"
         android:name="com.ift604.bingo.LobbyItemListFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent" />
 
 
 </LinearLayout>

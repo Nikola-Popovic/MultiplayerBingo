@@ -14,7 +14,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button createLobbyBtn = findViewById(R.id.lobby_create_game_button);
+        Button findLobbyBtn = findViewById(R.id.menu_find_lobby_button);
+        findLobbyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                // Get find lobby fragment
+                CreateLobbyFragment createLobbyFragment = CreateLobbyFragment.newInstance(0);
+                createLobbyFragment.show(fm, "");
+            }
+        });
+
+        
+        Button createLobbyBtn = findViewById(R.id.menu_create_game_button);
         createLobbyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -24,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
                 createLobbyFragment.show(fm, "");
             }
         });
-        Button joinLobbyBtn = findViewById(R.id.lobby_join_game_button);
+
+        Button joinLobbyBtn = findViewById(R.id.menu_join_game_button);
         joinLobbyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
