@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 
 import com.ift604.bingo.dal.Datasource;
 import com.ift604.bingo.dal.IBingoRepository;
-import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Lobby;
 
 import java.util.ArrayList;

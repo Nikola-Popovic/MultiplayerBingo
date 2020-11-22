@@ -9,9 +9,12 @@ import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.RelativeLayout;
 
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.CreateLobbyService;
@@ -57,6 +60,7 @@ public class CreateLobbyFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_lobby, container, false);
+
         final DialogFragment dialog = this;
         view.findViewById(R.id.create_lobby_create_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,8 +88,8 @@ public class CreateLobbyFragment extends DialogFragment {
     private void registerCreateLobbyReceiver(DialogFragment dialogFragment) {
         CreateLobbyReceiver receiver = new CreateLobbyReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("CREATE_LOBBY_RECEIVER");
-        dialogFragment.requireActivity().registerReceiver(receiver, intentFilter);
+        intentFilter.addAction(CreateLobbyService.CREATE_LOBBY_ACTION);
+        dialogFragment.getActivity().registerReceiver(receiver, intentFilter);
     }
 
     private void startWaitLobbyFragment(Lobby lobby) {
@@ -101,5 +105,16 @@ public class CreateLobbyFragment extends DialogFragment {
             Lobby lobby  = (Lobby) intent.getSerializableExtra(CreateLobbyService.CREATED_LOBBY_EXTRA);
             startWaitLobbyFragment(lobby);
         }
+    }
+
+    public void onResume()
+    {
+        super.onResume();
+        Window window = getDialog().getWindow();
+        int width = RelativeLayout.LayoutParams.MATCH_PARENT;
+        int height = getResources().getDimensionPixelSize(R.dimen.popup_height);
+        window.setLayout(width, height);
+        window.setGravity(Gravity.CENTER);
+        //TODO ca va pt pas dans on resume
     }
 }
