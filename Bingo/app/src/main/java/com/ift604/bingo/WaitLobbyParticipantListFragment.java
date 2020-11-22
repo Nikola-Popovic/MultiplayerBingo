@@ -1,5 +1,8 @@
 package com.ift604.bingo;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -60,5 +63,24 @@ public class WaitLobbyParticipantListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_wait_lobby_participant_list, container, false);
+    }
+
+
+    public class ParticipantsReceiver extends BroadcastReceiver {
+
+        public ParticipantsReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+//            Bundle b = intent.getBundleExtra("lobbiesNearMe");
+//            //todo bundle name, make it global in the other class
+//            lobbies = (ArrayList<Lobby>) b.getSerializable("lobbiesNearMeBundle");
+//            adapter.setLobbies(lobbies);
+//            adapter.notifyItemRangeChanged(position, lobbies.size());
+//            adapter.notifyDataSetChanged();
+//            //TODO REFRESH
+//            //      swipeRefreshLayout.setRefreshing(false);
+        }
     }
 }
