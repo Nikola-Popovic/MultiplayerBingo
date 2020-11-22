@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +21,7 @@ import com.ift604.bingo.service.FindLobbyNearMeService;
 
 import java.util.ArrayList;
 
-public class LobbyItemListFragment extends Fragment {
+public class LobbyItemListFragment extends DialogFragment {
 
     int position;
     RecyclerView lobbyRecyclerView;
@@ -35,6 +36,13 @@ public class LobbyItemListFragment extends Fragment {
 
     public LobbyItemListFragment(int position) {
         this.position = position;
+    }
+
+    public static LobbyItemListFragment newInstance() {
+        LobbyItemListFragment fragment = new LobbyItemListFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
