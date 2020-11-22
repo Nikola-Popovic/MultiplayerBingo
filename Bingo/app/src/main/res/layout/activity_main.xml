@@ -10,14 +10,27 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bingo_background">
+        android:background="@drawable/background_bingo">
+
+        <ImageView
+            android:id="@+id/menu_bingo_logo"
+            android:layout_width="292sp"
+            android:layout_height="104sp"
+            android:layout_marginTop="40sp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.454"
+            app:srcCompat="@drawable/bingo_logo" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="265dp"
-            android:layout_height="405dp"
-            android:layout_marginTop="60sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginTop="70sp"
             android:gravity="center_horizontal|center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -29,7 +42,6 @@
                 android:layout_width="180sp"
                 android:layout_height="60sp"
                 android:layout_gravity="center"
-                android:layout_marginTop="20sp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="30dp"

@@ -20,12 +20,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FragmentManager fm = getSupportFragmentManager();
                 // Get find lobby fragment
-                CreateLobbyFragment createLobbyFragment = CreateLobbyFragment.newInstance(0);
-                createLobbyFragment.show(fm, "");
+                LobbyItemListFragment lobbyItemListFragment = LobbyItemListFragment.newInstance();
+                lobbyItemListFragment.show(fm, "");
             }
         });
 
-        
+
         Button createLobbyBtn = findViewById(R.id.menu_create_game_button);
         createLobbyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
