@@ -13,5 +13,6 @@ public interface IBingoRepository {
   void sendWinnerCardForValidation();
   ArrayList<Lobby> getLobbiesNearMe();
   ArrayList<Participant> getLobbyParticipant(int lobbyId);
-
+  Lobby createLobby(int hostId);
+  void joinLobby(int lobbyId);
 }

@@ -36,6 +36,7 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 //TODO INFLATE WITH WAIT LOBBY FRAGMENT
             }
         });

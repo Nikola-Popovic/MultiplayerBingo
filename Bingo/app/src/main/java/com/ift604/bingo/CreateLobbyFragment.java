@@ -51,8 +51,8 @@ public class CreateLobbyFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_create_lobby, container, false);
-        view.findViewById(R.id.create_lobby_create_button).setOnClickListener(new View.OnClickListener(){
+        View view = inflater.inflate(R.layout.fragment_create_lobby, container, false);
+        view.findViewById(R.id.create_lobby_create_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO CALL LE SERVEUR QUI VA RETOURNER UN LOBBY_ID
@@ -60,7 +60,7 @@ public class CreateLobbyFragment extends DialogFragment {
             }
         });
 
-        view.findViewById(R.id.create_lobby_cancel_button).setOnClickListener(new View.OnClickListener(){
+        view.findViewById(R.id.create_lobby_cancel_button).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
