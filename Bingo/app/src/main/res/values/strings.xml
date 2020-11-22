@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Bingo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bingo_button">BINGO !</string>
+    <string name="see_previous_number">Voir les numéros précédents</string>
+    <string name="create_lobby">Create Lobby</string>
+    <string name="join_lobby">Join Lobby</string>
+    <string name="name">Lobby Name</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
+    <string name="join">Join</string>
+</resources>

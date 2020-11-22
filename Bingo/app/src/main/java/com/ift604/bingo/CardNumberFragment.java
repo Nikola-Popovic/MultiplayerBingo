@@ -1,0 +1,75 @@
+package com.ift604.bingo;
+
+import android.graphics.Color;
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.ift604.bingo.controller.GameController;
+import com.ift604.bingo.controller.IListener;
+import com.ift604.bingo.model.Box;
+import com.ift604.bingo.model.Coordinate;
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link CardNumberFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class CardNumberFragment extends Fragment {
+    private static final String BOX = "box";
+    private static final String COORDINATE = "coordinate";
+    private static final String LISTENER = "listener";
+    private Coordinate coordinate;
+    //todo implement listener
+    private IListener listener;
+
+    public CardNumberFragment() {
+        // Required empty public constructor
+    }
+
+    public static CardNumberFragment newInstance(Coordinate coordinate, Box box, IListener listener) {
+        CardNumberFragment fragment = new CardNumberFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(BOX, box);
+        args.putSerializable(COORDINATE, coordinate);
+        args.putSerializable(LISTENER, listener);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_card_number, container, false);
+        final TextView numberTextView = view.findViewById(R.id.box_button);
+
+        Box box = (Box) this.getArguments().getSerializable(BOX);
+        this.coordinate = (Coordinate) this.getArguments().getSerializable(COORDINATE);
+        this.listener = (IListener) this.getArguments().getSerializable(LISTENER);
+        numberTextView.setText(box.getNumber());
+        numberTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                markBox(numberTextView);
+            }
+        });
+        return view;
+    }
+
+    //TODO FOR LISTENER https://developer.android.com/training/basics/fragments/communicating.html
+    private void markBox(TextView b) {
+        b.setBackgroundColor(Color.parseColor("#0099ff"));
+        listener.onBoxClick(coordinate);
+    }
+}
