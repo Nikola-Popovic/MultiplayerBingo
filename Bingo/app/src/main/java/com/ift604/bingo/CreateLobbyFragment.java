@@ -110,10 +110,5 @@ public class CreateLobbyFragment extends DialogFragment {
 
     public void onResume() {
         super.onResume();
-        Window window = getDialog().getWindow();
-        int width = RelativeLayout.LayoutParams.MATCH_PARENT;
-        int height = getResources().getDimensionPixelSize(R.dimen.popup_height);
-        window.setLayout(width, height);
-        window.setGravity(Gravity.CENTER);
     }
 }

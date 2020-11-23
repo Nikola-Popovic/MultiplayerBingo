@@ -7,10 +7,16 @@
     <string name="create_lobby">Create Lobby</string>
     <string name="create_game">Create Game</string>
     <string name="enter_room_code">Enter room code</string>
+    <string name="enter_room_name">Enter room name</string>
     <string name="join_lobby">Join Lobby</string>
     <string name="find_lobby">Find Lobby</string>
     <string name="name">Lobby Name</string>
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>
     <string name="join">Join</string>
+    <string name="quit">Quit</string>
+    <string name="start">Start</string>
+    <string name="hello">Hello</string>
+    <string name="my_name_is">my name is</string>
+    <string name="anonyme">Anonyme</string>
 </resources>
