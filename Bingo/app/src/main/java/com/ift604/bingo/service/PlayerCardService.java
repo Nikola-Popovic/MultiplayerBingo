@@ -7,7 +7,7 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
-import com.ift604.bingo.dal.Datasource;
+import com.ift604.bingo.dal.RestServiceDatasource;
 import com.ift604.bingo.dal.IBingoRepository;
 import com.ift604.bingo.model.Card;
 
@@ -16,7 +16,7 @@ public class PlayerCardService extends IntentService {
 
     public PlayerCardService() {
         super("playerCardService");
-        bingoRepository = new Datasource();
+        bingoRepository = new RestServiceDatasource();
     }
 
     @Nullable

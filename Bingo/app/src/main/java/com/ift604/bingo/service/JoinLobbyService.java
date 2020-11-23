@@ -2,12 +2,13 @@ package com.ift604.bingo.service;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.Context;
 
 import androidx.annotation.Nullable;
 
-import com.ift604.bingo.dal.Datasource;
+import com.ift604.bingo.dal.RestServiceDatasource;
 import com.ift604.bingo.model.Lobby;
+
+import static com.ift604.bingo.service.CreateLobbyService.USER_ID;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -19,17 +20,17 @@ import com.ift604.bingo.model.Lobby;
 public class JoinLobbyService extends IntentService {
     public static final String JOIN_LOBBY_ACTION = "JOIN_LOBBY_ACTION";
     public static final String JOIN_LOBBY_EXTRA = "JOIN_LOBBY_EXTRA";
-    Datasource bingoRepository;
+    RestServiceDatasource bingoRepository;
     public JoinLobbyService() {
         super("JoinLobbyService");
-        bingoRepository = new Datasource();
+        bingoRepository = new RestServiceDatasource();
     }
 
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
-        Lobby lobby = bingoRepository.createLobby(0);
+        int userId = intent.getIntExtra(USER_ID, 0);
+        Lobby lobby = bingoRepository.createLobby(userId, "lobbyName");
         Intent i = new Intent();
         i.setAction(JOIN_LOBBY_ACTION);
         i.putExtra(JOIN_LOBBY_EXTRA, lobby);

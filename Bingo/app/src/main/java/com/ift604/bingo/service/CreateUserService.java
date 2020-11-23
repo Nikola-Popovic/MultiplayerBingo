@@ -2,25 +2,26 @@ package com.ift604.bingo.service;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
-import com.ift604.bingo.dal.RestServiceDatasource;
 import com.ift604.bingo.dal.IBingoRepository;
-import com.ift604.bingo.model.Lobby;
+import com.ift604.bingo.dal.RestServiceDatasource;
+import com.ift604.bingo.model.Participant;
 
-import java.util.ArrayList;
+public class CreateUserService extends IntentService {
+    public static  String CREATE_USER_ACTION = "CREATE_USER_ACTION";
+    public static  String CREATE_USER_EXTRA = "CREATE_USER_EXTRA";
 
-public class FindLobbyNearMeService extends IntentService {
     IBingoRepository bingoRepository;
 
-    public FindLobbyNearMeService(String name) {
+
+    public CreateUserService(String name) {
         super(name);
     }
 
-    public FindLobbyNearMeService() {
+    public CreateUserService() {
         super("");
         bingoRepository = new RestServiceDatasource();
     }
@@ -33,15 +34,10 @@ public class FindLobbyNearMeService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
-        ArrayList<Lobby> lobbies = bingoRepository.getLobbiesNearMe();
-        Bundle b = new Bundle();
-        b.putSerializable("lobbiesNearMeBundle", lobbies);
+        Participant participant = bingoRepository.createUser();
         Intent i = new Intent();
-        //TODO MAKE THIS IN A VAR
-        i.setAction("LOBBIES");
-        //TODO set action, if needed
-        i.putExtra("lobbiesNearMe", b);
+        i.setAction(CREATE_USER_ACTION);
+        i.putExtra(CREATE_USER_EXTRA, participant);
         sendBroadcast(i);
     }
 }

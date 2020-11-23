@@ -5,13 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.ift604.bingo.model.Lobby;
 
@@ -50,8 +49,6 @@ public class JoinLobbyFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
         View view =  inflater.inflate(R.layout.fragment_join_lobby, container, false);
         final DialogFragment dialog = this;
         view.findViewById(R.id.join_lobby_create_button).setOnClickListener(new View.OnClickListener() {

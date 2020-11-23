@@ -8,6 +8,7 @@ public class Lobby implements Serializable {
     String name;
     List<Participant> participants;
     String location;
+    Participant host;
     //TODO GERER LA LOCATION
 
 
@@ -16,6 +17,10 @@ public class Lobby implements Serializable {
         this.name = name;
         this.participants = participants;
         this.location = location;
+    }
+
+    public Lobby() {
+
     }
 
     public Integer getId() {
@@ -48,5 +53,13 @@ public class Lobby implements Serializable {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public Participant getHost() {
+        return host;
+    }
+
+    public void setHost(Participant host) {
+        this.host = host;
     }
 }
