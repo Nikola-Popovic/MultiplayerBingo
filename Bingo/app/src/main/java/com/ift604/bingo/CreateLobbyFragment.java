@@ -5,10 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +12,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.RelativeLayout;
 
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.CreateLobbyService;
+import com.ift604.bingo.util.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,6 +82,7 @@ public class CreateLobbyFragment extends DialogFragment {
 
     private void startCreateLobbyService(DialogFragment dialogFragment) {
         Intent createLobbyService = new Intent(dialogFragment.getActivity(), CreateLobbyService.class);
+        createLobbyService.putExtra(CreateLobbyService.USER_ID, Util.getConnectedUserId(dialogFragment.getContext()));
         dialogFragment.getActivity().startService(createLobbyService);
     }
 
@@ -107,8 +108,7 @@ public class CreateLobbyFragment extends DialogFragment {
         }
     }
 
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         Window window = getDialog().getWindow();
         int width = RelativeLayout.LayoutParams.MATCH_PARENT;

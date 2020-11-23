@@ -5,7 +5,6 @@ import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.model.Participant;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public interface IBingoRepository {
@@ -13,6 +12,7 @@ public interface IBingoRepository {
   void sendWinnerCardForValidation();
   ArrayList<Lobby> getLobbiesNearMe();
   ArrayList<Participant> getLobbyParticipant(int lobbyId);
-  Lobby createLobby(int hostId);
-  void joinLobby(int lobbyId);
+  Lobby createLobby(int hostId, String name);
+  void joinLobby(int lobbyId, int userId);
+  Participant createUser();
 }
