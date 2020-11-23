@@ -6,6 +6,9 @@ import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.model.Participant;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class RestServiceDatasource implements IBingoRepository {
@@ -48,7 +51,13 @@ public class RestServiceDatasource implements IBingoRepository {
 
     @Override
     public void joinLobby(int lobbyId, int userId) {
-        lobbyDAO.addPersonToLobby(lobbyId, userId);
+        try {
+            lobbyDAO.addPersonToLobby(lobbyId, userId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
