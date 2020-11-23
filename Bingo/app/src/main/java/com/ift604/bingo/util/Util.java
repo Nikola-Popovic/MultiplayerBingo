@@ -12,7 +12,7 @@ public class Util {
     public static final ArrayList<String> bingo = new ArrayList(Arrays.asList("B", "I", "N", "G", "O"));
     public static final String SharedPreferenceUserId = "USER_ID";
     public static String formatPlayerName(Participant player) {
-        return String.format("%s %s", player.getFirstName(), player.getLastName());
+        return String.format("%s", player.getUserName());
     }
 
     public static SharedPreferences sharedPref(Context context) {

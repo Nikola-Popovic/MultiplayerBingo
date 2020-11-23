@@ -13,15 +13,14 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ift604.bingo.model.Lobby;
-import com.ift604.bingo.util.Util;
 
 import java.util.ArrayList;
 
 public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.ViewHolder> {
     private ArrayList<Lobby> lobbies;
 
-    public LobbyItemAdapter(ArrayList<Lobby> matches) {
-        this.lobbies = matches;
+    public LobbyItemAdapter(ArrayList<Lobby> lobbies) {
+        this.lobbies = lobbies;
     }
 
     private Context context;
@@ -43,8 +42,9 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //TODO INFLATE WITH WAIT LOBBY FRAGMENT
+                Intent intent = new Intent(v.getContext(), WaitLobbyActivity.class);
+                intent.putExtra("LOBBY_ID", item);
+                v.getContext().startActivity(intent);
             }
         });
     }
@@ -61,7 +61,8 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
 
     private void populateData(@NonNull ViewHolder holder, Lobby item) {
         holder.lobbyName.setText(item.getName());
-        holder.playerAmount.setText(String.valueOf(item.getParticipants().size()) + " Participants");
+        //TODO REPLACE WHEN GUIGUI DID IT item.getParticipants().size()
+        holder.playerAmount.setText(String.valueOf(4) + " Participants");
     }
 
     @Override

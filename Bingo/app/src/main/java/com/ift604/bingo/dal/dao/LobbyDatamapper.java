@@ -5,8 +5,11 @@ import com.google.gson.reflect.TypeToken;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.model.Participant;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 public class LobbyDatamapper {
@@ -28,6 +31,18 @@ public class LobbyDatamapper {
             jsonObject = jsonObject.getJSONObject("joueur");
             Gson gson = new Gson();
             return (Participant) gson.fromJson(jsonObject.toString(), new TypeToken<Participant>(){}.getType());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ArrayList<Lobby> buildLobbies(String result) {
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray arr = jsonObject.getJSONArray("lobbies");
+            Gson gson = new Gson();
+            return (ArrayList<Lobby>) gson.fromJson(arr.toString(), new TypeToken<ArrayList<Lobby>>(){}.getType());
         } catch (JSONException e) {
             e.printStackTrace();
         }

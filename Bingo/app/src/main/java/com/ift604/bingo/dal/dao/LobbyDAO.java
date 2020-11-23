@@ -1,6 +1,5 @@
 package com.ift604.bingo.dal.dao;
 
-import com.ift604.bingo.DummyCard;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.model.Participant;
 
@@ -20,12 +19,24 @@ public class LobbyDAO extends GenericDataHandler {
     }
 
     public ArrayList<Lobby> getLobbiesNearMe() {
-        return DummyCard.dummyLobby();
+        String url = lobbyPath;
+        try {
+            String result = getDataFromUrl(url);
+            return lobbyMapper.buildLobbies(result);
+        } catch (IOException e) {
+            return new ArrayList<>();
+        }
     }
 
     public Lobby getLobby(int lobbyId) {
-        String url = String.format("%s/%s", String.valueOf(lobbyId));
-        return lobbyMapper.buildLobby(url);
+        String url = String.format("%s/%s", lobbyPath, String.valueOf(lobbyId));
+        try {
+            String result = getDataFromUrl(url);
+            return lobbyMapper.buildLobby(result);
+
+        } catch (IOException e) {
+            return new Lobby();
+        }
     }
 
     public Lobby createLobby(int hostId, String name) throws IOException, JSONException {

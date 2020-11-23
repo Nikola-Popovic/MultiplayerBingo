@@ -30,7 +30,7 @@ public class JoinLobbyFragment extends DialogFragment {
         // Required empty public constructor
     }
     // TODO: Rename and change types and number of parameters
-    public static JoinLobbyFragment newInstance(int playerId) {
+    public static JoinLobbyFragment newInstance() {
         JoinLobbyFragment fragment = new JoinLobbyFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);

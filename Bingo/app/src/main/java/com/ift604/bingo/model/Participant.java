@@ -4,29 +4,19 @@ import java.io.Serializable;
 
 public class Participant implements Serializable {
     Integer id;
-    String firstName;
-    String lastName;
+    String userName;
 
-    public Participant(Integer id, String firstName, String lastName) {
+    public Participant(Integer id, String username) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.userName = username;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public Integer getId() {
