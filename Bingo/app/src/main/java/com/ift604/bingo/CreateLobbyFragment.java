@@ -115,6 +115,5 @@ public class CreateLobbyFragment extends DialogFragment {
         int height = getResources().getDimensionPixelSize(R.dimen.popup_height);
         window.setLayout(width, height);
         window.setGravity(Gravity.CENTER);
-        //TODO ca va pt pas dans on resume
     }
 }

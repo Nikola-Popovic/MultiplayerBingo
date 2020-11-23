@@ -23,8 +23,9 @@ public class LobbyDAO extends GenericDataHandler {
         return DummyCard.dummyLobby();
     }
 
-    public ArrayList<Participant> getLobbyParticipants(int lobbyId) {
-        return (ArrayList<Participant>) DummyCard.dummyLobby().get(0).getParticipants();
+    public Lobby getLobby(int lobbyId) {
+        String url = String.format("%s/%s", String.valueOf(lobbyId));
+        return lobbyMapper.buildLobby(url);
     }
 
     public Lobby createLobby(int hostId, String name) throws IOException, JSONException {

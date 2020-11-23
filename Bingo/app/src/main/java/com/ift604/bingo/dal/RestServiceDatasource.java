@@ -33,8 +33,8 @@ public class RestServiceDatasource implements IBingoRepository {
     }
 
     @Override
-    public ArrayList<Participant> getLobbyParticipant(int lobbyId) {
-        return lobbyDAO.getLobbyParticipants(lobbyId);
+    public Lobby getLobby(int lobbyId) {
+        return lobbyDAO.getLobby(lobbyId);
     }
 
     @Override

@@ -11,7 +11,7 @@ public interface IBingoRepository {
   Card getPlayerCard();
   void sendWinnerCardForValidation();
   ArrayList<Lobby> getLobbiesNearMe();
-  ArrayList<Participant> getLobbyParticipant(int lobbyId);
+  Lobby getLobby(int lobbyId);
   Lobby createLobby(int hostId, String name);
   void joinLobby(int lobbyId, int userId);
   Participant createUser();
