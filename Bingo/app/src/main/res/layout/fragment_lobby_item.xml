@@ -9,12 +9,13 @@
 
     <LinearLayout
         android:layout_width="350sp"
-        android:layout_height="60sp"
+        android:layout_height="80sp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="5sp"
         android:layout_marginBottom="10sp"
         android:gravity="center_vertical"
         android:weightSum="1"
+        android:id="@+id/lobby_item_layout"
         android:background="@drawable/white_btn"
         android:orientation="horizontal">
 
@@ -23,9 +24,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:layout_marginStart="20sp"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="8dp"
             android:fontFamily="sans-serif-light"
+            android:textScaleX="1.2"
             android:text="BingoBelingo"
             android:layout_weight="0.7"
             android:textColor="#363636"
