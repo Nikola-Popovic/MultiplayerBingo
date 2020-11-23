@@ -61,7 +61,8 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
 
     private void populateData(@NonNull ViewHolder holder, Lobby item) {
         holder.lobbyName.setText(item.getName());
-        holder.playerAmount.setText(String.valueOf(item.getParticipants().size()) + " Participants");
+        //TODO REPLACE WHEN GUIGUI DID IT item.getParticipants().size()
+        holder.playerAmount.setText(String.valueOf(4) + " Participants");
     }
 
     @Override
