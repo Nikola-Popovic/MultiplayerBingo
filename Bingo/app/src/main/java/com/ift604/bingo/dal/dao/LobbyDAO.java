@@ -42,7 +42,7 @@ public class LobbyDAO extends GenericDataHandler {
     public Lobby createLobby(int hostId, String name) throws IOException, JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("hostId", hostId);
-      //  jsonObject.put("name", name);
+        jsonObject.put("nom", name);
         String jsonLobby = postDataToUrl(lobbyPath, jsonObject);
         return lobbyMapper.buildLobby(jsonLobby);
     }
