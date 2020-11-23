@@ -81,6 +81,66 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/myNameIsLayout"
+            android:layout_width="191dp"
+            android:layout_height="138dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/my_name_is"
+            android:gravity="center_horizontal"
+            android:weightSum="1"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.872"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintVertical_bias="1.0"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.20"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal|bottom"
+                android:text="@string/hello"
+                android:textStyle="bold"
+                android:textScaleX="2"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.20"
+                android:text="@string/my_name_is"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center_horizontal"
+                android:textScaleX="1.5"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/player_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:layout_marginLeft="5sp"
+                android:layout_marginRight="5sp"
+                android:layout_weight="0.45"
+                android:ems="10"
+                android:fontFamily="cursive"
+                android:textSize="24sp"
+                android:gravity="center_horizontal"
+                android:inputType="textPersonName"
+                android:text="@string/anonyme"
+                android:background="@android:color/transparent"/>
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <fragment
