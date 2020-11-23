@@ -36,8 +36,11 @@ public class LobbyDAO extends GenericDataHandler {
         return lobbyMapper.buildLobby(jsonLobby);
     }
 
-    public void addPersonToLobby(int lobbyId, int userId) {
-        //TODO DO PUT
+    public void addPersonToLobby(int lobbyId, int userId) throws JSONException, IOException {
+        String url = String.format("%s/%s/%s", lobbyPath, String.valueOf(lobbyId), userPath);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("joueurId", String.valueOf(userId));
+        putDataToUrl(url, jsonObject);
     }
 
     public Participant createUser() {
