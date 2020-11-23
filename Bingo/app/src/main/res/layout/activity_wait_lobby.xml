@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".WaitLobbyActivity">
 
-    <fragment
-        android:id="@+id/wait_lobby_participant_list_fragment"
+    <FrameLayout
+        android:id="@+id/wait_lobby_participant_frame_layout"
         android:name="com.ift604.bingo.WaitLobbyParticipantListFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

@@ -14,12 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <service
-            android:name=".service.GetLobbyByAttributeService"
-            android:exported="false"></service>
-        <service
-            android:name=".service.JoinLobbyService"
-            android:exported="false" />
+
 
         <activity android:name=".WaitLobbyActivity" />
         <activity android:name=".FindLobbyActivity" />
@@ -44,6 +39,12 @@
         <service
             android:name=".service.CreateUserService"
             android:enabled="true" />
+        <service
+            android:name=".service.GetLobbyByAttributeService"
+            android:exported="true"></service>
+        <service
+            android:name=".service.JoinLobbyService"
+            android:exported="true" />
     </application>
 
 </manifest>

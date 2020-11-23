@@ -89,7 +89,7 @@ public abstract class GenericDataHandler {
     }
 
     protected String getDataFromUrl(String urlPath) throws IOException {
-        URL url = new URL(urlPath);
+        URL url = new URL(apiPath + urlPath);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");

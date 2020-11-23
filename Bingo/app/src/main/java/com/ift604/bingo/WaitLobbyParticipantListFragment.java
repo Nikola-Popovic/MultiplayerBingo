@@ -25,9 +25,6 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class WaitLobbyParticipantListFragment extends Fragment {
-
-    private static final String PARTICIPANTS_LIST = "param1";
-
     private WaitLobbyAdapter adapter;
     private RecyclerView waitLobbyRecyclerView;
     private ArrayList<Participant> participants = new ArrayList<>();
@@ -40,9 +37,10 @@ public class WaitLobbyParticipantListFragment extends Fragment {
     public WaitLobbyParticipantListFragment() {
     }
 
-    public static WaitLobbyParticipantListFragment newInstance() {
+    public static WaitLobbyParticipantListFragment newInstance(int lobbyId) {
         WaitLobbyParticipantListFragment fragment = new WaitLobbyParticipantListFragment();
         Bundle args = new Bundle();
+        args.putInt("LOBBY_ID", lobbyId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,7 +48,8 @@ public class WaitLobbyParticipantListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startGetLobbyService();
+        int lobbyId = getArguments().getInt("LOBBY_ID");
+        startGetLobbyService(lobbyId);
         registerGetLobbyReceiver();
     }
 
@@ -73,8 +72,10 @@ public class WaitLobbyParticipantListFragment extends Fragment {
         getActivity().registerReceiver(receiver, intentFilter);
     }
 
-    private void startGetLobbyService() {
+    private void startGetLobbyService(int lobbyId) {
         Intent intent = new Intent(getActivity(), GetLobbyByAttributeService.class);
+        intent.setAction(GetLobbyByAttributeService.GET_BY_ID_ACTION);
+        intent.putExtra(GetLobbyByAttributeService.LOBBY_ID_PARAM, lobbyId);
         getActivity().startService(intent);
     }
 
