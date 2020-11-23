@@ -1,24 +1,22 @@
 package com.ift604.bingo;
 
+import android.os.Bundle;
+import android.widget.FrameLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-
-import com.ift604.bingo.controller.GameController;
-import com.ift604.bingo.model.Card;
-import com.ift604.bingo.model.Coordinate;
 import com.ift604.bingo.model.Lobby;
 
-import java.util.ArrayList;
-
 public class WaitLobbyActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wait_lobby);
+        Lobby lobby = (Lobby) getIntent().getSerializableExtra("LOBBY_ID");
+        FrameLayout waitLobbyListFrameLayout = findViewById(R.id.wait_lobby_participant_frame_layout);
+        getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), WaitLobbyParticipantListFragment.newInstance(waitLobbyListFrameLayout.getId()), "un autre joli tag").commit();
+
     }
 }

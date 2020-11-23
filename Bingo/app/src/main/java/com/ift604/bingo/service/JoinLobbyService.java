@@ -6,9 +6,6 @@ import android.content.Intent;
 import androidx.annotation.Nullable;
 
 import com.ift604.bingo.dal.RestServiceDatasource;
-import com.ift604.bingo.model.Lobby;
-
-import static com.ift604.bingo.service.CreateLobbyService.USER_ID;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -20,6 +17,8 @@ import static com.ift604.bingo.service.CreateLobbyService.USER_ID;
 public class JoinLobbyService extends IntentService {
     public static final String JOIN_LOBBY_ACTION = "JOIN_LOBBY_ACTION";
     public static final String JOIN_LOBBY_EXTRA = "JOIN_LOBBY_EXTRA";
+    public static final String LOBBY_ID = "LOBBY_ID";
+    public static final String USER_ID = "USER_ID";
     RestServiceDatasource bingoRepository;
     public JoinLobbyService() {
         super("JoinLobbyService");
@@ -29,11 +28,11 @@ public class JoinLobbyService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        int userId = intent.getIntExtra(USER_ID, 0);
-        Lobby lobby = bingoRepository.createLobby(userId, "lobbyName");
+        int lobbyId = intent.getIntExtra(LOBBY_ID, 0);
+        int userId =  intent.getIntExtra(USER_ID, 0);
+        bingoRepository.joinLobby(lobbyId, userId);
         Intent i = new Intent();
         i.setAction(JOIN_LOBBY_ACTION);
-        i.putExtra(JOIN_LOBBY_EXTRA, lobby);
         sendBroadcast(i);
     }
 

@@ -61,7 +61,7 @@ public class DummyCard {
     private static List<Participant> dummyParticipant(int lobbyId) {
         List<Participant> participants = new ArrayList();
         for (int i = 0; i < 5; i++) {
-            participants.add(new Participant(lobbyId + i, "Luc", "Lavoie " + i + lobbyId));
+            participants.add(new Participant(lobbyId + i, "Luc" + i + lobbyId));
         }
         return participants;
     }

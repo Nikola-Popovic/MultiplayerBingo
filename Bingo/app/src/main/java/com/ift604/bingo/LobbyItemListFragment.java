@@ -5,16 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.FindLobbyNearMeService;
@@ -27,6 +25,7 @@ public class LobbyItemListFragment extends Fragment {
     RecyclerView lobbyRecyclerView;
     ArrayList<Lobby> lobbies = new ArrayList<>();
     LobbyItemAdapter adapter;
+
 
     SwipeRefreshLayout swipeRefreshLayout;
 

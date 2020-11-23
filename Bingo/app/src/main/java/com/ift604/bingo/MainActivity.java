@@ -42,8 +42,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getSupportFragmentManager();
-                //TODO HOST ID ?
-                CreateLobbyFragment createLobbyFragment = CreateLobbyFragment.newInstance(0);
+                CreateLobbyFragment createLobbyFragment = CreateLobbyFragment.newInstance();
                 createLobbyFragment.show(fm, "");
             }
         });
@@ -53,8 +52,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getSupportFragmentManager();
-                //TODO PLAYER ID ?
-                JoinLobbyFragment joinLobbyFragment = JoinLobbyFragment.newInstance(0);
+                JoinLobbyFragment joinLobbyFragment = JoinLobbyFragment.newInstance();
                 joinLobbyFragment.show(fm, "");
             }
         });
