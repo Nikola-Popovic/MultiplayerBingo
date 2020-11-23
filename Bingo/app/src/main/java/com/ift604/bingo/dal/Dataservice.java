@@ -4,7 +4,7 @@ public class Dataservice {
     private IBingoRepository datasource;
 
     public Dataservice() {
-        datasource = new Datasource();
+        datasource = new RestServiceDatasource();
     }
 
     public IBingoRepository getDatasource() {

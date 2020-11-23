@@ -6,13 +6,14 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
-import com.ift604.bingo.dal.Datasource;
+import com.ift604.bingo.dal.RestServiceDatasource;
 import com.ift604.bingo.dal.IBingoRepository;
 import com.ift604.bingo.model.Lobby;
 
 public class CreateLobbyService extends IntentService {
     public final static String CREATE_LOBBY_ACTION = "CREATED_LOBBY";
     public final static String CREATED_LOBBY_EXTRA = "CREATED_LOBBY_EXTRA";
+    public static final String USER_ID = "USER_ID";
     IBingoRepository bingoRepository;
 
     public CreateLobbyService(String name) {
@@ -21,7 +22,7 @@ public class CreateLobbyService extends IntentService {
 
     public CreateLobbyService() {
         super("CreateLobbyService");
-        bingoRepository = new Datasource();
+        bingoRepository = new RestServiceDatasource();
     }
 
     @Nullable
@@ -32,7 +33,8 @@ public class CreateLobbyService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        Lobby lobby = bingoRepository.createLobby(0);
+        int userId = intent.getIntExtra(USER_ID, 0);
+        Lobby lobby = bingoRepository.createLobby(userId, "lobbyName");
         Intent i = new Intent();
         i.setAction(CREATE_LOBBY_ACTION);
         i.putExtra(CREATED_LOBBY_EXTRA, lobby);
