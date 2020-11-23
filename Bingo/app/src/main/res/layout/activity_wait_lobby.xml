@@ -32,7 +32,11 @@
          android:background="@drawable/creme_tall_rectange"
         android:orientation="vertical">
     </LinearLayout>
-
+        <FrameLayout
+            android:id="@+id/wait_lobby_participant_frame_layout"
+            android:name="com.ift604.bingo.WaitLobbyParticipantListFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -6,31 +6,39 @@
     tools:context=".CreateLobbyFragment">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:background="@drawable/big_rounded_square"
+        android:layout_width="300sp"
+        android:layout_height="300sp"
+        android:gravity="center_horizontal|center_vertical"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <TextView
+            android:id="@+id/enter_room_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="30dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="@string/enter_room_name"
+            android:textColor="#363636"
+            android:textSize="24sp" />
 
-            <TextView
-                android:id="@+id/enter_room_code"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/name" />
 
-            <EditText
-                android:id="@+id/create_lobby_name_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="text" />
-        </LinearLayout>
-
+        <EditText
+            android:id="@+id/create_lobby_name_value"
+            android:layout_width="200sp"
+            android:layout_height="40sp"
+            android:background="@drawable/white_input_contour"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="30dp"
+            android:fontFamily="sans-serif-medium"
+            android:inputType="text" />
 
         <LinearLayout
             android:layout_gravity="bottom"
@@ -39,20 +47,36 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/create_lobby_create_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.7"
-                android:layout_gravity="bottom"
-                android:text="@string/create" />
-
-            <Button
                 android:id="@+id/create_lobby_cancel_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_width="90sp"
+                android:layout_height="40sp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="#363636"
+                android:background="@drawable/btn_white_rounded_contour"
+                android:textSize="16sp"
                 android:layout_weight="0.3"
                 android:text="@string/cancel" />
+
+            <Space  android:layout_width="1dp"
+                android:layout_weight="0.2"
+                android:layout_height="30dp"/>
+
+            <Button
+                android:id="@+id/create_lobby_create_button"
+                android:layout_width="90sp"
+                android:layout_height="40sp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="#feffec"
+                android:layout_weight="0.5"
+                android:background="@drawable/black_btn"
+                android:textSize="16sp"
+                android:text="@string/create" />
 
         </LinearLayout>
     </LinearLayout>
