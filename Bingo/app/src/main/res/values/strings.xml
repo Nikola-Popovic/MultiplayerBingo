@@ -13,4 +13,9 @@
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>
     <string name="join">Join</string>
+    <string name="quit">Quit</string>
+    <string name="start">Start</string>
+    <string name="hello">Hello</string>
+    <string name="my_name_is">my name is</string>
+    <string name="anonyme">Anonyme</string>
 </resources>
