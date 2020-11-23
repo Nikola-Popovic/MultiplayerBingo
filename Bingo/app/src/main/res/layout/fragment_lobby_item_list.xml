@@ -3,6 +3,7 @@
     android:id="@+id/tournament_detail_refresh_layout"
     android:name="com.ift604.td1.ui.main.tournament.TournamentItemFragment"
     android:layout_width="match_parent"
+    android:layout_gravity="center_horizontal"
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"

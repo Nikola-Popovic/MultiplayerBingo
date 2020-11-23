@@ -21,7 +21,7 @@ import com.ift604.bingo.service.FindLobbyNearMeService;
 
 import java.util.ArrayList;
 
-public class LobbyItemListFragment extends DialogFragment {
+public class LobbyItemListFragment extends Fragment {
 
     int position;
     RecyclerView lobbyRecyclerView;
