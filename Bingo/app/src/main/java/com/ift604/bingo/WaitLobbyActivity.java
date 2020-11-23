@@ -16,7 +16,7 @@ public class WaitLobbyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wait_lobby);
         Lobby lobby = (Lobby) getIntent().getSerializableExtra("LOBBY_ID");
         FrameLayout waitLobbyListFrameLayout = findViewById(R.id.wait_lobby_participant_frame_layout);
-        getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), WaitLobbyParticipantListFragment.newInstance(lobby.getId()), "un autre joli tag").commit();
+        getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), WaitLobbyParticipantListFragment.newInstance(waitLobbyListFrameLayout.getId()), "un autre joli tag").commit();
 
     }
 }

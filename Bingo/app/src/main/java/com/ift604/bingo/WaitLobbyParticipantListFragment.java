@@ -88,12 +88,9 @@ public class WaitLobbyParticipantListFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             Lobby lobby = (Lobby) intent.getSerializableExtra(GetLobbyByAttributeService.LOBBY_EXTRA);
-            lobby.getParticipants().get(0).setFirstName("sda");
-            lobby.getParticipants().get(0).setLastName("sda");
             adapter.setParticipants((ArrayList<Participant>) lobby.getParticipants());
             adapter.notifyItemRangeChanged(position, participants.size());
             adapter.notifyDataSetChanged();
         }
     }
-
 }
