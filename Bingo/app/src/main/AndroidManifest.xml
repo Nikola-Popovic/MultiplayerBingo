@@ -22,6 +22,7 @@
             android:exported="false" />
 
         <activity android:name=".WaitLobbyActivity" />
+        <activity android:name=".FindLobbyActivity" />
         <activity android:name=".GameActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

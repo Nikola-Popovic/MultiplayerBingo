@@ -6,6 +6,7 @@
     <string name="see_previous_number">Voir les numéros précédents</string>
     <string name="create_lobby">Create Lobby</string>
     <string name="create_game">Create Game</string>
+    <string name="enter_room_code">Enter room code</string>
     <string name="join_lobby">Join Lobby</string>
     <string name="find_lobby">Find Lobby</string>
     <string name="name">Lobby Name</string>

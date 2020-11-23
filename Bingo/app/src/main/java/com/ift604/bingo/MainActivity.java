@@ -1,9 +1,11 @@
 package com.ift604.bingo;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.Intent;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import android.content.Context;
+import android.content.BroadcastReceiver;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,10 +31,8 @@ public class MainActivity extends AppCompatActivity {
         findLobbyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                // Get find lobby fragment
-                LobbyItemListFragment lobbyItemListFragment = LobbyItemListFragment.newInstance();
-                lobbyItemListFragment.show(fm, "");
+                Intent lobbyIntent = new Intent(MainActivity.this, FindLobbyActivity.class);
+                startActivity(lobbyIntent);
             }
         });
 

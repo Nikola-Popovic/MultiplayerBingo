@@ -3,6 +3,7 @@
     android:id="@+id/tournament_detail_refresh_layout"
     android:name="com.ift604.td1.ui.main.tournament.TournamentItemFragment"
     android:layout_width="match_parent"
+    android:layout_gravity="center_horizontal"
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,8 +12,8 @@
         android:id="@+id/lobby_recycle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="26sp"
+        android:layout_marginRight="26sp"
         tools:listitem="@layout/fragment_lobby_item" />
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
