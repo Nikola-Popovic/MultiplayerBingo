@@ -34,9 +34,8 @@ public class CreateLobbyService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         int userId = intent.getIntExtra(USER_ID, 0);
-        int lobbyId = intent.getIntExtra(LOBBY_ID, 0);
         //TODO put lobby name
-        bingoRepository.createLobby(lobbyId, "vsd");
+        bingoRepository.createLobby(userId, "vsd");
         Intent i = new Intent();
         i.setAction(CREATE_LOBBY_ACTION);
         //TODO COULD MANAGE ERROR
