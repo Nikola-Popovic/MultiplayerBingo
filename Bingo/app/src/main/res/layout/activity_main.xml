@@ -47,7 +47,7 @@
                 android:layout_marginBottom="30dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/find_lobby"
-                android:background="@drawable/btn_peach"
+                android:background="@drawable/white_btn"
                 android:textColor="#363636"
                 android:textSize="18sp" />
 
