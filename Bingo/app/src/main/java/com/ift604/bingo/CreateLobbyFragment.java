@@ -40,7 +40,7 @@ public class CreateLobbyFragment extends DialogFragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static CreateLobbyFragment newInstance(int hostId) {
+    public static CreateLobbyFragment newInstance() {
         CreateLobbyFragment fragment = new CreateLobbyFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
