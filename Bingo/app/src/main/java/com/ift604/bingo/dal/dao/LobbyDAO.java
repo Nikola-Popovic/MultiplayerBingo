@@ -42,7 +42,7 @@ public class LobbyDAO extends GenericDataHandler {
     public Lobby createLobby(int hostId, String name) throws IOException, JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("hostId", hostId);
-      //  jsonObject.put("name", name);
+        jsonObject.put("nom", name);
         String jsonLobby = postDataToUrl(lobbyPath, jsonObject);
         return lobbyMapper.buildLobby(jsonLobby);
     }
@@ -54,12 +54,16 @@ public class LobbyDAO extends GenericDataHandler {
         putDataToUrl(url, jsonObject);
     }
 
-    public Participant createUser() {
+    public Participant createUser(String username) {
+
         String url = userPath;
         try {
-            String jsonReturnValue = postDataToUrl(url, new JSONObject());
+            JSONObject jsonObject = new JSONObject();
+            //TODO GET USERNAME
+            jsonObject.put("username", username);
+            String jsonReturnValue = postDataToUrl(url, jsonObject);
             return lobbyMapper.mapUserToJson(jsonReturnValue);
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
             return null;
         }

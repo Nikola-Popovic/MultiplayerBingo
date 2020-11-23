@@ -61,7 +61,7 @@ public class RestServiceDatasource implements IBingoRepository {
     }
 
     @Override
-    public Participant createUser() {
-        return lobbyDAO.createUser();
+    public Participant createUser(String username) {
+        return lobbyDAO.createUser(username);
     }
 }

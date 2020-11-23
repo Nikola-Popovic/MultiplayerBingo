@@ -7,16 +7,9 @@ import androidx.annotation.Nullable;
 
 import com.ift604.bingo.dal.RestServiceDatasource;
 
-/**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
- */
+
 public class JoinLobbyService extends IntentService {
     public static final String JOIN_LOBBY_ACTION = "JOIN_LOBBY_ACTION";
-    public static final String JOIN_LOBBY_EXTRA = "JOIN_LOBBY_EXTRA";
     public static final String LOBBY_ID = "LOBBY_ID";
     public static final String USER_ID = "USER_ID";
     RestServiceDatasource bingoRepository;
@@ -35,5 +28,4 @@ public class JoinLobbyService extends IntentService {
         i.setAction(JOIN_LOBBY_ACTION);
         sendBroadcast(i);
     }
-
 }
