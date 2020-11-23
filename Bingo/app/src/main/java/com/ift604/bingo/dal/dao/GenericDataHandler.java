@@ -39,16 +39,16 @@ public abstract class GenericDataHandler {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json");
-        //conn.setRequestProperty("Accept", "application/json");
+        conn.setRequestProperty("Accept", "application/json");
         conn.setDoOutput(true);
         conn.setDoInput(true);
         DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+        if (jsonParams.length() > 0) {
+            os.writeBytes(jsonParams.toString());
 
-        os.writeBytes(jsonParams.toString());
-
-        os.flush();
-        os.close();
-
+          //  os.flush();
+          //  os.close();
+        }
         //TODO MANAGE ERROR
         String response = getResponse(conn.getInputStream());
         conn.disconnect();
