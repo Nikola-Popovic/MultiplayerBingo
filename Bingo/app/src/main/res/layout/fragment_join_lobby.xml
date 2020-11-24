@@ -28,7 +28,7 @@
 
 
         <EditText
-            android:id="@+id/create_lobby_name_value"
+            android:id="@+id/join_lobby_id_value"
             android:layout_width="160sp"
             android:layout_height="40sp"
             android:background="@drawable/white_input_contour"

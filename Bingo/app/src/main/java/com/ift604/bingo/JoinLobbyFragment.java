@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -51,11 +52,14 @@ public class JoinLobbyFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_join_lobby, container, false);
         final DialogFragment dialog = this;
+        final EditText lobbyIdEditText = view.findViewById(R.id.join_lobby_id_value);
         view.findViewById(R.id.join_lobby_create_button).setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
+                //TODO ADD LE PARTICIPANT
+                Intent intent = new Intent(v.getContext(), WaitLobbyActivity.class);
+                intent.putExtra("LOBBY_ID", Integer.valueOf(lobbyIdEditText.getText().toString()));
+                v.getContext().startActivity(intent);
             }
         });
 
@@ -85,6 +89,7 @@ public class JoinLobbyFragment extends DialogFragment {
     public class JoinLobbyReceiver extends BroadcastReceiver {
 
         public JoinLobbyReceiver() {
+
         }
 
         @Override

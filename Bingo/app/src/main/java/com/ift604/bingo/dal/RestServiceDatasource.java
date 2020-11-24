@@ -64,4 +64,13 @@ public class RestServiceDatasource implements IBingoRepository {
     public Participant createUser(String username) {
         return lobbyDAO.createUser(username);
     }
+
+    @Override
+    public void startGame(int lobbyId, int hostId) {
+        try {
+            gameDAO.startGame(lobbyId, hostId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
