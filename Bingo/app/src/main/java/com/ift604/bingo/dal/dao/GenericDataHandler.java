@@ -76,6 +76,28 @@ public abstract class GenericDataHandler {
         return response;
     }
 
+
+    protected String deleteDataToUrl(String urlPath, JSONObject jsonParams) throws IOException {
+        URL url = new URL(apiPath + urlPath);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("DELETE");
+        conn.setRequestProperty("Content-Type", "application/json");
+        //conn.setRequestProperty("Accept", "application/json");
+        conn.setDoOutput(true);
+        conn.setDoInput(true);
+        DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+
+        os.writeBytes(jsonParams.toString());
+
+        os.flush();
+        os.close();
+
+        //TODO MANAGE ERROR
+        String response = getResponse(conn.getInputStream());
+        conn.disconnect();
+        return response;
+    }
+
     private String getResponse(InputStream i) throws IOException {
         String res = "";
         InputStreamReader in = new InputStreamReader(i);

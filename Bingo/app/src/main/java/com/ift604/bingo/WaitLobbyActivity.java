@@ -1,6 +1,5 @@
 package com.ift604.bingo;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.GetLobbyByAttributeService;
+import com.ift604.bingo.service.JoinLobbyService;
 import com.ift604.bingo.service.StartGameService;
+import com.ift604.bingo.util.Util;
 
 public class WaitLobbyActivity extends AppCompatActivity {
     public Lobby lobby;
@@ -22,6 +23,7 @@ public class WaitLobbyActivity extends AppCompatActivity {
     private FrameLayout waitLobbyListFrameLayout;
     private GetLobbyResponseReceiver getLobbyResponseReceiver;
     private Intent getLobbyByAttributeService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,12 +34,11 @@ public class WaitLobbyActivity extends AppCompatActivity {
 
         waitLobbyListFrameLayout = findViewById(R.id.wait_lobby_participant_frame_layout);
 
-        final Activity thisActivity = this;
         Button cancelButton = findViewById(R.id.wait_lobby_cancel_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                thisActivity.finish();
+                leaveLobby();
             }
         });
         Button startGameButton = findViewById(R.id.wait_lobby_start_button);
@@ -48,6 +49,22 @@ public class WaitLobbyActivity extends AppCompatActivity {
                 registerWaitingLobby();
             }
         });
+    }
+
+    private void leaveLobby() {
+        Intent leaveLobbyService = new Intent(this, JoinLobbyService.class);
+        leaveLobbyService.setAction(JoinLobbyService.LEAVE_LOBBY_ACTION);
+        leaveLobbyService.putExtra(JoinLobbyService.LOBBY_ID, lobby.getId());
+        leaveLobbyService.putExtra(JoinLobbyService.USER_ID, Util.getConnectedUserId(this));
+        startService(leaveLobbyService);
+        registerLeaveLobbyReceiver();
+    }
+
+    private void registerLeaveLobbyReceiver() {
+        LeaveLobbyReceiver receiver = new LeaveLobbyReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(JoinLobbyService.LEAVE_LOBBY_ACTION);
+        registerReceiver(receiver, intentFilter);
     }
 
 
@@ -107,6 +124,19 @@ public class WaitLobbyActivity extends AppCompatActivity {
             //TODO, SI ERREUR, AFFICHER ERREUR ET DETRUIRE ACTIVITÉ
             waitLobbyParticipantListFragment = WaitLobbyParticipantListFragment.newInstance(lobby.getParticipants());
             getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), waitLobbyParticipantListFragment, "un autre joli tag").commit();
+        }
+    }
+
+
+    public class LeaveLobbyReceiver extends BroadcastReceiver {
+
+        public LeaveLobbyReceiver() {
+
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
         }
     }
 }
