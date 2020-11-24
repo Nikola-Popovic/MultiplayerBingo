@@ -48,15 +48,15 @@ public class WaitLobbyParticipantListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int lobbyId = getArguments().getInt("LOBBY_ID");
-        startGetLobbyService(lobbyId);
-        registerGetLobbyReceiver();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        int lobbyId = getArguments().getInt("LOBBY_ID");
+        startGetLobbyService(lobbyId);
+        registerGetLobbyReceiver();
         View view = inflater.inflate(R.layout.fragment_wait_lobby_participant_list, container, false);
         waitLobbyRecyclerView = view.findViewById(R.id.wait_lobby_participant_recycler_view);
         waitLobbyRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));

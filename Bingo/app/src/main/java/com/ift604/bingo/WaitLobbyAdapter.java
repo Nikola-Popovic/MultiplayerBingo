@@ -14,7 +14,7 @@ import com.ift604.bingo.util.Util;
 import java.util.ArrayList;
 
 public class WaitLobbyAdapter extends RecyclerView.Adapter<WaitLobbyAdapter.ViewHolder> {
-    private ArrayList<Participant> participants;
+    private ArrayList<Participant> participants = new ArrayList();
 
     public WaitLobbyAdapter(ArrayList<Participant> participants) {
         this.participants = participants;

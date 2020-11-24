@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.RelativeLayout;
+import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -60,12 +58,12 @@ public class CreateLobbyFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_lobby, container, false);
-
+        final EditText lobbyName = view.findViewById(R.id.create_lobby_name_value);
         final DialogFragment dialog = this;
         view.findViewById(R.id.create_lobby_create_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startCreateLobbyService(dialog);
+                startCreateLobbyService(dialog, lobbyName.getText().toString());
                 registerCreateLobbyReceiver(dialog);
             }
         });
@@ -80,8 +78,9 @@ public class CreateLobbyFragment extends DialogFragment {
         return view;
     }
 
-    private void startCreateLobbyService(DialogFragment dialogFragment) {
+    private void startCreateLobbyService(DialogFragment dialogFragment, String lobbyName) {
         Intent createLobbyService = new Intent(dialogFragment.getActivity(), CreateLobbyService.class);
+        createLobbyService.putExtra(CreateLobbyService.LOBBY_NAME, lobbyName);
         createLobbyService.putExtra(CreateLobbyService.USER_ID, Util.getConnectedUserId(dialogFragment.getContext()));
         dialogFragment.getActivity().startService(createLobbyService);
     }
@@ -95,7 +94,7 @@ public class CreateLobbyFragment extends DialogFragment {
 
     private void startWaitLobbyFragment(Lobby lobby) {
         Intent lobbyIntent = new Intent(getActivity(), WaitLobbyActivity.class);
-        lobbyIntent.putExtra("LOBBY", lobby);
+        lobbyIntent.putExtra("LOBBY_ID", lobby.getId());
         startActivity(lobbyIntent);
     }
 

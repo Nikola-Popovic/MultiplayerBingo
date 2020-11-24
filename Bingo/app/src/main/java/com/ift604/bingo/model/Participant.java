@@ -4,19 +4,19 @@ import java.io.Serializable;
 
 public class Participant implements Serializable {
     Integer id;
-    String userName;
+    String username;
 
     public Participant(Integer id, String username) {
         this.id = id;
-        this.userName = username;
+        this.username = username;
     }
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.username = userName;
     }
 
     public Integer getId() {
