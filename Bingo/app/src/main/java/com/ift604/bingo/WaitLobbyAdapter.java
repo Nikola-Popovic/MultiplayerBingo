@@ -33,12 +33,6 @@ public class WaitLobbyAdapter extends RecyclerView.Adapter<WaitLobbyAdapter.View
     public void onBindViewHolder(@NonNull WaitLobbyAdapter.ViewHolder holder, int position) {
         final Participant item = participants.get(position);
         populateData(holder, item);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
     private void populateData(@NonNull WaitLobbyAdapter.ViewHolder holder, Participant item) {
@@ -57,9 +51,5 @@ public class WaitLobbyAdapter extends RecyclerView.Adapter<WaitLobbyAdapter.View
             super(itemView);
             participantName = itemView.findViewById(R.id.wait_lobby_participant_name);
         }
-    }
-
-    public void setParticipants(ArrayList<Participant> participants) {
-        this.participants = participants;
     }
 }

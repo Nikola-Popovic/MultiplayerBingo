@@ -1,18 +1,18 @@
 package com.ift604.bingo.model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Lobby implements Serializable {
     Integer id;
     String name;
-    List<Participant> participants;
+    ArrayList<Participant> participants;
     String location;
     Participant host;
     //TODO GERER LA LOCATION
 
 
-    public Lobby(Integer id, String name, List<Participant> participants, String location) {
+    public Lobby(Integer id, String name, ArrayList<Participant> participants, String location) {
         this.id = id;
         this.name = name;
         this.participants = participants;
@@ -39,11 +39,11 @@ public class Lobby implements Serializable {
         this.name = name;
     }
 
-    public List<Participant> getParticipants() {
+    public ArrayList<Participant> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<Participant> participants) {
+    public void setParticipants(ArrayList<Participant> participants) {
         this.participants = participants;
     }
 

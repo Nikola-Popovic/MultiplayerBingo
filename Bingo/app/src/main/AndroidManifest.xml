@@ -45,6 +45,9 @@
         <service
             android:name=".service.JoinLobbyService"
             android:exported="true" />
+        <service
+            android:name=".service.StartGameService"
+            android:exported="true" />
     </application>
 
 </manifest>

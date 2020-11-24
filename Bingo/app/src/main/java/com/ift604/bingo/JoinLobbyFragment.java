@@ -85,6 +85,7 @@ public class JoinLobbyFragment extends DialogFragment {
     public class JoinLobbyReceiver extends BroadcastReceiver {
 
         public JoinLobbyReceiver() {
+
         }
 
         @Override
