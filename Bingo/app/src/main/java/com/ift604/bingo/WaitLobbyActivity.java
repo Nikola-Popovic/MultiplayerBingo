@@ -20,7 +20,8 @@ public class WaitLobbyActivity extends AppCompatActivity {
     public Lobby lobby;
     private WaitLobbyParticipantListFragment waitLobbyParticipantListFragment;
     private FrameLayout waitLobbyListFrameLayout;
-
+    private GetLobbyResponseReceiver getLobbyResponseReceiver;
+    private Intent getLobbyByAttributeService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,17 +76,24 @@ public class WaitLobbyActivity extends AppCompatActivity {
     }
 
     private void registerGetLobbyReceiver() {
-        GetLobbyResponseReceiver receiver = new GetLobbyResponseReceiver();
+        getLobbyResponseReceiver = new GetLobbyResponseReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(GetLobbyByAttributeService.GET_BY_ID_ACTION);
-        registerReceiver(receiver, intentFilter);
+        registerReceiver(getLobbyResponseReceiver, intentFilter);
     }
 
     private void startGetLobbyService(int lobbyId) {
-        Intent intent = new Intent(this, GetLobbyByAttributeService.class);
-        intent.setAction(GetLobbyByAttributeService.GET_BY_ID_ACTION);
-        intent.putExtra(GetLobbyByAttributeService.LOBBY_ID_PARAM, lobbyId);
-        startService(intent);
+        getLobbyByAttributeService = new Intent(this, GetLobbyByAttributeService.class);
+        getLobbyByAttributeService.setAction(GetLobbyByAttributeService.GET_BY_ID_ACTION);
+        getLobbyByAttributeService.putExtra(GetLobbyByAttributeService.LOBBY_ID_PARAM, lobbyId);
+        startService(getLobbyByAttributeService);
+    }
+
+    @Override
+    public void onDestroy() {
+        stopService(getLobbyByAttributeService);
+        unregisterReceiver(getLobbyResponseReceiver);
+        super.onDestroy();
     }
 
 
