@@ -75,7 +75,7 @@ public class LobbyItemListFragment extends Fragment {
     private void registerResponseReceiver() {
         LobbyResponseReceiver receiver = new LobbyResponseReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("LOBBIES");
+        intentFilter.addAction(FindLobbyNearMeService.GET_LOBBY_BY_LOCATION_ACTION);
         requireActivity().registerReceiver(receiver, intentFilter);
     }
 

@@ -1,7 +1,9 @@
 package com.ift604.bingo.fel.lobby;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ift604.bingo.R;
 import com.ift604.bingo.fel.waitlobby.WaitLobbyActivity;
 import com.ift604.bingo.model.Lobby;
+import com.ift604.bingo.service.JoinLobbyService;
+import com.ift604.bingo.util.Util;
 
 import java.util.ArrayList;
 
 public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.ViewHolder> {
     private ArrayList<Lobby> lobbies;
-
+    private JoinLobbyReceiver joinLobbyReceiver;
+    private Intent joinLobbyService;
+    private Context ctx;
     public LobbyItemAdapter(ArrayList<Lobby> lobbies) {
         this.lobbies = lobbies;
     }
@@ -44,11 +50,35 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), WaitLobbyActivity.class);
-                intent.putExtra(WaitLobbyActivity.LOBBY_ID, item.getId());
-                v.getContext().startActivity(intent);
+                ctx = v.getContext();
+                startJoinLobbyService(item.getId());
+                registerJoinLobbyReceiver();
+//                Intent intent = new Intent(v.getContext(), WaitLobbyActivity.class);
+//                intent.putExtra(WaitLobbyActivity.LOBBY_ID, item.getId());
+//                v.getContext().startActivity(intent);
             }
         });
+    }
+
+    private void registerJoinLobbyReceiver() {
+        joinLobbyReceiver = new JoinLobbyReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(JoinLobbyService.JOIN_LOBBY_ACTION);
+        ctx.registerReceiver(joinLobbyReceiver, intentFilter);
+    }
+
+    private void startWaitLobbyFragment(int lobbyId) {
+        Intent lobbyIntent = new Intent(ctx, WaitLobbyActivity.class);
+        lobbyIntent.putExtra(WaitLobbyActivity.LOBBY_ID, lobbyId);
+        ctx.startActivity(lobbyIntent);
+    }
+
+    private void startJoinLobbyService(int lobbyId) {
+        joinLobbyService = new Intent(ctx, JoinLobbyService.class);
+        joinLobbyService.putExtra(JoinLobbyService.LOBBY_ID, lobbyId);
+        joinLobbyService.putExtra(JoinLobbyService.USER_ID, Util.getConnectedUserId(ctx));
+        joinLobbyService.setAction(JoinLobbyService.JOIN_LOBBY_ACTION);
+        ctx.startService(joinLobbyService);
     }
 
     private void setBackGround(@NonNull ViewHolder holder, int position) {
@@ -86,5 +116,18 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
 
     public void setLobbies(ArrayList<Lobby> matches) {
         this.lobbies = matches;
+    }
+
+    public class JoinLobbyReceiver extends BroadcastReceiver {
+
+        public JoinLobbyReceiver() {
+
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int lobbyId = intent.getIntExtra(JoinLobbyService.LOBBY_ID, 0);
+            startWaitLobbyFragment(lobbyId);
+        }
     }
 }
