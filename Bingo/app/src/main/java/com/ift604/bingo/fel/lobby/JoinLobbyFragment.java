@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 
 import com.ift604.bingo.R;
 import com.ift604.bingo.fel.waitlobby.WaitLobbyActivity;
-import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.JoinLobbyService;
 import com.ift604.bingo.util.Util;
 
@@ -64,9 +63,9 @@ public class JoinLobbyFragment extends DialogFragment {
         return view;
     }
 
-    private void startWaitLobbyFragment(Lobby lobby) {
+    private void startWaitLobbyFragment(int lobbyId) {
         Intent lobbyIntent = new Intent(getActivity(), WaitLobbyActivity.class);
-        lobbyIntent.putExtra("LOBBY", lobby);
+        lobbyIntent.putExtra(WaitLobbyActivity.LOBBY_ID, lobbyId);
         startActivity(lobbyIntent);
     }
 
@@ -76,7 +75,6 @@ public class JoinLobbyFragment extends DialogFragment {
         joinLobbyService.putExtra(JoinLobbyService.USER_ID, Util.getConnectedUserId(getContext()));
         joinLobbyService.setAction(JoinLobbyService.JOIN_LOBBY_ACTION);
         getActivity().startService(joinLobbyService);
-
     }
 
     private void registerJoinLobbyReceiver() {
@@ -101,8 +99,8 @@ public class JoinLobbyFragment extends DialogFragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Lobby lobby = (Lobby) intent.getSerializableExtra("JOINED_LOBBY");
-            startWaitLobbyFragment(lobby);
+            int lobbyId = intent.getIntExtra(JoinLobbyService.LOBBY_ID, 0);
+            startWaitLobbyFragment(lobbyId);
         }
     }
 }

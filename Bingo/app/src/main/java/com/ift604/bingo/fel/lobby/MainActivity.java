@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void startCreateUserService() {
         Intent lobbiesService = new Intent(this, CreateUserService.class);
+        lobbiesService.setAction(CreateUserService.CREATE_USER_ACTION);
         startService(lobbiesService);
     }
 

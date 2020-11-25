@@ -112,11 +112,11 @@ public class WaitLobbyActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
+        leaveLobby();
         stopService(getLobbyByAttributeService);
         unregisterReceiver(getLobbyResponseReceiver);
         super.onDestroy();
     }
-
 
     public class GetLobbyResponseReceiver extends BroadcastReceiver {
         public GetLobbyResponseReceiver() {

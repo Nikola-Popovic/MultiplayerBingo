@@ -29,6 +29,7 @@ public class JoinLobbyService extends IntentService {
             case JOIN_LOBBY_ACTION:
                 bingoRepository.joinLobby(lobbyId, userId);
                 i.setAction(JOIN_LOBBY_ACTION);
+                i.putExtra(LOBBY_ID, lobbyId);
                 sendBroadcast(i);
                 break;
             case LEAVE_LOBBY_ACTION:

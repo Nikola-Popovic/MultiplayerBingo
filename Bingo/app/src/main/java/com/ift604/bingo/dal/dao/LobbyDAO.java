@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class LobbyDAO extends GenericDataHandler {
     LobbyDatamapper lobbyMapper;
     private final String lobbyPath = "/lobby";
-    private final String userPath = lobbyPath + "/joueur";
+    private final String userPath = "/user";
     public LobbyDAO() {
         super();
         lobbyMapper = new LobbyDatamapper();
@@ -48,7 +48,7 @@ public class LobbyDAO extends GenericDataHandler {
     }
 
     public void addPersonToLobby(int lobbyId, int userId) throws JSONException, IOException {
-        String url = String.format("%s/%s/%s", lobbyPath, String.valueOf(lobbyId), userPath);
+        String url = String.format("%s/%s%s", lobbyPath, String.valueOf(lobbyId), userPath);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("joueurId", String.valueOf(userId));
         putDataToUrl(url, jsonObject);
