@@ -137,6 +137,8 @@
                 android:textSize="24sp"
                 android:gravity="center_horizontal"
                 android:inputType="textPersonName"
+                android:nextFocusUp="@id/player_name"
+                android:nextFocusLeft="@id/player_name"
                 android:text="@string/anonyme"
                 android:background="@android:color/transparent"/>
 
