@@ -1,5 +1,7 @@
 package com.ift604.bingo.dal.dao;
 
+import com.ift604.bingo.util.ApplicationConstants;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -11,7 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public abstract class GenericDataHandler {
-    private final String serverPath = "http://192.168.0.138:3000";
+    private final String serverPath = ApplicationConstants.SERVER_PATH;
     private final String basePath = "/bingo";
     protected final String apiPath = serverPath + basePath;
 
