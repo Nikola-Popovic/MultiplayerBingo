@@ -1,7 +1,4 @@
-package com.ift604.bingo;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
+package com.ift604.bingo.fel.game;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,13 +10,16 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
+import com.ift604.bingo.R;
 import com.ift604.bingo.controller.GameController;
 import com.ift604.bingo.controller.IListener;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Coordinate;
 import com.ift604.bingo.service.PlayerCardService;
 
-//TODO THIS WILL BE CALLED QUAND LA GAME VA ETRE LANCÉ, pas dans le main activity. SO THIS CLASS WILL BE RENAMED TO GAME ACTIVITY
 public class GameActivity extends AppCompatActivity implements IListener {
 
     FrameLayout playerCardFrameLayout;

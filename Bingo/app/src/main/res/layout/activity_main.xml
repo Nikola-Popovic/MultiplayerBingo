@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".fel.lobby.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -145,7 +145,7 @@
 
     <fragment
         android:id="@+id/lobby_item_current_game_list"
-        android:name="com.ift604.bingo.LobbyItemListFragment"
+        android:name="com.ift604.bingo.fel.lobby.LobbyItemListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

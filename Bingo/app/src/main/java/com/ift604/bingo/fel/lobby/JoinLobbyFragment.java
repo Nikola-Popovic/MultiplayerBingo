@@ -1,4 +1,4 @@
-package com.ift604.bingo;
+package com.ift604.bingo.fel.lobby;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,7 +13,11 @@ import android.widget.EditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import com.ift604.bingo.R;
+import com.ift604.bingo.fel.waitlobby.WaitLobbyActivity;
 import com.ift604.bingo.model.Lobby;
+import com.ift604.bingo.service.JoinLobbyService;
+import com.ift604.bingo.util.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,45 +25,32 @@ import com.ift604.bingo.model.Lobby;
  * create an instance of this fragment.
  */
 public class JoinLobbyFragment extends DialogFragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
+    Intent joinLobbyService;
+    JoinLobbyReceiver joinLobbyReceiver;
     public JoinLobbyFragment() {
-        // Required empty public constructor
     }
-    // TODO: Rename and change types and number of parameters
+
     public static JoinLobbyFragment newInstance() {
         JoinLobbyFragment fragment = new JoinLobbyFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-        //    mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_join_lobby, container, false);
+        View view = inflater.inflate(R.layout.fragment_join_lobby, container, false);
         final DialogFragment dialog = this;
         final EditText lobbyIdEditText = view.findViewById(R.id.join_lobby_id_value);
         view.findViewById(R.id.join_lobby_create_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO ADD LE PARTICIPANT
-                Intent intent = new Intent(v.getContext(), WaitLobbyActivity.class);
-                intent.putExtra("LOBBY_ID", Integer.valueOf(lobbyIdEditText.getText().toString()));
-                v.getContext().startActivity(intent);
+                startJoinLobbyService(Integer.valueOf(lobbyIdEditText.getText().toString()));
+                registerJoinLobbyReceiver();
             }
         });
 
@@ -72,18 +63,34 @@ public class JoinLobbyFragment extends DialogFragment {
         });
         return view;
     }
-    //TODO THIS METHOD IS DUPLICATED WITH THE ONE IN CREATELOBBY
+
     private void startWaitLobbyFragment(Lobby lobby) {
         Intent lobbyIntent = new Intent(getActivity(), WaitLobbyActivity.class);
         lobbyIntent.putExtra("LOBBY", lobby);
         startActivity(lobbyIntent);
     }
 
+    private void startJoinLobbyService(int lobbyId) {
+        joinLobbyService = new Intent(getActivity(), JoinLobbyService.class);
+        joinLobbyService.putExtra(JoinLobbyService.LOBBY_ID, lobbyId);
+        joinLobbyService.putExtra(JoinLobbyService.USER_ID, Util.getConnectedUserId(getContext()));
+        joinLobbyService.setAction(JoinLobbyService.JOIN_LOBBY_ACTION);
+        getActivity().startService(joinLobbyService);
+
+    }
+
     private void registerJoinLobbyReceiver() {
-        JoinLobbyReceiver receiver = new JoinLobbyReceiver();
+        joinLobbyReceiver = new JoinLobbyReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("LOBBY");
-        requireActivity().registerReceiver(receiver, intentFilter);
+        intentFilter.addAction(JoinLobbyService.JOIN_LOBBY_ACTION);
+        requireActivity().registerReceiver(joinLobbyReceiver, intentFilter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().stopService(joinLobbyService);
+        getActivity().unregisterReceiver(joinLobbyReceiver);
     }
 
     public class JoinLobbyReceiver extends BroadcastReceiver {
@@ -94,7 +101,7 @@ public class JoinLobbyFragment extends DialogFragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Lobby lobby  = (Lobby) intent.getSerializableExtra("JOINED_LOBBY");
+            Lobby lobby = (Lobby) intent.getSerializableExtra("JOINED_LOBBY");
             startWaitLobbyFragment(lobby);
         }
     }

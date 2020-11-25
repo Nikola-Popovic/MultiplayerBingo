@@ -1,4 +1,4 @@
-package com.ift604.bingo;
+package com.ift604.bingo.fel.lobby;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ift604.bingo.R;
+import com.ift604.bingo.fel.waitlobby.WaitLobbyActivity;
 import com.ift604.bingo.model.Lobby;
 
 import java.util.ArrayList;
@@ -43,15 +45,10 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), WaitLobbyActivity.class);
-                intent.putExtra("LOBBY_ID", item.getId());
+                intent.putExtra(WaitLobbyActivity.LOBBY_ID, item.getId());
                 v.getContext().startActivity(intent);
             }
         });
-    }
-
-
-    private void startJoinLobbyService() {
-        //TODO, LE RECEIVER PEUT ETRE LE MEME QUE CREATE, ET QUE LAUTRE JOIN
     }
 
     private void setBackGround(@NonNull ViewHolder holder, int position) {

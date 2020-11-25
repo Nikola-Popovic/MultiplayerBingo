@@ -1,6 +1,5 @@
-package com.ift604.bingo;
+package com.ift604.bingo.fel.waitlobby;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,31 +11,38 @@ import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ift604.bingo.R;
+import com.ift604.bingo.fel.game.GameActivity;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.GetLobbyByAttributeService;
+import com.ift604.bingo.service.JoinLobbyService;
 import com.ift604.bingo.service.StartGameService;
+import com.ift604.bingo.util.Util;
 
 public class WaitLobbyActivity extends AppCompatActivity {
+    public static final String LOBBY_ID = "LOBBY_ID";
+
     public Lobby lobby;
     private WaitLobbyParticipantListFragment waitLobbyParticipantListFragment;
     private FrameLayout waitLobbyListFrameLayout;
+    private GetLobbyResponseReceiver getLobbyResponseReceiver;
+    private Intent getLobbyByAttributeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wait_lobby);
-        int lobbyId = getIntent().getIntExtra("LOBBY_ID", 0);
+        int lobbyId = getIntent().getIntExtra(LOBBY_ID, 0);
         startGetLobbyService(lobbyId);
         registerGetLobbyReceiver();
 
         waitLobbyListFrameLayout = findViewById(R.id.wait_lobby_participant_frame_layout);
 
-        final Activity thisActivity = this;
         Button cancelButton = findViewById(R.id.wait_lobby_cancel_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                thisActivity.finish();
+                leaveLobby();
             }
         });
         Button startGameButton = findViewById(R.id.wait_lobby_start_button);
@@ -47,6 +53,22 @@ public class WaitLobbyActivity extends AppCompatActivity {
                 registerWaitingLobby();
             }
         });
+    }
+
+    private void leaveLobby() {
+        Intent leaveLobbyService = new Intent(this, JoinLobbyService.class);
+        leaveLobbyService.setAction(JoinLobbyService.LEAVE_LOBBY_ACTION);
+        leaveLobbyService.putExtra(JoinLobbyService.LOBBY_ID, lobby.getId());
+        leaveLobbyService.putExtra(JoinLobbyService.USER_ID, Util.getConnectedUserId(this));
+        startService(leaveLobbyService);
+        registerLeaveLobbyReceiver();
+    }
+
+    private void registerLeaveLobbyReceiver() {
+        LeaveLobbyReceiver receiver = new LeaveLobbyReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(JoinLobbyService.LEAVE_LOBBY_ACTION);
+        registerReceiver(receiver, intentFilter);
     }
 
 
@@ -75,17 +97,24 @@ public class WaitLobbyActivity extends AppCompatActivity {
     }
 
     private void registerGetLobbyReceiver() {
-        GetLobbyResponseReceiver receiver = new GetLobbyResponseReceiver();
+        getLobbyResponseReceiver = new GetLobbyResponseReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(GetLobbyByAttributeService.GET_BY_ID_ACTION);
-        registerReceiver(receiver, intentFilter);
+        registerReceiver(getLobbyResponseReceiver, intentFilter);
     }
 
     private void startGetLobbyService(int lobbyId) {
-        Intent intent = new Intent(this, GetLobbyByAttributeService.class);
-        intent.setAction(GetLobbyByAttributeService.GET_BY_ID_ACTION);
-        intent.putExtra(GetLobbyByAttributeService.LOBBY_ID_PARAM, lobbyId);
-        startService(intent);
+        getLobbyByAttributeService = new Intent(this, GetLobbyByAttributeService.class);
+        getLobbyByAttributeService.setAction(GetLobbyByAttributeService.GET_BY_ID_ACTION);
+        getLobbyByAttributeService.putExtra(GetLobbyByAttributeService.LOBBY_ID_PARAM, lobbyId);
+        startService(getLobbyByAttributeService);
+    }
+
+    @Override
+    public void onDestroy() {
+        stopService(getLobbyByAttributeService);
+        unregisterReceiver(getLobbyResponseReceiver);
+        super.onDestroy();
     }
 
 
@@ -99,6 +128,19 @@ public class WaitLobbyActivity extends AppCompatActivity {
             //TODO, SI ERREUR, AFFICHER ERREUR ET DETRUIRE ACTIVITÉ
             waitLobbyParticipantListFragment = WaitLobbyParticipantListFragment.newInstance(lobby.getParticipants());
             getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), waitLobbyParticipantListFragment, "un autre joli tag").commit();
+        }
+    }
+
+
+    public class LeaveLobbyReceiver extends BroadcastReceiver {
+
+        public LeaveLobbyReceiver() {
+
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
         }
     }
 }
