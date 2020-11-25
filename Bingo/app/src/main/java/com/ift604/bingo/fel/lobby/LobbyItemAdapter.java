@@ -43,15 +43,10 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), WaitLobbyActivity.class);
-                intent.putExtra("LOBBY_ID", item.getId());
+                intent.putExtra(WaitLobbyActivity.LOBBY_ID, item.getId());
                 v.getContext().startActivity(intent);
             }
         });
-    }
-
-
-    private void startJoinLobbyService() {
-        //TODO, LE RECEIVER PEUT ETRE LE MEME QUE CREATE, ET QUE LAUTRE JOIN
     }
 
     private void setBackGround(@NonNull ViewHolder holder, int position) {

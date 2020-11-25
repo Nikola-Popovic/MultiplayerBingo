@@ -39,8 +39,6 @@ public class LobbyItemListFragment extends Fragment {
 
     public static LobbyItemListFragment newInstance() {
         LobbyItemListFragment fragment = new LobbyItemListFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -80,9 +78,8 @@ public class LobbyItemListFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Bundle b = intent.getBundleExtra("lobbiesNearMe");
-            //todo bundle name, make it global in the other class
-            lobbies = (ArrayList<Lobby>) b.getSerializable("lobbiesNearMeBundle");
+            Bundle b = intent.getBundleExtra(FindLobbyNearMeService.LOBBY_NEAR_ME_EXTRA);
+            lobbies = (ArrayList<Lobby>) b.getSerializable(FindLobbyNearMeService.LOBBY_NEAR_ME_BUNDLE);
             adapter.setLobbies(lobbies);
             adapter.notifyItemRangeChanged(position, lobbies.size());
             adapter.notifyDataSetChanged();

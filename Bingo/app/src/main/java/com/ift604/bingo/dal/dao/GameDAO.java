@@ -1,6 +1,6 @@
 package com.ift604.bingo.dal.dao;
 
-import com.ift604.bingo.DummyCard;
+import com.ift604.bingo.fel.DummyCard;
 import com.ift604.bingo.model.Card;
 
 public class GameDAO extends GenericDataHandler {

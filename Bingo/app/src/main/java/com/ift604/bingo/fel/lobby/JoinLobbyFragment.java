@@ -23,7 +23,8 @@ import com.ift604.bingo.util.Util;
  * create an instance of this fragment.
  */
 public class JoinLobbyFragment extends DialogFragment {
-
+    Intent joinLobbyService;
+    JoinLobbyReceiver joinLobbyReceiver;
     public JoinLobbyFragment() {
     }
 
@@ -61,7 +62,6 @@ public class JoinLobbyFragment extends DialogFragment {
         return view;
     }
 
-    //TODO THIS METHOD IS DUPLICATED WITH THE ONE IN CREATELOBBY
     private void startWaitLobbyFragment(Lobby lobby) {
         Intent lobbyIntent = new Intent(getActivity(), WaitLobbyActivity.class);
         lobbyIntent.putExtra("LOBBY", lobby);
@@ -69,7 +69,7 @@ public class JoinLobbyFragment extends DialogFragment {
     }
 
     private void startJoinLobbyService(int lobbyId) {
-        Intent joinLobbyService = new Intent(getActivity(), JoinLobbyService.class);
+        joinLobbyService = new Intent(getActivity(), JoinLobbyService.class);
         joinLobbyService.putExtra(JoinLobbyService.LOBBY_ID, lobbyId);
         joinLobbyService.putExtra(JoinLobbyService.USER_ID, Util.getConnectedUserId(getContext()));
         joinLobbyService.setAction(JoinLobbyService.JOIN_LOBBY_ACTION);
@@ -78,10 +78,17 @@ public class JoinLobbyFragment extends DialogFragment {
     }
 
     private void registerJoinLobbyReceiver() {
-        JoinLobbyReceiver receiver = new JoinLobbyReceiver();
+        joinLobbyReceiver = new JoinLobbyReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(JoinLobbyService.JOIN_LOBBY_ACTION);
-        requireActivity().registerReceiver(receiver, intentFilter);
+        requireActivity().registerReceiver(joinLobbyReceiver, intentFilter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().stopService(joinLobbyService);
+        getActivity().unregisterReceiver(joinLobbyReceiver);
     }
 
     public class JoinLobbyReceiver extends BroadcastReceiver {
@@ -95,14 +102,5 @@ public class JoinLobbyFragment extends DialogFragment {
             Lobby lobby = (Lobby) intent.getSerializableExtra("JOINED_LOBBY");
             startWaitLobbyFragment(lobby);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    public void cleanUp() {
-
     }
 }

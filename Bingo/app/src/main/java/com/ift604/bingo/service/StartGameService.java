@@ -7,8 +7,6 @@ import com.ift604.bingo.dal.IBingoRepository;
 import com.ift604.bingo.dal.RestServiceDatasource;
 
 public class StartGameService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     public static final String START_GAME_SERVICE = "START_GAME_SERVICE";
     public static final String LOBBY_ID_PARAM ="LOBBY_ID_PARAM";
     public static final String LOBBY_EXTRA ="LOBBY_EXTRA";

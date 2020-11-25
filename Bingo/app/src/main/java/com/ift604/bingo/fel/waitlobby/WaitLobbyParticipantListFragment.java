@@ -19,6 +19,7 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class WaitLobbyParticipantListFragment extends Fragment {
+    private static String PARTICIPANTS_ARG = "PARTICIPANTS";
     private WaitLobbyAdapter adapter;
     private RecyclerView waitLobbyRecyclerView;
     private ArrayList<Participant> participants = new ArrayList<>();
@@ -34,7 +35,7 @@ public class WaitLobbyParticipantListFragment extends Fragment {
     public static WaitLobbyParticipantListFragment newInstance(ArrayList<Participant> participants) {
         WaitLobbyParticipantListFragment fragment = new WaitLobbyParticipantListFragment();
         Bundle args = new Bundle();
-        args.putSerializable("PARTICIPANTS", participants);
+        args.putSerializable(PARTICIPANTS_ARG, participants);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,7 +49,7 @@ public class WaitLobbyParticipantListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        participants = (ArrayList<Participant>) getArguments().getSerializable("PARTICIPANTS");
+        participants = (ArrayList<Participant>) getArguments().getSerializable(PARTICIPANTS_ARG);
         View view = inflater.inflate(R.layout.fragment_wait_lobby_participant_list, container, false);
         waitLobbyRecyclerView = view.findViewById(R.id.wait_lobby_participant_recycler_view);
         waitLobbyRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));

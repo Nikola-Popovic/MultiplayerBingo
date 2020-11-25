@@ -11,47 +11,26 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.CreateLobbyService;
 import com.ift604.bingo.util.Util;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CreateLobbyFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CreateLobbyFragment extends DialogFragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    Intent createLobbyService;
+    CreateLobbyReceiver createLobbyReceiver;
     public CreateLobbyFragment() {
-        // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
     public static CreateLobbyFragment newInstance() {
         CreateLobbyFragment fragment = new CreateLobbyFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -79,35 +58,41 @@ public class CreateLobbyFragment extends DialogFragment {
     }
 
     private void startCreateLobbyService(DialogFragment dialogFragment, String lobbyName) {
-        Intent createLobbyService = new Intent(dialogFragment.getActivity(), CreateLobbyService.class);
+        createLobbyService = new Intent(dialogFragment.getActivity(), CreateLobbyService.class);
         createLobbyService.putExtra(CreateLobbyService.LOBBY_NAME, lobbyName);
         createLobbyService.putExtra(CreateLobbyService.USER_ID, Util.getConnectedUserId(dialogFragment.getContext()));
         dialogFragment.getActivity().startService(createLobbyService);
     }
 
     private void registerCreateLobbyReceiver(DialogFragment dialogFragment) {
-        CreateLobbyReceiver receiver = new CreateLobbyReceiver();
+        createLobbyReceiver = new CreateLobbyReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(CreateLobbyService.CREATE_LOBBY_ACTION);
-        dialogFragment.getActivity().registerReceiver(receiver, intentFilter);
+        dialogFragment.getActivity().registerReceiver(createLobbyReceiver, intentFilter);
     }
 
     private void startWaitLobbyFragment(Lobby lobby) {
         Intent lobbyIntent = new Intent(getActivity(), WaitLobbyActivity.class);
-        lobbyIntent.putExtra("LOBBY_ID", lobby.getId());
+        lobbyIntent.putExtra(WaitLobbyActivity.LOBBY_ID, lobby.getId());
         startActivity(lobbyIntent);
-    }
-
-
-    public class CreateLobbyReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Lobby lobby  = (Lobby) intent.getSerializableExtra(CreateLobbyService.CREATED_LOBBY_EXTRA);
-            startWaitLobbyFragment(lobby);
-        }
     }
 
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().stopService(createLobbyService);
+        getActivity().unregisterReceiver(createLobbyReceiver);
+    }
+
+    public class CreateLobbyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Lobby lobby = (Lobby) intent.getSerializableExtra(CreateLobbyService.CREATED_LOBBY_EXTRA);
+            startWaitLobbyFragment(lobby);
+        }
     }
 }

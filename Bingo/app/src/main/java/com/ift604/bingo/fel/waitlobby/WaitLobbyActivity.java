@@ -18,6 +18,8 @@ import com.ift604.bingo.service.StartGameService;
 import com.ift604.bingo.util.Util;
 
 public class WaitLobbyActivity extends AppCompatActivity {
+    public static final String LOBBY_ID = "LOBBY_ID";
+
     public Lobby lobby;
     private WaitLobbyParticipantListFragment waitLobbyParticipantListFragment;
     private FrameLayout waitLobbyListFrameLayout;
@@ -28,7 +30,7 @@ public class WaitLobbyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wait_lobby);
-        int lobbyId = getIntent().getIntExtra("LOBBY_ID", 0);
+        int lobbyId = getIntent().getIntExtra(LOBBY_ID, 0);
         startGetLobbyService(lobbyId);
         registerGetLobbyReceiver();
 

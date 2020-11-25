@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tournament_detail_refresh_layout"
+    android:id="@+id/lobby_refresh_layout"
     android:name="com.ift604.td1.ui.main.tournament.TournamentItemFragment"
     android:layout_width="match_parent"
     android:layout_gravity="center_horizontal"
