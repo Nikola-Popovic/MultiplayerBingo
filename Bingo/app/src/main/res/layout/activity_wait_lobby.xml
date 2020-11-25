@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/alt_background_shadow"
-    tools:context=".WaitLobbyActivity">
+    tools:context=".fel.waitlobby.WaitLobbyActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,7 +48,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="8sp">
             <Button
-                android:id="@+id/join_lobby_cancel_button"
+                android:id="@+id/wait_lobby_cancel_button"
                 android:layout_width="60sp"
                 android:layout_height="40sp"
                 android:layout_gravity="start|left"
@@ -66,7 +66,7 @@
                 android:layout_height="30dp"/>
 
             <Button
-                android:id="@+id/join_lobby_create_button"
+                android:id="@+id/wait_lobby_start_button"
                 android:layout_width="100sp"
                 android:layout_height="40sp"
                 android:layout_weight="0.3"

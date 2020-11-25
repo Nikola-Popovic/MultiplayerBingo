@@ -1,4 +1,4 @@
-package com.ift604.bingo;
+package com.ift604.bingo.fel.lobby;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.ift604.bingo.R;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.FindLobbyNearMeService;
 
@@ -39,8 +40,6 @@ public class LobbyItemListFragment extends Fragment {
 
     public static LobbyItemListFragment newInstance() {
         LobbyItemListFragment fragment = new LobbyItemListFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -55,6 +54,14 @@ public class LobbyItemListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_lobby_item_list, container, false);
         this.lobbyRecyclerView = view.findViewById(R.id.lobby_recycle_view);
+        this.swipeRefreshLayout = view.findViewById(R.id.lobby_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //TODO REFRESH
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         lobbyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         this.adapter = new LobbyItemAdapter(lobbies);
 
@@ -80,9 +87,8 @@ public class LobbyItemListFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Bundle b = intent.getBundleExtra("lobbiesNearMe");
-            //todo bundle name, make it global in the other class
-            lobbies = (ArrayList<Lobby>) b.getSerializable("lobbiesNearMeBundle");
+            Bundle b = intent.getBundleExtra(FindLobbyNearMeService.LOBBY_NEAR_ME_EXTRA);
+            lobbies = (ArrayList<Lobby>) b.getSerializable(FindLobbyNearMeService.LOBBY_NEAR_ME_BUNDLE);
             adapter.setLobbies(lobbies);
             adapter.notifyItemRangeChanged(position, lobbies.size());
             adapter.notifyDataSetChanged();

@@ -54,6 +54,13 @@ public class LobbyDAO extends GenericDataHandler {
         putDataToUrl(url, jsonObject);
     }
 
+    public void removePersonToLobby(int lobbyId, int userId) throws JSONException, IOException {
+        String url = String.format("%s/%s/%s", lobbyPath, String.valueOf(lobbyId), userPath);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("joueurId", String.valueOf(userId));
+        putDataToUrl(url, jsonObject);
+    }
+
     public Participant createUser(String username) {
 
         String url = userPath;
@@ -67,5 +74,12 @@ public class LobbyDAO extends GenericDataHandler {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void leaveLobby(int lobbyId, int userId) throws JSONException, IOException {
+        String url = String.format("%s/%s/%s", lobbyPath, String.valueOf(lobbyId), userPath);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("joueurId", String.valueOf(userId));
+        deleteDataToUrl(url, jsonObject);
     }
 }

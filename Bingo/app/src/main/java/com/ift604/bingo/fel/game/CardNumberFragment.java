@@ -1,17 +1,15 @@
-package com.ift604.bingo;
+package com.ift604.bingo.fel.game;
 
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.ift604.bingo.controller.GameController;
+import androidx.fragment.app.Fragment;
+
+import com.ift604.bingo.R;
 import com.ift604.bingo.controller.IListener;
 import com.ift604.bingo.model.Box;
 import com.ift604.bingo.model.Coordinate;
@@ -26,7 +24,7 @@ public class CardNumberFragment extends Fragment {
     private static final String COORDINATE = "coordinate";
     private static final String LISTENER = "listener";
     private Coordinate coordinate;
-    //todo implement listener
+
     private IListener listener;
 
     public CardNumberFragment() {
@@ -67,7 +65,6 @@ public class CardNumberFragment extends Fragment {
         return view;
     }
 
-    //TODO FOR LISTENER https://developer.android.com/training/basics/fragments/communicating.html
     private void markBox(TextView b) {
         b.setBackgroundColor(Color.parseColor("#0099ff"));
         listener.onBoxClick(coordinate);

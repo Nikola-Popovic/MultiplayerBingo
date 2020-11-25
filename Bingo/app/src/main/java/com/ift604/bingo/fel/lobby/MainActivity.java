@@ -1,11 +1,9 @@
-package com.ift604.bingo;
+package com.ift604.bingo.fel.lobby;
 
-import android.content.IntentFilter;
-import android.content.Intent;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import android.content.Context;
 import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +11,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.ift604.bingo.R;
 import com.ift604.bingo.model.Participant;
 import com.ift604.bingo.service.CreateUserService;
 import com.ift604.bingo.util.Util;

@@ -32,7 +32,7 @@ public class PlayerCardService extends IntentService {
         b.putSerializable("generatedCard", card);
         Intent i = new Intent();
         i.setAction("PLAYER_CARD_RECEIVER");
-        //TODO set action, if needed
+        //TODO use variable
         i.putExtra("playerCard", b);
         sendBroadcast(i);
     }

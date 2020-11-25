@@ -16,10 +16,10 @@
         android:usesCleartextTraffic="true">
 
 
-        <activity android:name=".WaitLobbyActivity" />
-        <activity android:name=".FindLobbyActivity" />
-        <activity android:name=".GameActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".fel.waitlobby.WaitLobbyActivity" />
+        <activity android:name=".fel.lobby.FindLobbyActivity" />
+        <activity android:name=".fel.game.GameActivity" />
+        <activity android:name=".fel.lobby.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,6 +44,9 @@
             android:exported="true"></service>
         <service
             android:name=".service.JoinLobbyService"
+            android:exported="true" />
+        <service
+            android:name=".service.StartGameService"
             android:exported="true" />
     </application>
 
