@@ -1,4 +1,4 @@
-package com.ift604.bingo;
+package com.ift604.bingo.fel.waitlobby;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ift604.bingo.R;
 import com.ift604.bingo.model.Participant;
 
 import java.util.ArrayList;

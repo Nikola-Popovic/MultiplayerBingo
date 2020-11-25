@@ -1,8 +1,10 @@
-package com.ift604.bingo;
+package com.ift604.bingo.fel.lobby;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.ift604.bingo.R;
 
 public class FindLobbyActivity extends AppCompatActivity {
 

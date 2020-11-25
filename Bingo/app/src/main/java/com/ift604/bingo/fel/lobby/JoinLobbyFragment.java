@@ -1,4 +1,4 @@
-package com.ift604.bingo;
+package com.ift604.bingo.fel.lobby;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.widget.EditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import com.ift604.bingo.R;
+import com.ift604.bingo.fel.waitlobby.WaitLobbyActivity;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.JoinLobbyService;
 import com.ift604.bingo.util.Util;

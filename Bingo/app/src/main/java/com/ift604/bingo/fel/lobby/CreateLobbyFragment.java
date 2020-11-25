@@ -1,4 +1,4 @@
-package com.ift604.bingo;
+package com.ift604.bingo.fel.lobby;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,6 +12,8 @@ import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
 
+import com.ift604.bingo.R;
+import com.ift604.bingo.fel.waitlobby.WaitLobbyActivity;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.CreateLobbyService;
 import com.ift604.bingo.util.Util;
@@ -22,7 +24,6 @@ public class CreateLobbyFragment extends DialogFragment {
     public CreateLobbyFragment() {
     }
 
-    // TODO: Rename and change types and number of parameters
     public static CreateLobbyFragment newInstance() {
         CreateLobbyFragment fragment = new CreateLobbyFragment();
         return fragment;

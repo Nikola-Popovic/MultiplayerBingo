@@ -1,4 +1,4 @@
-package com.ift604.bingo;
+package com.ift604.bingo.fel.waitlobby;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,6 +11,8 @@ import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ift604.bingo.R;
+import com.ift604.bingo.fel.game.GameActivity;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.GetLobbyByAttributeService;
 import com.ift604.bingo.service.JoinLobbyService;

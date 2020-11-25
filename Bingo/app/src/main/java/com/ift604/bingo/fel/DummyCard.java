@@ -1,4 +1,4 @@
-package com.ift604.bingo;
+package com.ift604.bingo.fel;
 
 import com.ift604.bingo.model.Box;
 import com.ift604.bingo.model.Card;
