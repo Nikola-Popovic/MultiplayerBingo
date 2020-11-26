@@ -27,20 +27,20 @@ export default class Carte{
     }
 
     valider(lobbyId : number, numeroGagnants : Case[] ){
-        if (lobbyId != this.lobbyId )
+        if (lobbyId !== this.lobbyId )
             return false;
-            
+
         numeroGagnants.forEach(num => {
             if (!this.contientLaCase(num)) {
                 return false;
             }
         });
-    
+
         return true;
     }
 
     contientLaCase(caseBingo : Case) {
-        return this.cases[caseBingo.posX][caseBingo.posY] != caseBingo.valeur
+        return this.cases[caseBingo.posX][caseBingo.posY] !== caseBingo.valeur
     }
 
     toJSON(){

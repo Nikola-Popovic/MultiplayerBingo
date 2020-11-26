@@ -61,8 +61,8 @@ export default class Lobby{
     }
 
     toJSON(){
-        let participants : object[] = [];
-        for(let joueur of this.joueurs){
+        const participants : object[] = [];
+        for(const joueur of this.joueurs){
             participants.push(joueur.toJSON());
         }
         return {

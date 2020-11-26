@@ -30,7 +30,7 @@ export function addLobby(lobby : Lobby){
 export function saveLobby(lobby : Lobby) {
     const lobbyIndex = lobbies.findIndex(l => l.id === lobby.id)
     if (lobbyIndex >= 0) {
-        lobbies[lobbyIndex] = lobby; 
+        lobbies[lobbyIndex] = lobby;
     }
 }
 
