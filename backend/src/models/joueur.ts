@@ -1,7 +1,6 @@
 import * as database from '../database'
 import Lobby from "./lobby";
 
-
 export default class Joueur{
     readonly id : number;
     private _lobby : Lobby;

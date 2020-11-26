@@ -4,6 +4,8 @@ export default class Case{
     readonly posY : number;
 
     constructor (valeur : number, posX : number, posY : number){
-        this.valeur, this.posX, this.posY
+        this.valeur = valeur;
+        this.posX = posX;
+        this.posY = posY;
     }
 }

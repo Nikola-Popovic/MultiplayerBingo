@@ -107,9 +107,9 @@ router.delete("/:id/joueur", (req : any, res : any, next : any) => {
         lobby.removeFromLobby(joueur);
         joueur.quitterPartie();
 
-        if (lobby.joueurs.length == 0) {
+        if (lobby.joueurs.length === 0) {
           database.deleteLobby(lobby);
-        } else if (lobby.host.id == joueur.id){
+        } else if (lobby.host.id === joueur.id){
           // The host Quit
           lobby.selectNewRandomHost();
           database.saveLobby(lobby);
@@ -131,7 +131,7 @@ router.delete("/:id/joueur", (req : any, res : any, next : any) => {
   else {
     erreur = "Le joueurId recu ne correspond pas a un joueur connu.";
   }
-  if(erreur != ""){
+  if(erreur !== ""){
     res.status(400);
     res.send(erreur);
   }
@@ -156,7 +156,7 @@ router.post("/:id/win", (req : any, res : any, next : any) => {
   else{
     erreur += "Le lobby n'existe pas\n";
   }
-  if(erreur != ""){
+  if(erreur !== ""){
     res.status(400);
     res.send(erreur);
   }
