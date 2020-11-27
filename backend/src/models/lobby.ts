@@ -1,17 +1,22 @@
 import Joueur from "./joueur";
 import * as database from '../database'
+import GeoLocation from "./geolocation";
+import Util from "../util";
 
 export default class Lobby{
     private _joueurs : Joueur[];
     private _host : Joueur;
+    private _geolocation : GeoLocation;
+
     readonly id : number;
     readonly nom : string;
     readonly chiffrePiges : number[];
     readonly estCommencee : boolean;
 
-    constructor(host : Joueur, name : string){
+    constructor(host : Joueur, name : string, geolocation: GeoLocation){
         this._host = host;
         this.nom = name;
+        this._geolocation = geolocation;
         database.addLobby(this);
         this.id = database.lobbies.length;
         this.chiffrePiges = [];
@@ -51,6 +56,10 @@ export default class Lobby{
         return true;
     }
 
+    isInAcceptableDistance(location: GeoLocation): boolean {
+        return this._geolocation.distanceToLocation(location) / 1000 < Util.MAX_LOBBY_DISTANCE
+    }
+
     toJSON(){
         const participants : object[] = [];
         for(const joueur of this.joueurs){
@@ -67,5 +76,4 @@ export default class Lobby{
     equals(lobby : Lobby){
         return this.id === lobby.id;
     }
-
 }
