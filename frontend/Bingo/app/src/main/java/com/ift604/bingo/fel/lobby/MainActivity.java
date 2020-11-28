@@ -4,20 +4,29 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.ift604.bingo.R;
 import com.ift604.bingo.model.Participant;
 import com.ift604.bingo.service.CreateUserService;
+import com.ift604.bingo.service.LocationService;
 import com.ift604.bingo.util.Util;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
+    private LocationService locationService;
+    private Location location;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +64,18 @@ public class MainActivity extends AppCompatActivity {
                 joinLobbyFragment.show(fm, "");
             }
         });
+
+        locationService = new LocationService(getApplicationContext(), this, new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                changeLocation(location);
+            }
+        });
+    }
+
+    public void changeLocation(Location newLocation)
+    {
+        location = newLocation;
     }
 
     private void registerCreateUserReceiver() {
@@ -70,6 +91,12 @@ public class MainActivity extends AppCompatActivity {
         startService(lobbiesService);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            locationService.startListening();
+        }
+    }
 
     public class CreateUserReceiver extends BroadcastReceiver {
 
