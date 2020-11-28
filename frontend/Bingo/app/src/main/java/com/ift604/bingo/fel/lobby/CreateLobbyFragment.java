@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,16 +17,21 @@ import com.ift604.bingo.R;
 import com.ift604.bingo.fel.waitlobby.WaitLobbyActivity;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.CreateLobbyService;
+import com.ift604.bingo.dal.LocationProvider;
 import com.ift604.bingo.util.Util;
 
 public class CreateLobbyFragment extends DialogFragment {
     Intent createLobbyService;
     CreateLobbyReceiver createLobbyReceiver;
+
+    LocationProvider locationProvider;
+
     public CreateLobbyFragment() {
     }
 
-    public static CreateLobbyFragment newInstance() {
+    public static CreateLobbyFragment newInstance(LocationProvider locationProvider) {
         CreateLobbyFragment fragment = new CreateLobbyFragment();
+        fragment.setLocationProvider(locationProvider);
         return fragment;
     }
 
@@ -62,6 +68,9 @@ public class CreateLobbyFragment extends DialogFragment {
         createLobbyService = new Intent(dialogFragment.getActivity(), CreateLobbyService.class);
         createLobbyService.putExtra(CreateLobbyService.LOBBY_NAME, lobbyName);
         createLobbyService.putExtra(CreateLobbyService.USER_ID, Util.getConnectedUserId(dialogFragment.getContext()));
+        Location location = locationProvider.getLocation();
+        createLobbyService.putExtra(CreateLobbyService.LONGITUDE, location.getLongitude());
+        createLobbyService.putExtra(CreateLobbyService.LATITUDE, location.getLatitude());
         dialogFragment.getActivity().startService(createLobbyService);
     }
 
@@ -87,6 +96,11 @@ public class CreateLobbyFragment extends DialogFragment {
         super.onDestroy();
         getActivity().stopService(createLobbyService);
         getActivity().unregisterReceiver(createLobbyReceiver);
+    }
+
+    private void setLocationProvider(LocationProvider locationProvider)
+    {
+        this.locationProvider = locationProvider;
     }
 
     public class CreateLobbyReceiver extends BroadcastReceiver {

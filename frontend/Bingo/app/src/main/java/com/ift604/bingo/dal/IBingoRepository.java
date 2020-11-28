@@ -10,9 +10,9 @@ import java.util.ArrayList;
 public interface IBingoRepository {
   Card getPlayerCard();
   void sendWinnerCardForValidation();
-  ArrayList<Lobby> getLobbiesNearMe();
+  ArrayList<Lobby> getLobbiesNearMe(double longitude, double latitude);
   Lobby getLobby(int lobbyId);
-  Lobby createLobby(int hostId, String name);
+  Lobby createLobby(int hostId, String name, double longitude, double latitude);
   void joinLobby(int lobbyId, int userId);
   void leaveLobby(int lobbyId, int userId);
   Participant createUser(String username);

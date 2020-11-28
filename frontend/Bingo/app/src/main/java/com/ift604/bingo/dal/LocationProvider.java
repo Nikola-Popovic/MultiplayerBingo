@@ -1,4 +1,4 @@
-package com.ift604.bingo.service;
+package com.ift604.bingo.dal;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -14,14 +14,20 @@ import androidx.core.app.ActivityCompat;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 
-public class LocationService {
+public class LocationProvider {
     private final LocationManager _locationManager;
     private final LocationListener _locationListener;
+    private Location location;
 
-    public LocationService(Context context, Activity activity, LocationListener locationListener)
+    public LocationProvider(Context context, Activity activity)
     {
         _locationManager = getSystemService(context, LocationManager.class);
-        _locationListener = locationListener;
+        _locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                changeLocation(location);
+            }
+        };
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -43,4 +49,15 @@ public class LocationService {
     {
         _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, _locationListener);
     }
+
+    public void changeLocation(Location newLocation)
+    {
+        location = newLocation;
+    }
+
+    public Location getLocation()
+    {
+        return location;
+    }
+
 }
