@@ -46,6 +46,14 @@ public class GameActivity extends AppCompatActivity implements IListener {
         registerPlayerCardReceiver();
         ImageView c = findViewById(R.id.player_game_background_image);
         c.setImageResource(R.drawable.player_game_background);
+
+        //TODO WILL SUBSCRIBE HERE FOR WIN
+        //TODO WHEN SOMEONE WIN, THE GAME ENDS FOR EVERYBODY
+
+        //TODO WILL SUBSCRIBE HERE FOR NUMBER CALLED.
+        //TODO WHEN NUMBER ARE CALLED, PREVIOUSNUMBERGRID SHOULD BE UPDATED
+        //TODO WHEN NUMBER ARE CALLED, THE VALUE SHOULD BE SAVED
+        //TODO WHEN NUMBER ARE CALLED, THE NUMBER SHOULD BE DISPLAYED
     }
 
     private void registerPlayerCardReceiver() {

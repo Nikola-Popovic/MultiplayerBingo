@@ -53,6 +53,8 @@ public class WaitLobbyActivity extends AppCompatActivity {
                 registerWaitingLobby();
             }
         });
+
+        //TODO WILL SUBSCRIBE HERE. WHEN THE HOST START THE GAME, THE GameActivity SHOULD START
     }
 
     private void leaveLobby() {
