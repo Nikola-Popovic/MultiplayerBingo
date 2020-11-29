@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ift604.bingo.R;
 import com.ift604.bingo.fel.game.GameActivity;
+import com.ift604.bingo.fel.lobby.MainActivity;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.GetLobbyByAttributeService;
 import com.ift604.bingo.service.JoinLobbyService;
@@ -53,7 +55,8 @@ public class WaitLobbyActivity extends AppCompatActivity {
                 registerWaitingLobby();
             }
         });
-
+        //TODO WILL SUBSCRIBE HERE. WHEN A NEW PERSON ENTER THE LOBBY, HIS NAME WILL BE THERE
+        //TODO WILL SUBSCRIBE HERE. WHEN A NEW PERSON LEAVE THE LOBBY, HIS NAME WILL BE REMOVED
         //TODO WILL SUBSCRIBE HERE. WHEN THE HOST START THE GAME, THE GameActivity SHOULD START
     }
 
@@ -62,8 +65,8 @@ public class WaitLobbyActivity extends AppCompatActivity {
         leaveLobbyService.setAction(JoinLobbyService.LEAVE_LOBBY_ACTION);
         leaveLobbyService.putExtra(JoinLobbyService.LOBBY_ID, lobby.getId());
         leaveLobbyService.putExtra(JoinLobbyService.USER_ID, Util.getConnectedUserId(this));
-        startService(leaveLobbyService);
         registerLeaveLobbyReceiver();
+        startService(leaveLobbyService);
     }
 
     private void registerLeaveLobbyReceiver() {
@@ -114,10 +117,16 @@ public class WaitLobbyActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        leaveLobby();
         stopService(getLobbyByAttributeService);
         unregisterReceiver(getLobbyResponseReceiver);
         super.onDestroy();
+    }
+
+    public void goBackToMainActivty() {
+        Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(i);
     }
 
     public class GetLobbyResponseReceiver extends BroadcastReceiver {
@@ -133,6 +142,16 @@ public class WaitLobbyActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            leaveLobby();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
     public class LeaveLobbyReceiver extends BroadcastReceiver {
 
@@ -142,7 +161,7 @@ public class WaitLobbyActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            finish();
+            goBackToMainActivty();
         }
     }
 }

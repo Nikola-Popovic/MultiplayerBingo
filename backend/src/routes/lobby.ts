@@ -97,7 +97,7 @@ router.put("/:id/user", (req : any, res : any, next : any) => {
 })
 
 // Enlever un joueur d'une partie
-router.delete("/:id/joueur", (req : any, res : any, next : any) => {
+router.delete("/:id/user", (req : any, res : any, next : any) => {
   let erreur = "";
   const joueur = database.getJoueurById(parseInt(req.body.joueurId, 10));
   if(joueur != null){

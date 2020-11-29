@@ -16,7 +16,8 @@
         android:usesCleartextTraffic="true">
 
 
-        <activity android:name=".fel.waitlobby.WaitLobbyActivity" />
+        <activity android:name=".fel.waitlobby.WaitLobbyActivity"
+            android:noHistory="true"/>
         <activity android:name=".fel.lobby.FindLobbyActivity" />
         <activity android:name=".fel.game.GameActivity" />
         <activity android:name=".fel.lobby.MainActivity">

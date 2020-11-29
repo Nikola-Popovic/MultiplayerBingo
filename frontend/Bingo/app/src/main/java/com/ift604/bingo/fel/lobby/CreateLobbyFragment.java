@@ -75,6 +75,7 @@ public class CreateLobbyFragment extends DialogFragment {
     private void startWaitLobbyFragment(Lobby lobby) {
         Intent lobbyIntent = new Intent(getActivity(), WaitLobbyActivity.class);
         lobbyIntent.putExtra(WaitLobbyActivity.LOBBY_ID, lobby.getId());
+        dismiss();
         startActivity(lobbyIntent);
     }
 
@@ -85,14 +86,17 @@ public class CreateLobbyFragment extends DialogFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().stopService(createLobbyService);
-        getActivity().unregisterReceiver(createLobbyReceiver);
+        if (createLobbyService != null) {
+            getActivity().stopService(createLobbyService);
+            getActivity().unregisterReceiver(createLobbyReceiver);
+        }
     }
 
     public class CreateLobbyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             Lobby lobby = (Lobby) intent.getSerializableExtra(CreateLobbyService.CREATED_LOBBY_EXTRA);
+
             startWaitLobbyFragment(lobby);
         }
     }

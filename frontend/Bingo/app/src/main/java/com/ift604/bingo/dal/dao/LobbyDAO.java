@@ -77,7 +77,7 @@ public class LobbyDAO extends GenericDataHandler {
     }
 
     public void leaveLobby(int lobbyId, int userId) throws JSONException, IOException {
-        String url = String.format("%s/%s/%s", lobbyPath, String.valueOf(lobbyId), userPath);
+        String url = String.format("%s/%s%s", lobbyPath, String.valueOf(lobbyId), userPath);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("joueurId", String.valueOf(userId));
         deleteDataToUrl(url, jsonObject);

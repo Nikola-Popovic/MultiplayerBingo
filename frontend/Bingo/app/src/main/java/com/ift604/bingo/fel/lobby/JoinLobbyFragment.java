@@ -26,6 +26,7 @@ import com.ift604.bingo.util.Util;
 public class JoinLobbyFragment extends DialogFragment {
     Intent joinLobbyService;
     JoinLobbyReceiver joinLobbyReceiver;
+
     public JoinLobbyFragment() {
     }
 
@@ -66,6 +67,7 @@ public class JoinLobbyFragment extends DialogFragment {
     private void startWaitLobbyFragment(int lobbyId) {
         Intent lobbyIntent = new Intent(getActivity(), WaitLobbyActivity.class);
         lobbyIntent.putExtra(WaitLobbyActivity.LOBBY_ID, lobbyId);
+        dismiss();
         startActivity(lobbyIntent);
     }
 
@@ -87,8 +89,10 @@ public class JoinLobbyFragment extends DialogFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().stopService(joinLobbyService);
-        getActivity().unregisterReceiver(joinLobbyReceiver);
+        if (joinLobbyService != null) {
+            getActivity().stopService(joinLobbyService);
+            getActivity().unregisterReceiver(joinLobbyReceiver);
+        }
     }
 
     public class JoinLobbyReceiver extends BroadcastReceiver {

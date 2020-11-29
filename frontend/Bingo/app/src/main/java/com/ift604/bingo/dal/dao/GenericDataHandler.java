@@ -73,7 +73,7 @@ public abstract class GenericDataHandler {
         os.close();
 
         //TODO MANAGE ERROR
-        String response = getResponse(conn.getInputStream());
+        String response = getResponseFromUrl(conn.getInputStream());
         conn.disconnect();
         return response;
     }
