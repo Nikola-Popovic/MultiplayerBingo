@@ -10,11 +10,11 @@ import java.util.ArrayList;
 public interface IBingoRepository {
   Card getPlayerCard();
   void sendWinnerCardForValidation();
-  ArrayList<Lobby> getLobbiesNearMe();
-  Lobby getLobby(int lobbyId);
-  Lobby createLobby(int hostId, String name);
-  void joinLobby(int lobbyId, int userId);
-  void leaveLobby(int lobbyId, int userId);
-  Participant createUser(String username);
+  ArrayList<Lobby> getLobbiesNearMe() throws Exception;
+  Lobby getLobby(int lobbyId) throws Exception;
+  Lobby createLobby(int hostId, String name) throws Exception;
+  void joinLobby(int lobbyId, int userId) throws Exception;
+  void leaveLobby(int lobbyId, int userId) throws Exception;
+  Participant createUser(String username) throws Exception;
   void startGame(int lobbyId, int hostId);
 }

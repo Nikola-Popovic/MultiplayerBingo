@@ -10,12 +10,12 @@ import androidx.annotation.Nullable;
 import com.ift604.bingo.dal.RestServiceDatasource;
 import com.ift604.bingo.dal.IBingoRepository;
 import com.ift604.bingo.model.Lobby;
+import com.ift604.bingo.util.Util;
 
 import java.util.ArrayList;
 
 public class FindLobbyNearMeService extends IntentService {
     public static String GET_LOBBY_BY_LOCATION_ACTION = "GET_LOBBY_BY_LOCATION_ACTION";
-    public static String LOBBY_NEAR_ME_BUNDLE = "LOBBY_NEAR_ME_BUNDLE";
     public static String LOBBY_NEAR_ME_EXTRA = "LOBBY_NEAR_ME_EXTRA";
     IBingoRepository bingoRepository;
 
@@ -37,12 +37,16 @@ public class FindLobbyNearMeService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
-        ArrayList<Lobby> lobbies = bingoRepository.getLobbiesNearMe();
-        Bundle b = new Bundle();
-        b.putSerializable(LOBBY_NEAR_ME_BUNDLE, lobbies);
+        ArrayList<Lobby> lobbies = null;
         Intent i = new Intent();
-        i.setAction(GET_LOBBY_BY_LOCATION_ACTION);
-        i.putExtra(LOBBY_NEAR_ME_EXTRA, b);
+        try {
+            lobbies = bingoRepository.getLobbiesNearMe();
+            i.putExtra(LOBBY_NEAR_ME_EXTRA, lobbies);
+            i.setAction(GET_LOBBY_BY_LOCATION_ACTION);
+            i.putExtra(Util.IS_SUCCESS, true);
+        } catch (Exception e) {
+            i.putExtra(Util.IS_SUCCESS, false);
+        }
         sendBroadcast(i);
     }
 }

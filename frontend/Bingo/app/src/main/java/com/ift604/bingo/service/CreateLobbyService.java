@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import com.ift604.bingo.dal.IBingoRepository;
 import com.ift604.bingo.dal.RestServiceDatasource;
 import com.ift604.bingo.model.Lobby;
+import com.ift604.bingo.util.Util;
 
 public class CreateLobbyService extends IntentService {
     public final static String CREATE_LOBBY_ACTION = "CREATED_LOBBY";
@@ -34,13 +35,18 @@ public class CreateLobbyService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        Intent i = new Intent();
         int userId = intent.getIntExtra(USER_ID, 0);
         String lobbyName = intent.getStringExtra(LOBBY_NAME);
-        Lobby lobby = bingoRepository.createLobby(userId, lobbyName);
-        Intent i = new Intent();
-        i.putExtra(CREATED_LOBBY_EXTRA, lobby);
+        Lobby lobby = null;
+        try {
+            lobby = bingoRepository.createLobby(userId, lobbyName);
+            i.putExtra(CREATED_LOBBY_EXTRA, lobby);
+            i.putExtra(Util.IS_SUCCESS, true);
+        } catch (Exception e) {
+            i.putExtra(Util.IS_SUCCESS, false);
+        }
         i.setAction(CREATE_LOBBY_ACTION);
-        //TODO COULD MANAGE ERROR
         sendBroadcast(i);
     }
 }
