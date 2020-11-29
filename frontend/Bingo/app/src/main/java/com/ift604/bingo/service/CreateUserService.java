@@ -36,10 +36,9 @@ public class CreateUserService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         //TODO GET LE USERNAME
-        Participant participant = null;
         Intent i = new Intent();
         try {
-            participant = bingoRepository.createUser("Nikolas Popovik");
+            Participant participant = bingoRepository.createUser("Nikolas Popovik");
             i.putExtra(CREATE_USER_EXTRA, participant);
             i.putExtra(Util.IS_SUCCESS, true);
         } catch (Exception e) {

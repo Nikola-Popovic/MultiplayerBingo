@@ -38,9 +38,8 @@ public class CreateLobbyService extends IntentService {
         Intent i = new Intent();
         int userId = intent.getIntExtra(USER_ID, 0);
         String lobbyName = intent.getStringExtra(LOBBY_NAME);
-        Lobby lobby = null;
         try {
-            lobby = bingoRepository.createLobby(userId, lobbyName);
+            Lobby lobby = bingoRepository.createLobby(userId, lobbyName);
             i.putExtra(CREATED_LOBBY_EXTRA, lobby);
             i.putExtra(Util.IS_SUCCESS, true);
         } catch (Exception e) {

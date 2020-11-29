@@ -36,11 +36,9 @@ public class FindLobbyNearMeService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
-        ArrayList<Lobby> lobbies = null;
         Intent i = new Intent();
         try {
-            lobbies = bingoRepository.getLobbiesNearMe();
+            ArrayList lobbies = bingoRepository.getLobbiesNearMe();
             i.putExtra(LOBBY_NEAR_ME_EXTRA, lobbies);
             i.setAction(GET_LOBBY_BY_LOCATION_ACTION);
             i.putExtra(Util.IS_SUCCESS, true);
