@@ -31,8 +31,8 @@ public class RestServiceDatasource implements IBingoRepository {
     }
 
     @Override
-    public ArrayList<Lobby> getLobbiesNearMe() {
-        return lobbyDAO.getLobbiesNearMe();
+    public ArrayList<Lobby> getLobbiesNearMe(double longitude, double latitude) {
+        return lobbyDAO.getLobbiesNearMe(longitude, latitude);
     }
 
     @Override
@@ -41,9 +41,9 @@ public class RestServiceDatasource implements IBingoRepository {
     }
 
     @Override
-    public Lobby createLobby(int hostId, String name) {
+    public Lobby createLobby(int hostId, String name, double longitude, double latitude) {
         try {
-            return lobbyDAO.createLobby(hostId, name);
+            return lobbyDAO.createLobby(hostId, name, longitude, latitude);
         } catch (Exception e) {
             return new Lobby();
         }

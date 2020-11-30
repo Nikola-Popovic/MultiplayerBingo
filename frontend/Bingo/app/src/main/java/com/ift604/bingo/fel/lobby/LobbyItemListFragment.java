@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ift604.bingo.R;
 import com.ift604.bingo.model.Lobby;
+import com.ift604.bingo.service.CreateLobbyService;
 import com.ift604.bingo.service.FindLobbyNearMeService;
+import com.ift604.bingo.dal.LocationProvider;
 
 import java.util.ArrayList;
 
@@ -27,6 +30,7 @@ public class LobbyItemListFragment extends Fragment {
     ArrayList<Lobby> lobbies = new ArrayList<>();
     LobbyItemAdapter adapter;
 
+    LocationProvider locationProvider;
 
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -38,8 +42,9 @@ public class LobbyItemListFragment extends Fragment {
         this.position = position;
     }
 
-    public static LobbyItemListFragment newInstance() {
+    public static LobbyItemListFragment newInstance(LocationProvider locationProvider) {
         LobbyItemListFragment fragment = new LobbyItemListFragment();
+        fragment.setLocationProvider(locationProvider);
         return fragment;
     }
 
@@ -67,6 +72,16 @@ public class LobbyItemListFragment extends Fragment {
 
         this.lobbyRecyclerView.setAdapter(adapter);
         Intent lobbiesService = new Intent(getActivity(), FindLobbyNearMeService.class);
+        // TODO: figure out why we need this check
+        double lon = 0;
+        double lat = 0;
+        if (locationProvider != null)
+        {
+            lon = locationProvider.getLocation().getLongitude();
+            lat = locationProvider.getLocation().getLatitude();
+        }
+        lobbiesService.putExtra(CreateLobbyService.LONGITUDE, lon);
+        lobbiesService.putExtra(CreateLobbyService.LATITUDE, lat);
         getActivity().startService(lobbiesService);
         registerResponseReceiver();
         return view;
@@ -79,6 +94,10 @@ public class LobbyItemListFragment extends Fragment {
         requireActivity().registerReceiver(receiver, intentFilter);
     }
 
+    private void setLocationProvider(LocationProvider locationProvider)
+    {
+        this.locationProvider = locationProvider;
+    }
 
     public class LobbyResponseReceiver extends BroadcastReceiver {
 
