@@ -118,3 +118,5 @@ dist
 .idea/
 
 package-lock.json
+
+frontend/Bingo/app/src/main/java/com/ift604/bingo/util/ApplicationConstants.java
