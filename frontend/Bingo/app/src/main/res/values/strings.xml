@@ -19,4 +19,6 @@
     <string name="hello">Hello</string>
     <string name="my_name_is">my name is</string>
     <string name="anonyme">Anonyme</string>
+    <string name="error_joining">This lobby doesn\'t exist</string>
+    <string name="error_empty_lobby_name">Lobby name cannot be empty</string>
 </resources>

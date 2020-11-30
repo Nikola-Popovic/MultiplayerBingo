@@ -31,12 +31,12 @@ public class RestServiceDatasource implements IBingoRepository {
     }
 
     @Override
-    public ArrayList<Lobby> getLobbiesNearMe() {
+    public ArrayList<Lobby> getLobbiesNearMe() throws Exception {
         return lobbyDAO.getLobbiesNearMe();
     }
 
     @Override
-    public Lobby getLobby(int lobbyId) {
+    public Lobby getLobby(int lobbyId) throws Exception {
         return lobbyDAO.getLobby(lobbyId);
     }
 
@@ -50,29 +50,17 @@ public class RestServiceDatasource implements IBingoRepository {
     }
 
     @Override
-    public void joinLobby(int lobbyId, int userId) {
-        try {
-            lobbyDAO.addPersonToLobby(lobbyId, userId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void joinLobby(int lobbyId, int userId) throws Exception {
+        lobbyDAO.addPersonToLobby(lobbyId, userId);
     }
 
     @Override
-    public void leaveLobby(int lobbyId, int userId) {
-        try {
-            lobbyDAO.leaveLobby(lobbyId, userId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void leaveLobby(int lobbyId, int userId) throws Exception {
+        lobbyDAO.leaveLobby(lobbyId, userId);
     }
 
     @Override
-    public Participant createUser(String username) {
+    public Participant createUser(String username) throws Exception {
         return lobbyDAO.createUser(username);
     }
 

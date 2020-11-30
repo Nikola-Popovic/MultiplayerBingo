@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 
@@ -43,8 +44,15 @@ public class CreateLobbyFragment extends DialogFragment {
         view.findViewById(R.id.create_lobby_create_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startCreateLobbyService(dialog, lobbyName.getText().toString());
-                registerCreateLobbyReceiver(dialog);
+                String textValue = lobbyName.getText().toString();
+                if(validateNotEmpty(textValue)) {
+                    startCreateLobbyService(dialog, textValue);
+                    registerCreateLobbyReceiver(dialog);
+                }
+                else {
+                    Toast.makeText(dialog.getContext(), getResources().getString(R.string.error_empty_lobby_name), Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -56,6 +64,10 @@ public class CreateLobbyFragment extends DialogFragment {
             }
         });
         return view;
+    }
+
+    private boolean validateNotEmpty(String textValue) {
+        return textValue.length() > 0;
     }
 
     private void startCreateLobbyService(DialogFragment dialogFragment, String lobbyName) {
@@ -75,6 +87,7 @@ public class CreateLobbyFragment extends DialogFragment {
     private void startWaitLobbyFragment(Lobby lobby) {
         Intent lobbyIntent = new Intent(getActivity(), WaitLobbyActivity.class);
         lobbyIntent.putExtra(WaitLobbyActivity.LOBBY_ID, lobby.getId());
+        dismiss();
         startActivity(lobbyIntent);
     }
 
@@ -85,14 +98,17 @@ public class CreateLobbyFragment extends DialogFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().stopService(createLobbyService);
-        getActivity().unregisterReceiver(createLobbyReceiver);
+        if (createLobbyService != null) {
+            getActivity().stopService(createLobbyService);
+            getActivity().unregisterReceiver(createLobbyReceiver);
+        }
     }
 
     public class CreateLobbyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             Lobby lobby = (Lobby) intent.getSerializableExtra(CreateLobbyService.CREATED_LOBBY_EXTRA);
+
             startWaitLobbyFragment(lobby);
         }
     }

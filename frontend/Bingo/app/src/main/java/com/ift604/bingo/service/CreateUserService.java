@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import com.ift604.bingo.dal.IBingoRepository;
 import com.ift604.bingo.dal.RestServiceDatasource;
 import com.ift604.bingo.model.Participant;
+import com.ift604.bingo.util.Util;
 
 public class CreateUserService extends IntentService {
     public static  String CREATE_USER_ACTION = "CREATE_USER_ACTION";
@@ -35,10 +36,15 @@ public class CreateUserService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         //TODO GET LE USERNAME
-        Participant participant = bingoRepository.createUser("Nikolas Popovik");
         Intent i = new Intent();
+        try {
+            Participant participant = bingoRepository.createUser("Nikolas Popovik");
+            i.putExtra(CREATE_USER_EXTRA, participant);
+            i.putExtra(Util.IS_SUCCESS, true);
+        } catch (Exception e) {
+            i.putExtra(Util.IS_SUCCESS, false);
+        }
         i.setAction(CREATE_USER_ACTION);
-        i.putExtra(CREATE_USER_EXTRA, participant);
         sendBroadcast(i);
     }
 }

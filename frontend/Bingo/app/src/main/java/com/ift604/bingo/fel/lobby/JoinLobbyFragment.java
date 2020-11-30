@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -26,6 +27,7 @@ import com.ift604.bingo.util.Util;
 public class JoinLobbyFragment extends DialogFragment {
     Intent joinLobbyService;
     JoinLobbyReceiver joinLobbyReceiver;
+
     public JoinLobbyFragment() {
     }
 
@@ -48,8 +50,14 @@ public class JoinLobbyFragment extends DialogFragment {
         view.findViewById(R.id.join_lobby_create_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startJoinLobbyService(Integer.valueOf(lobbyIdEditText.getText().toString()));
-                registerJoinLobbyReceiver();
+                String textValue = lobbyIdEditText.getText().toString();
+                if(validateNotEmpty(textValue)) {
+                    startJoinLobbyService(Integer.valueOf(lobbyIdEditText.getText().toString()));
+                    registerJoinLobbyReceiver();
+                }
+                else {
+                    Toast.makeText(dialog.getContext(), getResources().getString(R.string.error_empty_lobby_name), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -63,10 +71,19 @@ public class JoinLobbyFragment extends DialogFragment {
         return view;
     }
 
+    private boolean validateNotEmpty(String textValue) {
+        return textValue.length() > 0;
+    }
+
     private void startWaitLobbyFragment(int lobbyId) {
         Intent lobbyIntent = new Intent(getActivity(), WaitLobbyActivity.class);
         lobbyIntent.putExtra(WaitLobbyActivity.LOBBY_ID, lobbyId);
+        dismiss();
         startActivity(lobbyIntent);
+    }
+
+    private void showErrorJoiningLobby() {
+        Toast.makeText(this.getContext(), R.string.error_joining, Toast.LENGTH_SHORT).show();
     }
 
     private void startJoinLobbyService(int lobbyId) {
@@ -87,8 +104,10 @@ public class JoinLobbyFragment extends DialogFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().stopService(joinLobbyService);
-        getActivity().unregisterReceiver(joinLobbyReceiver);
+        if (joinLobbyService != null) {
+            getActivity().stopService(joinLobbyService);
+            getActivity().unregisterReceiver(joinLobbyReceiver);
+        }
     }
 
     public class JoinLobbyReceiver extends BroadcastReceiver {
@@ -100,7 +119,12 @@ public class JoinLobbyFragment extends DialogFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             int lobbyId = intent.getIntExtra(JoinLobbyService.LOBBY_ID, 0);
-            startWaitLobbyFragment(lobbyId);
+            boolean isSuccess = intent.getBooleanExtra(Util.IS_SUCCESS, false);
+            if (isSuccess) {
+                startWaitLobbyFragment(lobbyId);
+            } else {
+                showErrorJoiningLobby();
+            }
         }
     }
 }

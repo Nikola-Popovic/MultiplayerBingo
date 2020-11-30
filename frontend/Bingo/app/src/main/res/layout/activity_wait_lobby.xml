@@ -27,7 +27,7 @@
 
      <LinearLayout
         android:layout_width="360sp"
-        android:layout_height="580sp"
+        android:layout_height="400sp"
         android:gravity="center_horizontal"
          android:background="@drawable/creme_tall_rectange"
         android:orientation="vertical">

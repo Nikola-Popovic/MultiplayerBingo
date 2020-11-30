@@ -1,16 +1,20 @@
 package com.ift604.bingo.dal.dao;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
+import com.androidnetworking.common.Priority;
 import com.ift604.bingo.util.ApplicationConstants;
 
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 
 public abstract class GenericDataHandler {
     private final String serverPath = ApplicationConstants.SERVER_PATH;
@@ -21,109 +25,79 @@ public abstract class GenericDataHandler {
 
     }
 
+    protected ANResponse postDataToUrl(String urlPath, JSONObject jsonParams) {
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                .build();
 
-    protected String getResponseFromUrl(InputStream inputStream) throws IOException {
-        String result = "";
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(inputStream));
-        String readLine = in.readLine();
-        while (readLine != null) {
-            result += readLine;
-            readLine = in.readLine();
-        }
-        in.close();
+        ANRequest request = AndroidNetworking.post(apiPath + urlPath)
+                .setPriority(Priority.HIGH)
+                .addJSONObjectBody(jsonParams)
+                .addHeaders("Accept", "application/json")
+                .addHeaders("Content-Type", "application/json")
+                .build();
 
-        return result;
-    }
 
-    protected String postDataToUrl(String urlPath, JSONObject jsonParams) throws IOException {
-        URL url = new URL(apiPath + urlPath);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setRequestProperty("Accept", "application/json");
-        conn.setDoOutput(true);
-        conn.setDoInput(true);
-        DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-        if (jsonParams.length() > 0) {
-            os.writeBytes(jsonParams.toString());
-
-          //  os.flush();
-          //  os.close();
-        }
-        //TODO MANAGE ERROR
-        String response = getResponse(conn.getInputStream());
-        conn.disconnect();
+        ANResponse response = request.executeForString();
         return response;
     }
 
-    protected String putDataToUrl(String urlPath, JSONObject jsonParams) throws IOException {
-        URL url = new URL(apiPath + urlPath);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("PUT");
-        conn.setRequestProperty("Content-Type", "application/json");
-        //conn.setRequestProperty("Accept", "application/json");
-        conn.setDoOutput(true);
-        conn.setDoInput(true);
-        DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+    protected ANResponse putDataToUrl(String urlPath, JSONObject jsonParams) {
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                .build();
 
-        os.writeBytes(jsonParams.toString());
+        ANRequest request = AndroidNetworking.put(apiPath + urlPath)
+                .setPriority(Priority.HIGH)
+                .addJSONObjectBody(jsonParams)
+                .addHeaders("Accept", "application/json")
+                .addHeaders("Content-Type", "application/json")
+                .build();
 
-        os.flush();
-        os.close();
 
-        //TODO MANAGE ERROR
-        String response = getResponse(conn.getInputStream());
-        conn.disconnect();
+        ANResponse response = request.executeForString();
         return response;
     }
 
 
-    protected String deleteDataToUrl(String urlPath, JSONObject jsonParams) throws IOException {
-        URL url = new URL(apiPath + urlPath);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("DELETE");
-        conn.setRequestProperty("Content-Type", "application/json");
-        //conn.setRequestProperty("Accept", "application/json");
-        conn.setDoOutput(true);
-        conn.setDoInput(true);
-        DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+    protected ANResponse deleteDataToUrl(String urlPath, JSONObject jsonParams) {
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                .build();
 
-        os.writeBytes(jsonParams.toString());
+        ANRequest request = AndroidNetworking.delete(apiPath + urlPath)
+                .setPriority(Priority.HIGH)
+                .addJSONObjectBody(jsonParams)
+                .addHeaders("Accept", "application/json")
+                .addHeaders("Content-Type", "application/json")
+                .build();
 
-        os.flush();
-        os.close();
 
-        //TODO MANAGE ERROR
-        String response = getResponse(conn.getInputStream());
-        conn.disconnect();
+        ANResponse response = request.executeForString();
         return response;
     }
 
-    private String getResponse(InputStream i) throws IOException {
-        String res = "";
-        InputStreamReader in = new InputStreamReader(i);
-        BufferedReader br = new BufferedReader(in);
-        String output;
-        while ((output = br.readLine()) != null) {
-            res += (output);
-        }
+    protected ANResponse getDataFromUrl(String urlPath) {
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                .build();
 
-        return res;
-    }
+        ANRequest request = AndroidNetworking.get(apiPath + urlPath)
+                .setPriority(Priority.HIGH)
+                .addHeaders("Accept", "application/json")
+                .addHeaders("Content-Type", "application/json")
+                .build();
 
-    protected String getDataFromUrl(String urlPath) throws IOException {
-        URL url = new URL(apiPath + urlPath);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-        conn.setRequestProperty("Accept", "application/json");
-        conn.setDoOutput(false);
-        conn.setDoInput(true);
-        conn.setConnectTimeout(1000);
 
-        conn.disconnect();
-
-        return getResponseFromUrl(conn.getInputStream());
+        ANResponse response = request.executeForString();
+        return response;
     }
 }

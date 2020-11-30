@@ -6,6 +6,7 @@ import android.content.Intent;
 import androidx.annotation.Nullable;
 
 import com.ift604.bingo.dal.RestServiceDatasource;
+import com.ift604.bingo.util.Util;
 
 
 public class JoinLobbyService extends IntentService {
@@ -27,13 +28,23 @@ public class JoinLobbyService extends IntentService {
         Intent i = new Intent();
         switch (intent.getAction()) {
             case JOIN_LOBBY_ACTION:
-                bingoRepository.joinLobby(lobbyId, userId);
+                try {
+                    bingoRepository.joinLobby(lobbyId, userId);
+                    i.putExtra(LOBBY_ID, lobbyId);
+                    i.putExtra(Util.IS_SUCCESS, true);
+                } catch (Exception e) {
+                    i.putExtra(Util.IS_SUCCESS, false);
+                }
                 i.setAction(JOIN_LOBBY_ACTION);
-                i.putExtra(LOBBY_ID, lobbyId);
                 sendBroadcast(i);
                 break;
             case LEAVE_LOBBY_ACTION:
-                bingoRepository.leaveLobby(lobbyId, userId);
+                try {
+                    bingoRepository.leaveLobby(lobbyId, userId);
+                    i.putExtra(Util.IS_SUCCESS, true);
+                } catch (Exception e) {
+                    i.putExtra(Util.IS_SUCCESS, false);
+                }
                 i.setAction(LEAVE_LOBBY_ACTION);
                 sendBroadcast(i);
                 break;

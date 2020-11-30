@@ -87,8 +87,7 @@ public class LobbyItemListFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Bundle b = intent.getBundleExtra(FindLobbyNearMeService.LOBBY_NEAR_ME_EXTRA);
-            lobbies = (ArrayList<Lobby>) b.getSerializable(FindLobbyNearMeService.LOBBY_NEAR_ME_BUNDLE);
+            lobbies = (ArrayList<Lobby>) intent.getExtras().getSerializable(FindLobbyNearMeService.LOBBY_NEAR_ME_EXTRA);
             adapter.setLobbies(lobbies);
             adapter.notifyItemRangeChanged(position, lobbies.size());
             adapter.notifyDataSetChanged();
