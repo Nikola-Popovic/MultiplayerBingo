@@ -15,9 +15,6 @@ public class CreateLobbyService extends IntentService {
     public final static String CREATED_LOBBY_EXTRA = "CREATED_LOBBY_EXTRA";
     public static final String USER_ID = "USER_ID";
     public static final String LOBBY_NAME = "LOBBY_NAME";
-    public static final String LONGITUDE = "LONGITUDE";
-    public static final String LATITUDE = "LATITUDE";
-
     IBingoRepository bingoRepository;
 
     public CreateLobbyService(String name) {
@@ -39,9 +36,7 @@ public class CreateLobbyService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         int userId = intent.getIntExtra(USER_ID, 0);
         String lobbyName = intent.getStringExtra(LOBBY_NAME);
-        double longitude = intent.getDoubleExtra(LONGITUDE, 0);
-        double latitude = intent.getDoubleExtra(LATITUDE, 0);
-        Lobby lobby = bingoRepository.createLobby(userId, lobbyName, longitude, latitude);
+        Lobby lobby = bingoRepository.createLobby(userId, lobbyName);
         Intent i = new Intent();
         i.putExtra(CREATED_LOBBY_EXTRA, lobby);
         i.setAction(CREATE_LOBBY_ACTION);

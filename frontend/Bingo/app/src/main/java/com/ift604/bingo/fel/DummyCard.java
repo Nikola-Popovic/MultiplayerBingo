@@ -68,7 +68,7 @@ public class DummyCard {
     public static ArrayList<Lobby> dummyLobby() {
         ArrayList<Lobby> lobbies = new ArrayList();
         for (int i = 0; i < 10; i++) {
-            lobbies.add(new Lobby(i, "Lobby " + i, dummyParticipant(i), 45.51102, -73.56273));
+            lobbies.add(new Lobby(i, "Lobby " + i, dummyParticipant(i), "Location vide"));
         }
         return lobbies;
     }

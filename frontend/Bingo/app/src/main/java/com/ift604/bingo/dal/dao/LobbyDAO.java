@@ -18,14 +18,12 @@ public class LobbyDAO extends GenericDataHandler {
         lobbyMapper = new LobbyDatamapper();
     }
 
-    public ArrayList<Lobby> getLobbiesNearMe(double longitude, double latitude) {
+    public ArrayList<Lobby> getLobbiesNearMe() {
+        String url = lobbyPath;
         try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("longitude", longitude);
-            jsonObject.put("latitude", latitude);
-            String jsonLobbies = postDataToUrl(lobbyPath, jsonObject);
-            return lobbyMapper.buildLobbies(jsonLobbies);
-        } catch (IOException | JSONException e) {
+            String result = getDataFromUrl(url);
+            return lobbyMapper.buildLobbies(result);
+        } catch (IOException e) {
             return new ArrayList<>();
         }
     }
@@ -41,12 +39,10 @@ public class LobbyDAO extends GenericDataHandler {
         }
     }
 
-    public Lobby createLobby(int hostId, String name, double longitude, double latitude) throws IOException, JSONException {
+    public Lobby createLobby(int hostId, String name) throws IOException, JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("hostId", hostId);
         jsonObject.put("nom", name);
-        jsonObject.put("longitude", longitude);
-        jsonObject.put("latitude", latitude);
         String jsonLobby = postDataToUrl(lobbyPath, jsonObject);
         return lobbyMapper.buildLobby(jsonLobby);
     }

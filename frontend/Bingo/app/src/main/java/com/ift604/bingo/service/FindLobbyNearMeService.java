@@ -13,9 +13,6 @@ import com.ift604.bingo.model.Lobby;
 
 import java.util.ArrayList;
 
-import static com.ift604.bingo.service.CreateLobbyService.LATITUDE;
-import static com.ift604.bingo.service.CreateLobbyService.LONGITUDE;
-
 public class FindLobbyNearMeService extends IntentService {
     public static String GET_LOBBY_BY_LOCATION_ACTION = "GET_LOBBY_BY_LOCATION_ACTION";
     public static String LOBBY_NEAR_ME_BUNDLE = "LOBBY_NEAR_ME_BUNDLE";
@@ -39,9 +36,8 @@ public class FindLobbyNearMeService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        double longitude = intent.getDoubleExtra(LONGITUDE, 0);
-        double latitude = intent.getDoubleExtra(LATITUDE, 0);
-        ArrayList<Lobby> lobbies = bingoRepository.getLobbiesNearMe(longitude, latitude);
+
+        ArrayList<Lobby> lobbies = bingoRepository.getLobbiesNearMe();
         Bundle b = new Bundle();
         b.putSerializable(LOBBY_NEAR_ME_BUNDLE, lobbies);
         Intent i = new Intent();

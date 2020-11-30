@@ -4,25 +4,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.ift604.bingo.R;
 import com.ift604.bingo.model.Participant;
 import com.ift604.bingo.service.CreateUserService;
-import com.ift604.bingo.dal.LocationProvider;
 import com.ift604.bingo.util.Util;
 
-public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
-
-    private LocationProvider locationProvider;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         setContentView(R.layout.activity_main);
         startCreateUserService();
         registerCreateUserReceiver();
-        locationProvider = new LocationProvider(getApplicationContext(), this);
+
 
         Button findLobbyBtn = findViewById(R.id.menu_find_lobby_button);
         findLobbyBtn.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getSupportFragmentManager();
-                CreateLobbyFragment createLobbyFragment = CreateLobbyFragment.newInstance(locationProvider);
+                CreateLobbyFragment createLobbyFragment = CreateLobbyFragment.newInstance();
                 createLobbyFragment.show(fm, "");
             }
         });
@@ -61,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 joinLobbyFragment.show(fm, "");
             }
         });
-
     }
 
     private void registerCreateUserReceiver() {
@@ -77,12 +70,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         startService(lobbiesService);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            locationProvider.startListening();
-        }
-    }
 
     public class CreateUserReceiver extends BroadcastReceiver {
 
