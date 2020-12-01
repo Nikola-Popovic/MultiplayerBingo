@@ -14,37 +14,39 @@ import com.ift604.bingo.util.Util;
 
 import java.util.ArrayList;
 
-public class FindLobbyNearMeService extends IntentService {
+public class FindLobbyNearMeService extends GenericRestService {
     public static String GET_LOBBY_BY_LOCATION_ACTION = "GET_LOBBY_BY_LOCATION_ACTION";
     public static String LOBBY_NEAR_ME_EXTRA = "LOBBY_NEAR_ME_EXTRA";
-    IBingoRepository bingoRepository;
 
     public FindLobbyNearMeService(String name) {
         super(name);
     }
 
     public FindLobbyNearMeService() {
-        super("");
+        super("findLobbyNearMeService");
         bingoRepository = new RestServiceDatasource();
     }
 
-    @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    protected Object restAction(Intent i) throws Exception {
+        ArrayList lobbies = bingoRepository.getLobbiesNearMe();
+        return lobbies;
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
-        Intent i = new Intent();
-        try {
-            ArrayList lobbies = bingoRepository.getLobbiesNearMe();
-            i.putExtra(LOBBY_NEAR_ME_EXTRA, lobbies);
-            i.setAction(GET_LOBBY_BY_LOCATION_ACTION);
-            i.putExtra(Util.IS_SUCCESS, true);
-        } catch (Exception e) {
-            i.putExtra(Util.IS_SUCCESS, false);
-        }
-        sendBroadcast(i);
+    protected Intent onSuccess(Object o, Intent intentOutput) {
+        intentOutput.putExtra(LOBBY_NEAR_ME_EXTRA, (ArrayList) o);
+        return intentOutput;
+    }
+
+    @Override
+    protected void onError(Exception e) {
+
+    }
+
+    @Override
+    protected Intent setAction(Intent intentOutput) {
+        intentOutput.setAction(GET_LOBBY_BY_LOCATION_ACTION);
+        return intentOutput;
     }
 }

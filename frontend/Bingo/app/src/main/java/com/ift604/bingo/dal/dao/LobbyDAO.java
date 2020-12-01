@@ -70,7 +70,6 @@ public class LobbyDAO extends GenericDataHandler {
         jsonObject.put("joueurId", String.valueOf(userId));
         ANResponse response = putDataToUrl(url, jsonObject);
         if (response.isSuccess()) {
-
         } else {
             throw new Exception("Error");
         }
