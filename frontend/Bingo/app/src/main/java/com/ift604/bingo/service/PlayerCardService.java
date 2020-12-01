@@ -11,6 +11,7 @@ import com.ift604.bingo.dal.RestServiceDatasource;
 import com.ift604.bingo.dal.IBingoRepository;
 import com.ift604.bingo.model.Card;
 
+//TODO THIS SERVICE IS USELESS. IT WILL BE REPLACED BY A PUSH NOTIFICATION
 public class PlayerCardService extends IntentService {
     IBingoRepository bingoRepository;
 
@@ -32,7 +33,6 @@ public class PlayerCardService extends IntentService {
         b.putSerializable("generatedCard", card);
         Intent i = new Intent();
         i.setAction("PLAYER_CARD_RECEIVER");
-        //TODO use variable
         i.putExtra("playerCard", b);
         sendBroadcast(i);
     }

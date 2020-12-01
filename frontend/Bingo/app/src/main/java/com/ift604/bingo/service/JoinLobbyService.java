@@ -28,15 +28,7 @@ public class JoinLobbyService extends IntentService {
         Intent i = new Intent();
         switch (intent.getAction()) {
             case JOIN_LOBBY_ACTION:
-                try {
-                    bingoRepository.joinLobby(lobbyId, userId);
-                    i.putExtra(LOBBY_ID, lobbyId);
-                    i.putExtra(Util.IS_SUCCESS, true);
-                } catch (Exception e) {
-                    i.putExtra(Util.IS_SUCCESS, false);
-                }
-                i.setAction(JOIN_LOBBY_ACTION);
-                sendBroadcast(i);
+                joinLobbyAction(lobbyId, userId, i);
                 break;
             case LEAVE_LOBBY_ACTION:
                 try {
@@ -49,5 +41,17 @@ public class JoinLobbyService extends IntentService {
                 sendBroadcast(i);
                 break;
         }
+    }
+
+    private void joinLobbyAction(int lobbyId, int userId, Intent i) {
+        try {
+            bingoRepository.joinLobby(lobbyId, userId);
+            i.putExtra(LOBBY_ID, lobbyId);
+            i.putExtra(Util.IS_SUCCESS, true);
+        } catch (Exception e) {
+            i.putExtra(Util.IS_SUCCESS, false);
+        }
+        i.setAction(JOIN_LOBBY_ACTION);
+        sendBroadcast(i);
     }
 }

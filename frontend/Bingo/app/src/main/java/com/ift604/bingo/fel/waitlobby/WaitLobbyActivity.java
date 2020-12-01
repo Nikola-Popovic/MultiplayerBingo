@@ -136,7 +136,6 @@ public class WaitLobbyActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             lobby = (Lobby) intent.getSerializableExtra(GetLobbyByAttributeService.LOBBY_EXTRA);
-            //TODO, SI ERREUR, AFFICHER ERREUR ET DETRUIRE ACTIVITÉ
             waitLobbyParticipantListFragment = WaitLobbyParticipantListFragment.newInstance(lobby.getParticipants());
             getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), waitLobbyParticipantListFragment, "un autre joli tag").commit();
         }

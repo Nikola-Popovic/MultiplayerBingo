@@ -8,37 +8,37 @@ import com.ift604.bingo.dal.RestServiceDatasource;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.util.Util;
 
-public class GetLobbyByAttributeService extends IntentService {
+public class GetLobbyByAttributeService extends GenericRestService {
   public static final String GET_BY_ID_ACTION = "GET_LOBBY_BY_ID";
     public static final String LOBBY_ID_PARAM ="LOBBY_ID_PARAM";
     public static final String LOBBY_EXTRA ="LOBBY_EXTRA";
 
-    IBingoRepository bingoRepository;
-
     public GetLobbyByAttributeService() {
-        super("GetLobbyByAttributeService");
-        bingoRepository = new RestServiceDatasource();
+        super("getLobbyByAttributeService");
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            Intent i = new Intent();
-            final String action = intent.getAction();
-            if (GET_BY_ID_ACTION.equals(action)) {
-                final int lobbyId = intent.getIntExtra(LOBBY_ID_PARAM, 0);
-                Lobby lobby = null;
-                try {
-                    lobby = bingoRepository.getLobby(lobbyId);
-                    i.putExtra(LOBBY_EXTRA, lobby);
-                    i.putExtra(Util.IS_SUCCESS, true);
-                } catch (Exception e) {
-                    i.putExtra(Util.IS_SUCCESS, false);
-                }
-                i.setAction(GET_BY_ID_ACTION);
-                sendBroadcast(i);
-            }
-        }
+    protected Object restAction(Intent i) throws Exception {
+        final int lobbyId = i.getIntExtra(LOBBY_ID_PARAM, 0);
+        Lobby lobby = bingoRepository.getLobby(lobbyId);
+        return lobby;
+    }
+
+    @Override
+    protected Intent onSuccess(Object o, Intent intentOutput) {
+        intentOutput.putExtra(LOBBY_EXTRA, (Lobby) o);
+        return intentOutput;
+    }
+
+    @Override
+    protected void onError(Exception e) {
+
+    }
+
+    @Override
+    protected Intent setAction(Intent intentOutput) {
+        intentOutput.setAction(GET_BY_ID_ACTION);
+        return intentOutput;
     }
 
 }
