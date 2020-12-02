@@ -7,16 +7,18 @@ public class Lobby implements Serializable {
     Integer id;
     String name;
     ArrayList<Participant> participants;
-    String location;
+    double longitude;
+    double latitude;
     Participant host;
     //TODO GERER LA LOCATION
 
 
-    public Lobby(Integer id, String name, ArrayList<Participant> participants, String location) {
+    public Lobby(Integer id, String name, ArrayList<Participant> participants, double longitude, double latitude) {
         this.id = id;
         this.name = name;
         this.participants = participants;
-        this.location = location;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public Lobby() {
@@ -47,12 +49,20 @@ public class Lobby implements Serializable {
         this.participants = participants;
     }
 
-    public String getLocation() {
-        return location;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public Participant getHost() {
