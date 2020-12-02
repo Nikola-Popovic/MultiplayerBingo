@@ -44,8 +44,6 @@ public class GameActivity extends AppCompatActivity implements IListener {
         playerCardFrameLayout = findViewById(R.id.player_card_frame_layout);
         startService(generateCardService);
         registerPlayerCardReceiver();
-        ImageView c = findViewById(R.id.player_game_background_image);
-        c.setImageResource(R.drawable.player_game_background);
 
         //TODO WILL SUBSCRIBE HERE FOR WIN
         //TODO WHEN SOMEONE WIN, THE GAME ENDS FOR EVERYBODY

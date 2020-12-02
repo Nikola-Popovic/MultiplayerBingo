@@ -66,7 +66,7 @@ public class CardNumberFragment extends Fragment {
     }
 
     private void markBox(TextView b) {
-        b.setBackgroundColor(Color.parseColor("#0099ff"));
+       //  b.setBackgroundColor(Color.parseColor("#0099ff"));
         listener.onBoxClick(coordinate);
     }
 }

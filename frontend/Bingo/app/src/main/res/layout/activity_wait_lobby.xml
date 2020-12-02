@@ -18,14 +18,18 @@
         app:layout_constraintVertical_bias="0.024"
         tools:layout_editor_absoluteX="16dp">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="240sp"
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8sp"
-            app:srcCompat="@drawable/waiting_room" />
+            android:layout_marginTop="15sp"
+            android:layout_marginBottom="20sp"
+            android:fontFamily="@font/cooper_black_regular"
+            android:text="@string/waiting_room"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30sp" />
 
-     <LinearLayout
+        <LinearLayout
         android:layout_width="360sp"
         android:layout_height="400sp"
         android:gravity="center_horizontal"
@@ -81,4 +85,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
