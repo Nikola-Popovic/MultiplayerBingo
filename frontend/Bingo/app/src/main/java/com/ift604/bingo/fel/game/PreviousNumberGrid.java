@@ -47,7 +47,7 @@ public class PreviousNumberGrid extends DialogFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        FrameLayout previousNumberFrameLayout = (FrameLayout) view.findViewById(R.id.previous_number_frame_layout);
+        FrameLayout previousNumberFrameLayout = (FrameLayout) view.findViewById(R.id.previous_numbers_frame_layout);
         Card card = generateFullGrid();
         getChildFragmentManager().beginTransaction().add(previousNumberFrameLayout.getId(), CardFragment.newInstance(card, null), "previous number").commit();
         super.onViewCreated(view, savedInstanceState);

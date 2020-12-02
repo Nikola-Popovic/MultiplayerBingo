@@ -9,6 +9,7 @@ import com.ift604.bingo.dal.RestServiceDatasource;
 public class StartGameService extends GenericRestService {
     public static final String START_GAME_SERVICE = "START_GAME_SERVICE";
     public static final String LOBBY_ID_PARAM ="LOBBY_ID_PARAM";
+    public static final String LOBBY_HOST ="LOBBY_HOST_PARAM";
     public static final String LOBBY_EXTRA ="LOBBY_EXTRA";
 
 
@@ -18,12 +19,15 @@ public class StartGameService extends GenericRestService {
 
     @Override
     protected Object restAction(Intent i) throws Exception {
+        final int lobbyId = i.getIntExtra(LOBBY_ID_PARAM, 0);
+        final int lobbyHost = i.getIntExtra(LOBBY_HOST, 0);
+        bingoRepository.startGame(lobbyId, lobbyHost);
         return null;
     }
 
     @Override
     protected Intent onSuccess(Object o, Intent intentOutput) {
-        return null;
+        return intentOutput;
     }
 
     @Override

@@ -26,6 +26,11 @@ public class RestServiceDatasource implements IBingoRepository {
     }
 
     @Override
+    public String getPreviousNumber() {
+        return gameDAO.getPreviousNumber();
+    }
+
+    @Override
     public void sendWinnerCardForValidation() {
 
     }

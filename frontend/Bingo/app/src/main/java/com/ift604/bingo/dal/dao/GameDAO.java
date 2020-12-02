@@ -24,4 +24,9 @@ public class GameDAO extends GenericDataHandler {
 //            return new ArrayList<>();
 //        }
     }
+
+    public String getPreviousNumber() {
+        // TODO : Supp fellas. Goota push them balls
+        return "B5";
+    }
 }

@@ -8,6 +8,7 @@
     <TextView
         android:id="@+id/header_letter_button"
         android:background="@drawable/box_number"
-        style="@style/bingo_case_style"/>
+        style="@style/bingo_case_style"
+        android:textSize="35sp"/>
 
 </FrameLayout>
