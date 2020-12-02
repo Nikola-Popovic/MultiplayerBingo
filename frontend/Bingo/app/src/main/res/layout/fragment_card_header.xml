@@ -6,11 +6,9 @@
     tools:context=".fel.game.CardHeaderFragment">
 
     <TextView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/header_letter"
         android:id="@+id/header_letter_button"
-        android:gravity="center"
-        android:textColor="#0400ff"/>
+        android:background="@drawable/box_number"
+        style="@style/bingo_case_style"
+        android:textSize="35sp"/>
 
 </FrameLayout>

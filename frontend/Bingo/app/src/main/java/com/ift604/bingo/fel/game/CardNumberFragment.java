@@ -1,12 +1,14 @@
 package com.ift604.bingo.fel.game;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.ift604.bingo.R;
@@ -24,6 +26,7 @@ public class CardNumberFragment extends Fragment {
     private static final String COORDINATE = "coordinate";
     private static final String LISTENER = "listener";
     private Coordinate coordinate;
+    private boolean isClicked = false;
 
     private IListener listener;
 
@@ -66,7 +69,9 @@ public class CardNumberFragment extends Fragment {
     }
 
     private void markBox(TextView b) {
-        b.setBackgroundColor(Color.parseColor("#0099ff"));
+        isClicked = !isClicked;
+        int drawable = isClicked ? R.drawable.box_number_selected : R.drawable.box_number;
+        b.setBackground(ContextCompat.getDrawable(getContext(), drawable));
         listener.onBoxClick(coordinate);
     }
 }

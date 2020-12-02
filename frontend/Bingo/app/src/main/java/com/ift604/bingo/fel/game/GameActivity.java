@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -18,11 +17,13 @@ import com.ift604.bingo.controller.GameController;
 import com.ift604.bingo.controller.IListener;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Coordinate;
+import com.ift604.bingo.service.DrawnNumberService;
 import com.ift604.bingo.service.PlayerCardService;
 
 public class GameActivity extends AppCompatActivity implements IListener {
 
     FrameLayout playerCardFrameLayout;
+    FrameLayout previousNumbersFrameLayout;
     public GameController gameController;
     GameActivity gameActivity;
 
@@ -31,6 +32,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
         super.onCreate(savedInstanceState);
         gameActivity = this;
         Intent generateCardService = new Intent(this, PlayerCardService.class);
+        Intent previousNumberService = new Intent(this, DrawnNumberService.class);
         setContentView(R.layout.activity_game);
         Button previousNumberButton = findViewById(R.id.previous_number_button);
         previousNumberButton.setOnClickListener(new View.OnClickListener() {
@@ -43,9 +45,10 @@ public class GameActivity extends AppCompatActivity implements IListener {
         });
         playerCardFrameLayout = findViewById(R.id.player_card_frame_layout);
         startService(generateCardService);
+        startService(previousNumberService);
         registerPlayerCardReceiver();
-        ImageView c = findViewById(R.id.player_game_background_image);
-        c.setImageResource(R.drawable.player_game_background);
+        registerNewNumberReceiver();
+        previousNumbersFrameLayout = findViewById(R.id.previous_numbers_frame_layout);
 
         //TODO WILL SUBSCRIBE HERE FOR WIN
         //TODO WHEN SOMEONE WIN, THE GAME ENDS FOR EVERYBODY
@@ -56,6 +59,11 @@ public class GameActivity extends AppCompatActivity implements IListener {
         //TODO WHEN NUMBER ARE CALLED, THE NUMBER SHOULD BE DISPLAYED
     }
 
+    private void registerNewNumberReceiver() {
+        PreviousNumberReceiver receiver = new PreviousNumberReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+    }
+
     private void registerPlayerCardReceiver() {
         PlayerCardReceiver receiver = new PlayerCardReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -64,6 +72,15 @@ public class GameActivity extends AppCompatActivity implements IListener {
     }
 
     public class PlayerCardReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Card card = (Card) intent.getBundleExtra("playerCard").getSerializable("generatedCard");
+            gameController = new GameController(card);
+            getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "un autre joli tag").commit();
+        }
+    }
+
+    public class PreviousNumberReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             Card card = (Card) intent.getBundleExtra("playerCard").getSerializable("generatedCard");

@@ -1,5 +1,6 @@
 package com.ift604.bingo.fel.waitlobby;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 
 public class WaitLobbyAdapter extends RecyclerView.Adapter<WaitLobbyAdapter.ViewHolder> {
     private ArrayList<Participant> participants = new ArrayList();
-
+    private Context ctx;
     public WaitLobbyAdapter(ArrayList<Participant> participants) {
         this.participants = participants;
     }
@@ -27,6 +28,7 @@ public class WaitLobbyAdapter extends RecyclerView.Adapter<WaitLobbyAdapter.View
     public WaitLobbyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_wait_lobby_participant_item, parent, false);
+        ctx = parent.getContext();
         return new WaitLobbyAdapter.ViewHolder(view);
     }
 

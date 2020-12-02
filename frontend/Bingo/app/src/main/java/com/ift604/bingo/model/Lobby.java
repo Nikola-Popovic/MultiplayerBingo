@@ -1,10 +1,13 @@
 package com.ift604.bingo.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Lobby implements Serializable {
     Integer id;
+    @SerializedName("nom")
     String name;
     ArrayList<Participant> participants;
     String location;
@@ -15,6 +18,7 @@ public class Lobby implements Serializable {
     public Lobby(Integer id, String name, ArrayList<Participant> participants, String location) {
         this.id = id;
         this.name = name;
+        this.host = host;
         this.participants = participants;
         this.location = location;
     }

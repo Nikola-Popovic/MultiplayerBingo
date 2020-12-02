@@ -4,9 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -53,6 +57,32 @@ public class MainActivity extends AppCompatActivity {
                 FragmentManager fm = getSupportFragmentManager();
                 JoinLobbyFragment joinLobbyFragment = JoinLobbyFragment.newInstance();
                 joinLobbyFragment.show(fm, "");
+            }
+        });
+
+        EditText playerName = findViewById(R.id.player_name);
+        // Get preferences
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        String userName = settings.getString("Username", "Anonyme");
+        playerName.setText(userName);
+
+        playerName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("Username",editable.toString());
+                editor.commit();
             }
         });
     }

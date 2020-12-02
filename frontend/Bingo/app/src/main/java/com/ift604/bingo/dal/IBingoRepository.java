@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public interface IBingoRepository {
   Card getPlayerCard();
+  String getPreviousNumber();
   void sendWinnerCardForValidation();
   ArrayList<Lobby> getLobbiesNearMe() throws Exception;
   Lobby getLobby(int lobbyId) throws Exception;

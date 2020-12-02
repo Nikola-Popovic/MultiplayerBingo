@@ -18,7 +18,7 @@ public class WaitLobbyParticipantItemFragment extends Fragment {
     public WaitLobbyParticipantItemFragment() {
     }
 
-    public static WaitLobbyParticipantItemFragment newInstance(String param1, String param2) {
+    public static WaitLobbyParticipantItemFragment newInstance() {
         WaitLobbyParticipantItemFragment fragment = new WaitLobbyParticipantItemFragment();
         return fragment;
     }
