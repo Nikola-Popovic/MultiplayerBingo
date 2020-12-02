@@ -2,6 +2,7 @@ package com.ift604.bingo.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
@@ -26,7 +27,9 @@ public class CreateUserService extends GenericRestService {
 
     @Override
     protected Object restAction(Intent i) throws Exception {
-        return bingoRepository.createUser("Nikolas Popovik");
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        String userName = settings.getString("Username", "Anonyme");
+        return bingoRepository.createUser(userName);
     }
 
     @Override
