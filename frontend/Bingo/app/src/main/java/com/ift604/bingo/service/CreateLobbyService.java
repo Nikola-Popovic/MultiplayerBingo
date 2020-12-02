@@ -1,13 +1,7 @@
 package com.ift604.bingo.service;
 
-import android.app.IntentService;
 import android.content.Intent;
-import android.os.IBinder;
 
-import androidx.annotation.Nullable;
-
-import com.ift604.bingo.dal.IBingoRepository;
-import com.ift604.bingo.dal.RestServiceDatasource;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.util.Util;
 
@@ -16,6 +10,8 @@ public class CreateLobbyService extends GenericRestService {
     public final static String CREATED_LOBBY_EXTRA = "CREATED_LOBBY_EXTRA";
     public static final String USER_ID = "USER_ID";
     public static final String LOBBY_NAME = "LOBBY_NAME";
+    public static final String LONGITUDE = "LONGITUDE";
+    public static final String LATITUDE = "LATITUDE";
 
     public CreateLobbyService(String name) {
         super(name);
@@ -29,7 +25,9 @@ public class CreateLobbyService extends GenericRestService {
     protected Object restAction(Intent intent) throws Exception {
         int userId = intent.getIntExtra(USER_ID, 0);
         String lobbyName = intent.getStringExtra(LOBBY_NAME);
-        return bingoRepository.createLobby(userId, lobbyName);
+        double longitude = intent.getDoubleExtra(LONGITUDE, 0);
+        double latitude = intent.getDoubleExtra(LATITUDE, 0);
+        return bingoRepository.createLobby(userId, lobbyName, longitude, latitude);
     }
 
     @Override
