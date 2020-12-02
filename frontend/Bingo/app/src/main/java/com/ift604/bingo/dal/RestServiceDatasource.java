@@ -6,6 +6,9 @@ import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.model.Participant;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class RestServiceDatasource implements IBingoRepository {
@@ -33,8 +36,8 @@ public class RestServiceDatasource implements IBingoRepository {
     }
 
     @Override
-    public ArrayList<Lobby> getLobbiesNearMe(double longitude, double latitude) throws Exception{
-        return lobbyDAO.getLobbiesNearMe(longitude, latitude);
+    public ArrayList<Lobby> getLobbiesNearMe() throws Exception {
+        return lobbyDAO.getLobbiesNearMe();
     }
 
     @Override
@@ -43,9 +46,9 @@ public class RestServiceDatasource implements IBingoRepository {
     }
 
     @Override
-    public Lobby createLobby(int hostId, String name, double longitude, double latitude) {
+    public Lobby createLobby(int hostId, String name) {
         try {
-            return lobbyDAO.createLobby(hostId, name, longitude, latitude);
+            return lobbyDAO.createLobby(hostId, name);
         } catch (Exception e) {
             return new Lobby();
         }

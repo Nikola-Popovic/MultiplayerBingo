@@ -11,9 +11,9 @@ public interface IBingoRepository {
   Card getPlayerCard();
   String getPreviousNumber();
   void sendWinnerCardForValidation();
-  ArrayList<Lobby> getLobbiesNearMe(double longitude, double latitude) throws Exception;
+  ArrayList<Lobby> getLobbiesNearMe() throws Exception;
   Lobby getLobby(int lobbyId) throws Exception;
-  Lobby createLobby(int hostId, String name, double longitude, double latitude) throws Exception;
+  Lobby createLobby(int hostId, String name) throws Exception;
   void joinLobby(int lobbyId, int userId) throws Exception;
   void leaveLobby(int lobbyId, int userId) throws Exception;
   Participant createUser(String username) throws Exception;

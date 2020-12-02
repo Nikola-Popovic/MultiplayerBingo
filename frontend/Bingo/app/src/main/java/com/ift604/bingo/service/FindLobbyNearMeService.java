@@ -1,14 +1,18 @@
 package com.ift604.bingo.service;
 
+import android.app.IntentService;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.IBinder;
+
+import androidx.annotation.Nullable;
 
 import com.ift604.bingo.dal.RestServiceDatasource;
+import com.ift604.bingo.dal.IBingoRepository;
 import com.ift604.bingo.model.Lobby;
+import com.ift604.bingo.util.Util;
 
 import java.util.ArrayList;
-
-import static com.ift604.bingo.service.CreateLobbyService.LATITUDE;
-import static com.ift604.bingo.service.CreateLobbyService.LONGITUDE;
 
 public class FindLobbyNearMeService extends GenericRestService {
     public static String GET_LOBBY_BY_LOCATION_ACTION = "GET_LOBBY_BY_LOCATION_ACTION";
@@ -25,9 +29,7 @@ public class FindLobbyNearMeService extends GenericRestService {
 
     @Override
     protected Object restAction(Intent i) throws Exception {
-        double longitude = i.getDoubleExtra(LONGITUDE, 0);
-        double latitude = i.getDoubleExtra(LATITUDE, 0);
-        ArrayList<Lobby> lobbies = bingoRepository.getLobbiesNearMe(longitude, latitude);
+        ArrayList lobbies = bingoRepository.getLobbiesNearMe();
         return lobbies;
     }
 
