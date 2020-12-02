@@ -16,7 +16,6 @@ public class LobbyDatamapper {
     public Lobby buildLobby(String json) {
         try {
             JSONObject jsonObject = new JSONObject(json);
-            jsonObject = jsonObject.getJSONObject("lobby");
             Gson gson = new Gson();
             return (Lobby) gson.fromJson(jsonObject.toString(), new TypeToken<Lobby>(){}.getType());
         } catch (JSONException e) {
@@ -28,7 +27,6 @@ public class LobbyDatamapper {
     public Participant mapUserToJson(String postDataToUrl) {
         try {
             JSONObject jsonObject = new JSONObject(postDataToUrl);
-            jsonObject = jsonObject.getJSONObject("joueur");
             Gson gson = new Gson();
             return (Participant) gson.fromJson(jsonObject.toString(), new TypeToken<Participant>(){}.getType());
         } catch (JSONException e) {
@@ -39,8 +37,7 @@ public class LobbyDatamapper {
 
     public ArrayList<Lobby> buildLobbies(String result) {
         try {
-            JSONObject jsonObject = new JSONObject(result);
-            JSONArray arr = jsonObject.getJSONArray("lobbies");
+            JSONArray arr = new JSONArray(result);
             Gson gson = new Gson();
             return (ArrayList<Lobby>) gson.fromJson(arr.toString(), new TypeToken<ArrayList<Lobby>>(){}.getType());
         } catch (JSONException e) {
