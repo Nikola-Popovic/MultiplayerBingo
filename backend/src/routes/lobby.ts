@@ -10,9 +10,7 @@ router.get("/", (req : any, res : any, next : any) => {
   for(const lobby of database.lobbies.filter(l => !l.estCommencee)){
     lobbies.push(lobby.toJSON());
   }
-  res.send({
-    "lobbies" : lobbies
-  });
+  res.send(lobbies);
 })
 
 // Créer une partie
@@ -26,9 +24,7 @@ router.post("/", (req : any, res : any, next : any) => {
   else {
     if (host != null) {
       const lobby = new Lobby(host, lobbyName);
-      res.send({
-        "lobby": lobby.toJSON()
-      });
+      res.send(lobby.toJSON());
     } else {
       res.status(400);
       res.send("Le hostId ne correspond pas a un joueur connu.");
@@ -40,9 +36,7 @@ router.post("/", (req : any, res : any, next : any) => {
 router.get("/:id", (req : any, res : any, next : any) => {
   const lobby = database.getLobbyById(parseInt(req.params.id, 10));
   if(lobby !== undefined) {
-    res.send({
-      "lobby": lobby.toJSON()
-    });
+    res.send(lobby.toJSON());
   }
   else{
     res.status(400);
@@ -55,9 +49,7 @@ router.get("/carte/:id", (req : any, res : any, next : any) => {
   const id = parseInt(req.params.id, 10);
   if(database.lobbyExiste(id)){
     const carte = new Carte(id);
-    res.send({
-      "carte" : carte.toJSON()
-    });
+    res.send(carte.toJSON());
   }
   else{
     res.status(400);
@@ -76,9 +68,7 @@ router.put("/:id/user", (req : any, res : any, next : any) => {
         lobby.addToLobby(joueur);
         database.saveLobby(lobby);
         joueur.assignerALobby(lobby);
-        res.send({
-          "success": true
-        })
+        res.status(204).end();
       } else {
         erreur = "Le joueur recu est deja inscrit dans un lobby.";
       }
@@ -116,9 +106,7 @@ router.delete("/:id/user", (req : any, res : any, next : any) => {
         } else {
           database.saveLobby(lobby);
         }
-        res.send({
-          "success": true
-        })
+        res.status(204).end();
       }
       else {
         erreur = "Le joueur n'est pas inscrit au lobby recu, nous ne pouvons donc pas le desinscrire.";
