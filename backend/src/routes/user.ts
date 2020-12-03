@@ -1,6 +1,5 @@
 import express from 'express'
 const router = express.Router();
-import * as database from '../database'
 import Joueur from "../models/joueur";
 
 router.post("/", (req : any, res : any, next : any) => {
