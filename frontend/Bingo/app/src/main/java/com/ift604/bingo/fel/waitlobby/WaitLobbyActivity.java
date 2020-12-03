@@ -138,6 +138,15 @@ public class WaitLobbyActivity extends AppCompatActivity {
             lobby = (Lobby) intent.getSerializableExtra(GetLobbyByAttributeService.LOBBY_EXTRA);
             waitLobbyParticipantListFragment = WaitLobbyParticipantListFragment.newInstance(lobby.getParticipants());
             getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), waitLobbyParticipantListFragment, "un autre joli tag").commit();
+
+            Button startGameButton = findViewById(R.id.wait_lobby_start_button);
+            int hostId = lobby.getHost().getId();
+            int userId = Util.getConnectedUserId(context);
+            if (hostId != userId)
+            {
+                startGameButton.setEnabled(false);
+                startGameButton.setVisibility(View.GONE);
+            }
         }
     }
 
