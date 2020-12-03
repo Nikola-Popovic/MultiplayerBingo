@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,22 +14,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.ift604.bingo.R;
+import com.ift604.bingo.dal.LocationProvider;
 import com.ift604.bingo.model.Participant;
 import com.ift604.bingo.service.CreateUserService;
 import com.ift604.bingo.util.Util;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
+    private LocationProvider locationProvider;
+    private Location location;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startCreateUserService();
         registerCreateUserReceiver();
+        locationProvider = new LocationProvider(getApplicationContext(), this);
 
 
         Button findLobbyBtn = findViewById(R.id.menu_find_lobby_button);
@@ -45,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getSupportFragmentManager();
-                CreateLobbyFragment createLobbyFragment = CreateLobbyFragment.newInstance();
+                CreateLobbyFragment createLobbyFragment = CreateLobbyFragment.newInstance(locationProvider);
                 createLobbyFragment.show(fm, "");
             }
         });
@@ -100,6 +108,12 @@ public class MainActivity extends AppCompatActivity {
         startService(lobbiesService);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            locationProvider.startListening();
+        }
+    }
 
     public class CreateUserReceiver extends BroadcastReceiver {
 
