@@ -2,15 +2,22 @@ package com.ift604.bingo.fel.game;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ift604.bingo.R;
 import com.ift604.bingo.controller.GameController;
@@ -27,6 +34,11 @@ public class GameActivity extends AppCompatActivity implements IListener {
     public GameController gameController;
     GameActivity gameActivity;
 
+    TextView previousNumbers;
+    LinearLayout mainGameLayout;
+    LinearLayout previousNumberLayout;
+    RecyclerView previousRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,21 +46,26 @@ public class GameActivity extends AppCompatActivity implements IListener {
         Intent generateCardService = new Intent(this, PlayerCardService.class);
         Intent previousNumberService = new Intent(this, DrawnNumberService.class);
         setContentView(R.layout.activity_game);
-        Button previousNumberButton = findViewById(R.id.previous_number_button);
-        previousNumberButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                PreviousNumberGrid previousNumberGrid = PreviousNumberGrid.newInstance();
-                previousNumberGrid.show(fm, "");
-            }
-        });
         playerCardFrameLayout = findViewById(R.id.player_card_frame_layout);
         startService(generateCardService);
         startService(previousNumberService);
         registerPlayerCardReceiver();
         registerNewNumberReceiver();
         previousNumbersFrameLayout = findViewById(R.id.previous_numbers_frame_layout);
+        previousNumbers = findViewById(R.id.previous_number_text);
+        /*
+         * Layouts to switch after a screen orientation change
+         */
+        mainGameLayout = findViewById(R.id.game_activity_layout);
+        previousNumberLayout = findViewById(R.id.previous_number_layout);
+        previousRecyclerView = findViewById(R.id.previous_number_recycler_view);
+        int orientation = getResources().getConfiguration().orientation;
+
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+           handleLandscapeOrientation();
+        } else {
+          handlePortraitOrientation();
+        }
 
         //TODO WILL SUBSCRIBE HERE FOR WIN
         //TODO WHEN SOMEONE WIN, THE GAME ENDS FOR EVERYBODY
@@ -63,6 +80,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
         PreviousNumberReceiver receiver = new PreviousNumberReceiver();
         IntentFilter intentFilter = new IntentFilter();
     }
+
 
     private void registerPlayerCardReceiver() {
         PlayerCardReceiver receiver = new PlayerCardReceiver();
@@ -83,10 +101,105 @@ public class GameActivity extends AppCompatActivity implements IListener {
     public class PreviousNumberReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Card card = (Card) intent.getBundleExtra("playerCard").getSerializable("generatedCard");
-            gameController = new GameController(card);
-            getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "un autre joli tag").commit();
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            handleLandscapeOrientation();
+        } else {
+            // Portrait
+            handlePortraitOrientation();
+        }
+    }
+
+
+    private void handlePortraitOrientation() {
+        // Text field
+        // resetPreviousNumberTextView();
+        // Main Layout
+        mainGameLayout.setOrientation(LinearLayout.VERTICAL);
+        mainGameLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+        //Previous numbers layout
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0);
+        lp.weight = 0.1f;
+        lp.gravity = Gravity.CENTER_HORIZONTAL;
+        previousNumberLayout.setLayoutParams(lp);
+
+        // Player Card Frame Layout
+        LinearLayout.LayoutParams fp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
+        fp.weight = 0.75f;
+        fp.gravity = Gravity.CENTER_HORIZONTAL;
+        playerCardFrameLayout.setLayoutParams(fp);
+
+        /** Todo: Change the orientation of recyclerview
+        // Recycler view
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        previousRecyclerView.setLayoutManager(linearLayoutManager);
+         **/
+    }
+
+    private void handleLandscapeOrientation() {
+        // Text field
+       //rotateTextSideways();
+        // Main Layout
+        mainGameLayout.setOrientation(LinearLayout.HORIZONTAL);
+        mainGameLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+        //Previous numbers layout
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.weight = 0.3f;
+        lp.gravity = Gravity.CENTER_HORIZONTAL;
+        previousNumberLayout.setLayoutParams(lp);
+
+        // Player Card Frame Layout
+        LinearLayout.LayoutParams fp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        fp.weight = 0.7f;
+        fp.gravity = Gravity.CENTER_HORIZONTAL;
+        playerCardFrameLayout.setLayoutParams(fp);
+
+        /**
+        // Recycler view
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        previousRecyclerView.setLayoutManager(linearLayoutManager);**/
+
+    }
+
+    // Confirm Exit
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //Display confirmation here, finish() activity.
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setMessage("Are you sure you want to exit?")
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            GameActivity.this.finish();
+                        }
+                    }).setNegativeButton(R.string.cancel,new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            return;
+                        }});
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void rotateTextSideways() {
+        String text = previousNumbers.getText().toString();
+        // Ajoute une new row pour chaque caractere
+        String newText = text.replaceAll("(.{1})", "$1\n");
+        previousNumbers.setText(newText);
+    }
+
+    private void resetPreviousNumberTextView() {
+        previousNumbers.setText(R.string.previous_numbers);
     }
 
     @Override
