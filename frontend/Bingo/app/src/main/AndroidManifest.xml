@@ -20,6 +20,7 @@
             android:noHistory="true"/>
         <activity android:name=".fel.lobby.FindLobbyActivity" />
         <activity android:name=".fel.game.GameActivity"
+            android:noHistory="true"
             android:configChanges = "keyboardHidden|orientation|screenSize"/>
         <activity android:name=".fel.lobby.MainActivity">
             <intent-filter>
