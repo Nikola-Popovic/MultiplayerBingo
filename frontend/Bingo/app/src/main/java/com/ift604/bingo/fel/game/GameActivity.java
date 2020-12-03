@@ -177,11 +177,11 @@ public class GameActivity extends AppCompatActivity implements IListener {
 
             builder.setMessage("Are you sure you want to exit?")
                     .setCancelable(false)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             GameActivity.this.finish();
                         }
-                    }).setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                    }).setNegativeButton(R.string.cancel,new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             return;
                         }});
