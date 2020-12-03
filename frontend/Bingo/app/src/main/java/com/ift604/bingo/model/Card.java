@@ -2,7 +2,6 @@ package com.ift604.bingo.model;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 
 public class Card implements Serializable {
     private HashMap<Coordinate, Box> number;
@@ -41,5 +40,10 @@ public class Card implements Serializable {
 
     public void setNumber(HashMap<Coordinate, Box> number) {
         this.number = number;
+    }
+
+    public boolean isChecked(int x, int y)
+    {
+        return number.get(new Coordinate(x, y)).isMarked();
     }
 }
