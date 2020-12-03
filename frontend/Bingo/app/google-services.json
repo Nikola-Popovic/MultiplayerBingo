@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "618279485096",
+    "project_id": "bingo-23ff0",
+    "storage_bucket": "bingo-23ff0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618279485096:android:eb39f828a7d9b80ec58c9d",
+        "android_client_info": {
+          "package_name": "com.ift604.bingo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "618279485096-o7d5262d9u082ija3t35vavpd65ep4kf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDqLQQBm0ahtA8mfZnP1SPZmmvSGOwPzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "618279485096-o7d5262d9u082ija3t35vavpd65ep4kf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
