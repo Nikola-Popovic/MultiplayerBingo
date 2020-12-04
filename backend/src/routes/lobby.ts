@@ -44,6 +44,28 @@ router.get("/:id", (req : any, res : any, next : any) => {
   }
 })
 
+router.post("/:id/start", (req : any, res : any, next : any) => {
+  const lobby = database.getLobbyById(parseInt(req.params.id, 10));
+  
+  if(lobby !== undefined) {
+    if (lobby.estCommencee) {
+      res.status(400).send(`La partie ${req.params.id} est déjà démarrée`);
+    } else {
+      if (req.body.hostId == lobby.host.id) {
+        lobby.startGame();
+        database.saveLobby(lobby);
+        res.status(204).end();
+      } else {
+        res.status(400).send("Seul le host peut démarrer la partie.")
+      }
+    }
+  }
+  else{
+    res.status(400);
+    res.send("Le id recu ne correspond pas a un lobby connu.");
+  }
+});
+
 // Créer une carte pour une partie
 router.get("/carte/:id", (req : any, res : any, next : any) => {
   const id = parseInt(req.params.id, 10);
