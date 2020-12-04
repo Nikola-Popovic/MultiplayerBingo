@@ -1,6 +1,9 @@
 package com.ift604.bingo.dal.dao;
 
 import com.androidnetworking.common.ANResponse;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.model.Participant;
 
@@ -9,6 +12,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class LobbyDAO extends GenericDataHandler {
     LobbyDatamapper lobbyMapper;
@@ -76,11 +80,12 @@ public class LobbyDAO extends GenericDataHandler {
     }
 
     public Participant createUser(String username) throws Exception {
-
+        Task<String> getTokenTask = FirebaseMessaging.getInstance().getToken();
+        String token = Tasks.await(getTokenTask);
         String url = userPath;
         JSONObject jsonObject = new JSONObject();
-        //TODO GET USERNAME
         jsonObject.put("username", username);
+        jsonObject.put("token", token);
         ANResponse response = postDataToUrl(url, jsonObject);
         if (response.isSuccess()) {
             return lobbyMapper.mapUserToJson(response.getResult().toString());
