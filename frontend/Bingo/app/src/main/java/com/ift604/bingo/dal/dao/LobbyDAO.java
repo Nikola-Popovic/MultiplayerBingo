@@ -7,12 +7,9 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.model.Participant;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 public class LobbyDAO extends GenericDataHandler {
     LobbyDatamapper lobbyMapper;
