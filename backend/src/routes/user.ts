@@ -10,12 +10,7 @@ router.post("/", (req : any, res : any, next : any) => {
     }
     else {
       const joueur = new Joueur(nomJoueur);
-      if (joueur !== undefined) {
-        res.send(joueur.toJSON());
-      } else {
-        res.status(400);
-        res.send("Il est impossible de creer un joueur. Veuillez reesayer plus tard.");
-      }
+      res.send(joueur.toJSON());
     }
   })
 

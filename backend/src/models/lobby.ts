@@ -7,18 +7,19 @@ export default class Lobby{
     readonly id : number;
     readonly nom : string;
     readonly chiffrePiges : number[];
-    readonly estCommencee : boolean;
+    private _estCommencee : boolean;
+    static nextId : number = 0;
 
     constructor(host : Joueur, name : string){
         this._host = host;
         this.nom = name;
         database.addLobby(this);
-        this.id = database.lobbies.length;
+        this.id = Lobby.nextId++;
         this.chiffrePiges = [];
         this._joueurs = [];
         this._joueurs.push(this._host);
         host.assignerALobby(this);
-        this.estCommencee = false;
+        this._estCommencee = false;
     }
 
     addToLobby(joueur : Joueur){
@@ -35,6 +36,14 @@ export default class Lobby{
 
     get host() {
         return this._host;
+    }
+
+    get estCommencee() {
+        return this._estCommencee;
+    }
+
+    startGame() {
+        this._estCommencee = true;
     }
 
     selectNewRandomHost() {
