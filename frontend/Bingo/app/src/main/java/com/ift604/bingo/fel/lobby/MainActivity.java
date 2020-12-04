@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import com.ift604.bingo.R;
 import com.ift604.bingo.model.Participant;
 import com.ift604.bingo.service.CreateUserService;
+import com.ift604.bingo.service.UpdateUserService;
 import com.ift604.bingo.util.Util;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startCreateUserService();
+        //
         registerCreateUserReceiver();
 
 
@@ -83,6 +85,12 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("Username",editable.toString());
                 editor.commit();
+
+                Intent updateUserService = new Intent(getParent(), UpdateUserService.class);
+                updateUserService.putExtra(UpdateUserService.UPDATE_USER_ID_EXTRA, Util.getConnectedUserId(getParent()));
+                updateUserService.putExtra(UpdateUserService.UPDATE_USER_NAME_EXTRA, editable.toString());
+                updateUserService.setAction(UpdateUserService.UPDATE_USER_ACTION);
+                startService(updateUserService);
             }
         });
     }
@@ -95,9 +103,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startCreateUserService() {
-        Intent lobbiesService = new Intent(this, CreateUserService.class);
-        lobbiesService.setAction(CreateUserService.CREATE_USER_ACTION);
-        startService(lobbiesService);
+        //String userName = settings.getString("Username", "Anonyme");
+        SharedPreferences sharedPreferences =
+                getSharedPreferences("UserInfo", MODE_PRIVATE);
+
+        boolean isCreated = sharedPreferences.getBoolean("IS_CREATED", false);
+
+        if (!isCreated) {
+            Intent createUserService = new Intent(this, CreateUserService.class);
+            createUserService.setAction(CreateUserService.CREATE_USER_ACTION);
+            startService(createUserService);
+        }
     }
 
 
@@ -109,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Participant participant = (Participant) intent.getSerializableExtra(CreateUserService.CREATE_USER_EXTRA);
+            // Save User ID
             Util.sharedPref(context).edit().putInt(Util.SharedPreferenceUserId, participant.getId()).apply();
         }
     }

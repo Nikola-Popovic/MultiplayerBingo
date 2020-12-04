@@ -77,4 +77,13 @@ public class RestServiceDatasource implements IBingoRepository {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void updateUser(int userId, String userName) {
+        try {
+            lobbyDAO.updateUser(userId, userName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
