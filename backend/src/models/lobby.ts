@@ -8,12 +8,13 @@ export default class Lobby{
     readonly nom : string;
     readonly chiffrePiges : number[];
     private _estCommencee : boolean;
+    static nextId : number = 0;
 
     constructor(host : Joueur, name : string){
         this._host = host;
         this.nom = name;
         database.addLobby(this);
-        this.id = database.lobbies.length;
+        this.id = Lobby.nextId++;
         this.chiffrePiges = [];
         this._joueurs = [];
         this._joueurs.push(this._host);
