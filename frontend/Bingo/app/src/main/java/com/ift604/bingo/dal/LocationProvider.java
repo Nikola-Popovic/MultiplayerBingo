@@ -21,6 +21,7 @@ public class LocationProvider {
 
     public LocationProvider(Context context, Activity activity)
     {
+        location = new Location(LocationManager.GPS_PROVIDER);
         _locationManager = getSystemService(context, LocationManager.class);
         _locationListener = new LocationListener() {
             @Override

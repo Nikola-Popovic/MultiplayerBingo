@@ -25,14 +25,14 @@ public class CreateLobbyFragment extends DialogFragment {
     Intent createLobbyService;
     CreateLobbyReceiver createLobbyReceiver;
 
-    LocationProvider locationProvider;
+    static LocationProvider locationProvider;
 
     public CreateLobbyFragment() {
     }
 
     public static CreateLobbyFragment newInstance(LocationProvider locationProvider) {
+        setLocationProvider(locationProvider);
         CreateLobbyFragment fragment = new CreateLobbyFragment();
-        fragment.setLocationProvider(locationProvider);
         return fragment;
     }
 
@@ -113,9 +113,9 @@ public class CreateLobbyFragment extends DialogFragment {
         }
     }
 
-    private void setLocationProvider(LocationProvider locationProvider)
+    private static void setLocationProvider(LocationProvider lp)
     {
-        this.locationProvider = locationProvider;
+        locationProvider = lp;
     }
 
     public class CreateLobbyReceiver extends BroadcastReceiver {

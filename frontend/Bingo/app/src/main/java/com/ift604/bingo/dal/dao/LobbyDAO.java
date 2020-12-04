@@ -49,7 +49,7 @@ public class LobbyDAO extends GenericDataHandler {
         jsonObject.put("nom", name);
         jsonObject.put("longitude", longitude);
         jsonObject.put("latitude", latitude);
-        ANResponse response = postDataToUrl(lobbyPath, jsonObject);
+        ANResponse response = postDataToUrl(lobbyPath + "/create", jsonObject);
         if (response.isSuccess()) {
             return lobbyMapper.buildLobby(response.getResult().toString());
         } else {

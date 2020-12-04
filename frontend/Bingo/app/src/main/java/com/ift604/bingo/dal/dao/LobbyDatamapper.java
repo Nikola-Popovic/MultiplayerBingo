@@ -13,15 +13,12 @@ import java.util.ArrayList;
 
 
 public class LobbyDatamapper {
-    public Lobby buildLobby(String json) {
-        try {
+    public Lobby buildLobby(String json) throws JSONException {
+
             JSONObject jsonObject = new JSONObject(json);
             Gson gson = new Gson();
             return (Lobby) gson.fromJson(jsonObject.toString(), new TypeToken<Lobby>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+
     }
 
     public Participant mapUserToJson(String postDataToUrl) {

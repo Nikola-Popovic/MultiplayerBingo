@@ -29,7 +29,7 @@ public class LobbyItemListFragment extends Fragment {
     ArrayList<Lobby> lobbies = new ArrayList<>();
     LobbyItemAdapter adapter;
 
-    LocationProvider locationProvider;
+    static LocationProvider locationProvider;
 
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -42,8 +42,8 @@ public class LobbyItemListFragment extends Fragment {
     }
 
     public static LobbyItemListFragment newInstance(LocationProvider locationProvider) {
+        setLocationProvider(locationProvider);
         LobbyItemListFragment fragment = new LobbyItemListFragment();
-        fragment.setLocationProvider(locationProvider);
         return fragment;
     }
 
@@ -95,9 +95,9 @@ public class LobbyItemListFragment extends Fragment {
         requireActivity().registerReceiver(receiver, intentFilter);
     }
 
-    private void setLocationProvider(LocationProvider locationProvider)
+    private static void setLocationProvider(LocationProvider lp)
     {
-        this.locationProvider = locationProvider;
+        locationProvider = lp;
     }
 
     public class LobbyResponseReceiver extends BroadcastReceiver {
@@ -108,6 +108,8 @@ public class LobbyItemListFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             lobbies = (ArrayList<Lobby>) intent.getExtras().getSerializable(FindLobbyNearMeService.LOBBY_NEAR_ME_EXTRA);
+            if (lobbies == null)
+                return;
             adapter.setLobbies(lobbies);
             adapter.notifyItemRangeChanged(position, lobbies.size());
             adapter.notifyDataSetChanged();
