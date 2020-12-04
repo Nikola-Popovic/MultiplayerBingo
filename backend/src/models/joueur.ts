@@ -1,15 +1,15 @@
 import * as database from '../database'
 import Lobby from "./lobby";
 
-
 export default class Joueur{
     readonly id : number;
     private _lobby : Lobby;
     readonly username : string;
+    static nextId : number = 0;
 
     constructor(username : string) {
         database.addJoueur(this);
-        this.id = database.joueurs.length;
+        this.id = Joueur.nextId++;
         this._lobby = null;
         this.username = username;
     }
