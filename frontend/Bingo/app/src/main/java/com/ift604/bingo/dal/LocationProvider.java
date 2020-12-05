@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
@@ -27,9 +28,14 @@ public class LocationProvider {
         _locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                System.out.println("LOCATION CHANGED ---------");
-                System.out.println(location.getLongitude());
                 changeLocation(location);
+            }
+            @Override
+            public void onStatusChanged(String provider,
+                                        int status,
+                                        Bundle extras)
+            {
+                // Here to fix a bug from version Android 28 and less
             }
         };
 
