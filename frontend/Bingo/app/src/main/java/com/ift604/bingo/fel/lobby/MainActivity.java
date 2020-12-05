@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startCreateUserService();
-        //
         registerCreateUserReceiver();
 
 
@@ -62,37 +62,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        EditText playerName = findViewById(R.id.player_name);
+        final EditText playerName = findViewById(R.id.player_name);
         // Get preferences
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-        String userName = settings.getString("Username", "Anonyme");
+        final String userName = settings.getString("Username", "Anonyme");
         playerName.setText(userName);
-
-        playerName.addTextChangedListener(new TextWatcher() {
+        playerName.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("Username",editable.toString());
-                editor.commit();
-
-                Intent updateUserService = new Intent(getParent(), UpdateUserService.class);
-                updateUserService.putExtra(UpdateUserService.UPDATE_USER_ID_EXTRA, Util.getConnectedUserId(getParent()));
-                updateUserService.putExtra(UpdateUserService.UPDATE_USER_NAME_EXTRA, editable.toString());
-                updateUserService.setAction(UpdateUserService.UPDATE_USER_ACTION);
-                startService(updateUserService);
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
+                {
+                    switch (keyCode)
+                    {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putString("Username",playerName.getText().toString());
+                            editor.commit();
+                            Intent updateUserService = new Intent(getApplicationContext(), UpdateUserService.class);
+                            updateUserService.putExtra(UpdateUserService.UPDATE_USER_ID_EXTRA, Util.getConnectedUserId(getApplicationContext()));
+                            updateUserService.putExtra(UpdateUserService.UPDATE_USER_NAME_EXTRA, playerName.toString());
+                            updateUserService.setAction(UpdateUserService.UPDATE_USER_ACTION);
+                            startService(updateUserService);
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+                return false;
             }
         });
+
+        playerName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (!hasFocus) {
+                    SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+                    String username = settings.getString("Username", "Anonyme");
+                    playerName.setText(username);
+                } else {
+                }
+            }});
     }
 
     private void registerCreateUserReceiver() {
@@ -107,13 +118,12 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences =
                 getSharedPreferences("UserInfo", MODE_PRIVATE);
 
+        // If we switch backend to a NOSQL database. (after 2020)
         boolean isCreated = sharedPreferences.getBoolean("IS_CREATED", false);
 
-        if (!isCreated) {
-            Intent createUserService = new Intent(this, CreateUserService.class);
-            createUserService.setAction(CreateUserService.CREATE_USER_ACTION);
-            startService(createUserService);
-        }
+        Intent createUserService = new Intent(this, CreateUserService.class);
+        createUserService.setAction(CreateUserService.CREATE_USER_ACTION);
+        startService(createUserService);
     }
 
 

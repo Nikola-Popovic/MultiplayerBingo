@@ -24,7 +24,6 @@ public class UpdateUserService extends GenericRestService {
     protected Object restAction(Intent i) throws Exception {
         final String userName = i.getStringExtra(UPDATE_USER_NAME_EXTRA);
         final int userId = i.getIntExtra(UPDATE_USER_ID_EXTRA, -1);
-        Util.getConnectedUserId(getApplicationContext());
         bingoRepository.updateUser(userId, userName);
         return null;
     }

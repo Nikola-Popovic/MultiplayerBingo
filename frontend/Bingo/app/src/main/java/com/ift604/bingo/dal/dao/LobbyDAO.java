@@ -100,7 +100,6 @@ public class LobbyDAO extends GenericDataHandler {
         String token = Tasks.await(getTokenTask);
         String url = String.format("%s/%s", userPath, String.valueOf(userId));
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id", userId);
         jsonObject.put("username", userName);
         jsonObject.put("token", token);
         ANResponse response = putDataToUrl(url, jsonObject);
