@@ -5,11 +5,12 @@ import Carte from "../models/carte";
 import Lobby from "../models/lobby";
 import GeoLocation from "../models/geolocation";
 
-router.post("/", (req : any, res : any, next : any) => {
+// Obtenir les parties dans un range acceptable
+router.get("/", (req : any, res : any, next : any) => {
   const lobbies : any[] = [];
-  const longitude = req.body.longitude;
-  const latitude = req.body.latitude;
-  if (longitude === null || latitude === null) {
+  const longitude = req.query.longitude;
+  const latitude = req.query.latitude;
+  if (longitude === undefined || latitude === undefined) {
     res.status(400);
     res.send("Veuillez entrer la longitude et latitude courante.");
   }
