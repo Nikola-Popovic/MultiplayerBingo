@@ -98,7 +98,7 @@ public class LobbyDAO extends GenericDataHandler {
     public void updateUser(int userId, String userName) throws Exception {
         Task<String> getTokenTask = FirebaseMessaging.getInstance().getToken();
         String token = Tasks.await(getTokenTask);
-        String url = userPath;
+        String url = String.format("%s/%s", userPath, String.valueOf(userId));
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", userId);
         jsonObject.put("username", userName);
@@ -119,7 +119,6 @@ public class LobbyDAO extends GenericDataHandler {
         jsonObject.put("joueurId", String.valueOf(userId));
         ANResponse response = deleteDataToUrl(url, jsonObject);
         if (response.isSuccess()) {
-
         }
         else {
             throw new Exception("Error");
