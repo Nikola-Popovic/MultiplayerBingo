@@ -8,9 +8,9 @@ import GeoLocation from "../models/geolocation";
 // Obtenir les parties dans un range acceptable
 router.get("/", (req : any, res : any, next : any) => {
   const lobbies : any[] = [];
-  const longitude = req.query.longitude;
-  const latitude = req.query.latitude;
-  if (longitude === undefined || latitude === undefined) {
+  const longitude = parseFloat(req.query.longitude);
+  const latitude = parseFloat(req.query.latitude);
+  if (isNaN(longitude) || isNaN(latitude)) {
     res.status(400);
     res.send("Veuillez entrer la longitude et latitude courante.");
   }
@@ -29,27 +29,25 @@ router.get("/", (req : any, res : any, next : any) => {
 router.post("/", (req : any, res : any, next : any) => {
   const host = database.getJoueurById(parseInt(req.body.hostId, 10));
   const lobbyName = req.body.nom;
-  const longitude = req.body.longitude;
-  const latitude = req.body.latitude;
-  
+  const longitude = parseFloat(req.body.longitude);
+  const latitude = parseFloat(req.body.latitude);
+
   if(lobbyName === "" || lobbyName === undefined){
     res.status(400);
-    res.send("Veuillez envoyer un nom de lobby.");
+    return res.send("Veuillez envoyer un nom de lobby.");
   }
 
-  if (longitude === undefined || latitude === undefined) {
+  if (isNaN(longitude) || isNaN(latitude)) {
     res.status(400);
-    res.send("Veuillez entrer la longitude et latitude courante.");
+    return res.send("Veuillez entrer la longitude et latitude courante.");
   }
 
-  else {
-    if (host !== null) {
+  if (host !== null) {
       const lobby = new Lobby(host, lobbyName, new GeoLocation(longitude, latitude));
       res.send(lobby.toJSON());
-    } else {
+  } else {
       res.status(400);
       res.send("Le hostId ne correspond pas a un joueur connu.");
-    }
   }
 })
 
