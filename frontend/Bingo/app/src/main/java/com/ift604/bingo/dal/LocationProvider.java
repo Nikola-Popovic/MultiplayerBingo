@@ -8,36 +8,38 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Bundle;
-import android.os.Looper;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
-import static androidx.core.content.ContextCompat.getSystemService;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 public class LocationProvider {
     private static LocationManager _locationManager;
     private static LocationListener _locationListener;
     private static Location location;
+    private static FusedLocationProviderClient fusedLocationProviderClient;
 
     public LocationProvider(Context context, Activity activity)
     {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
+
         location = new Location(LocationManager.GPS_PROVIDER);
-        _locationManager = getSystemService(context, LocationManager.class);
-        _locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                changeLocation(location);
-            }
-            @Override
-            public void onStatusChanged(String provider,
-                                        int status,
-                                        Bundle extras)
-            {
-                // Here to fix a bug from version Android 28 and less
-            }
-        };
+//        _locationManager = getSystemService(context, LocationManager.class);
+//        _locationListener = new LocationListener() {
+//            @Override
+//            public void onLocationChanged(@NonNull Location location) {
+//                changeLocation(location);
+//            }
+//            @Override
+//            public void onStatusChanged(String provider,
+//                                        int status,
+//                                        Bundle extras)
+//            {
+//                // Here to fix a bug from version Android 28 and less
+//            }
+//        };
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -59,7 +61,13 @@ public class LocationProvider {
     @SuppressLint("MissingPermission")
     public static void startListening()
     {
-        _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, _locationListener, Looper.getMainLooper());
+        //_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, _locationListener, Looper.getMainLooper());
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                changeLocation(location);
+            }
+        });
     }
 
     public static void changeLocation(Location newLocation)
