@@ -43,17 +43,17 @@ export function deleteLobby(lobby : Lobby) {
 
 export function getJoueurById(id : number){
     const joueur = joueurs.filter(j => j.id === id);
-    return joueur != null ? joueur[0] : null;
+    return joueur !== [] ? joueur[0] : null;
 }
 
 export function getLobbyById(id : number){
     const lobby = lobbies.filter(l => l.id === id);
-    return lobby != null ? lobby[0] : null;
+    return lobby !== [] ? lobby[0] : null;
 }
 
 export function getCarteById(id : number){
     const carte = cartes.filter(c => c.id === id);
-    return carte != null ? carte[0] : null;
+    return carte !== [] ? carte[0] : null;
 }
 
 export function removeJoueur(id : number){
