@@ -30,9 +30,7 @@ router.post("/", (req : any, res : any, next : any) => {
     }
   }
 
-  res.send({
-    "lobbies" : lobbies
-  });
+  res.send(lobbies);
 });
 
 // Créer une partie
