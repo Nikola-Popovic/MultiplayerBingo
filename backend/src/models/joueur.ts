@@ -5,14 +5,14 @@ export default class Joueur{
     readonly id : number;
     private _lobby : Lobby;
     private _token : string;
-    readonly username : string;
+    private _username : string;
     static nextId : number = 0;
 
     constructor(username : string, token : string) {
         database.addJoueur(this);
         this.id = Joueur.nextId++;
         this._lobby = null;
-        this.username = username;
+        this._username = username;
         this._token = token;
     }
 
@@ -30,6 +30,18 @@ export default class Joueur{
 
     get token() {
         return this._token;
+    }
+
+    updateToken(newToken : string) {
+        this._token = newToken;
+    }
+
+    get username() {
+        return this._username;
+    }
+
+    updateUsername(newUsername : string) {
+        this._username = newUsername;
     }
 
     toJSON(){
