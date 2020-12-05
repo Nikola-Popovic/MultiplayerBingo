@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,7 +27,7 @@ import com.ift604.bingo.util.Util;
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     private LocationProvider locationProvider;
-    private Location location;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             @Override
             public void onClick(View v) {
                 Intent lobbyIntent = new Intent(MainActivity.this, FindLobbyActivity.class);
+
                 startActivity(lobbyIntent);
             }
         });

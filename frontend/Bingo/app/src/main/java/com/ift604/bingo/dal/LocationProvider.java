@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -15,9 +16,9 @@ import androidx.core.app.ActivityCompat;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 public class LocationProvider {
-    private final LocationManager _locationManager;
-    private final LocationListener _locationListener;
-    private Location location;
+    private static LocationManager _locationManager;
+    private static LocationListener _locationListener;
+    private static Location location;
 
     public LocationProvider(Context context, Activity activity)
     {
@@ -26,6 +27,8 @@ public class LocationProvider {
         _locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
+                System.out.println("LOCATION CHANGED ---------");
+                System.out.println(location.getLongitude());
                 changeLocation(location);
             }
         };
@@ -43,20 +46,22 @@ public class LocationProvider {
             permissions[1] = Manifest.permission.ACCESS_COARSE_LOCATION;
             ActivityCompat.requestPermissions(activity, permissions, 0);
         }
+        else
+            startListening();
     }
 
     @SuppressLint("MissingPermission")
-    public void startListening()
+    public static void startListening()
     {
-        _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, _locationListener);
+        _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, _locationListener, Looper.getMainLooper());
     }
 
-    public void changeLocation(Location newLocation)
+    public static void changeLocation(Location newLocation)
     {
         location = newLocation;
     }
 
-    public Location getLocation()
+    public static Location getLocation()
     {
         return location;
     }
