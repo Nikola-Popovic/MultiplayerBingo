@@ -2,6 +2,7 @@ import Joueur from "./joueur";
 import * as database from '../database'
 import GeoLocation from "./geolocation";
 import Util from "../util";
+import shuffle from 'lodash.shuffle';
 
 export default class Lobby{
     private _joueurs : Joueur[];
@@ -10,8 +11,9 @@ export default class Lobby{
 
     readonly id : number;
     readonly nom : string;
-    readonly chiffrePiges : number[];
+    private _chiffrePiges : number[];
     private _estCommencee : boolean;
+    private _nextChiffres : number[];
     static nextId : number = 0;
 
     constructor(host : Joueur, name : string, geolocation: GeoLocation){
@@ -20,11 +22,20 @@ export default class Lobby{
         this._geolocation = geolocation;
         database.addLobby(this);
         this.id = Lobby.nextId++;
-        this.chiffrePiges = [];
+        this._chiffrePiges = [];
+        this._nextChiffres = this.generateRandomNextChiffres();
         this._joueurs = [];
         this._joueurs.push(this._host);
         host.assignerALobby(this);
         this._estCommencee = false;
+    }
+
+    private generateRandomNextChiffres() : number[] {
+        // Generate number array from 1 to 75
+        const numbers = Array.from({length: 75}, (_, i) => i + 1);
+
+        // Shuffle the numbers to randomize which numbers to send to the players
+        return shuffle(numbers);
     }
 
     addToLobby(joueur : Joueur){
@@ -58,7 +69,7 @@ export default class Lobby{
 
     givenNumbersWereDrawn(numberArray: number[]) {
         for (let i = 0; i < numberArray.length; i ++){
-            if (!this.chiffrePiges.includes(numberArray[i])) {
+            if (!this._chiffrePiges.includes(numberArray[i])) {
                 return false;
             }
         }
@@ -67,6 +78,16 @@ export default class Lobby{
 
     isInAcceptableDistance(location: GeoLocation): boolean {
         return this._geolocation.distanceToLocation(location) / 1000 < Util.MAX_LOBBY_DISTANCE
+    }
+
+    getNextNumber() : number {
+        if (this._nextChiffres.length !== 0) {   
+            const nextNumber = this._nextChiffres.pop();
+            this._chiffrePiges.push(nextNumber);
+            return nextNumber;
+        } else {
+            return -1; // no more numbers
+        }
     }
 
     toJSON(){
