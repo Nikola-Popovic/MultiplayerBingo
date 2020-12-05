@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                             editor.commit();
                             Intent updateUserService = new Intent(getApplicationContext(), UpdateUserService.class);
                             updateUserService.putExtra(UpdateUserService.UPDATE_USER_ID_EXTRA, Util.getConnectedUserId(getApplicationContext()));
-                            updateUserService.putExtra(UpdateUserService.UPDATE_USER_NAME_EXTRA, playerName.toString());
+                            updateUserService.putExtra(UpdateUserService.UPDATE_USER_NAME_EXTRA, playerName.getText().toString());
                             updateUserService.setAction(UpdateUserService.UPDATE_USER_ACTION);
                             startService(updateUserService);
                             return true;
