@@ -13,15 +13,12 @@ import java.util.ArrayList;
 
 
 public class LobbyDatamapper {
-    public Lobby buildLobby(String json) {
-        try {
+    public Lobby buildLobby(String json) throws JSONException {
+
             JSONObject jsonObject = new JSONObject(json);
             Gson gson = new Gson();
             return (Lobby) gson.fromJson(jsonObject.toString(), new TypeToken<Lobby>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+
     }
 
     public Participant mapUserToJson(String postDataToUrl) {
@@ -35,14 +32,10 @@ public class LobbyDatamapper {
         return null;
     }
 
-    public ArrayList<Lobby> buildLobbies(String result) {
-        try {
-            JSONArray arr = new JSONArray(result);
-            Gson gson = new Gson();
-            return (ArrayList<Lobby>) gson.fromJson(arr.toString(), new TypeToken<ArrayList<Lobby>>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public ArrayList<Lobby> buildLobbies(String result) throws JSONException {
+        JSONObject jsonObject = new JSONObject(result);
+        JSONArray arr = jsonObject.getJSONArray("lobbies");
+        Gson gson = new Gson();
+        return (ArrayList<Lobby>) gson.fromJson(arr.toString(), new TypeToken<ArrayList<Lobby>>(){}.getType());
     }
 }

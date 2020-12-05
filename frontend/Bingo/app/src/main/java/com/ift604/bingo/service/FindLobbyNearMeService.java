@@ -1,16 +1,10 @@
 package com.ift604.bingo.service;
 
-import android.app.IntentService;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.IBinder;
 
-import androidx.annotation.Nullable;
-
+import com.ift604.bingo.dal.LocationProvider;
 import com.ift604.bingo.dal.RestServiceDatasource;
-import com.ift604.bingo.dal.IBingoRepository;
 import com.ift604.bingo.model.Lobby;
-import com.ift604.bingo.util.Util;
 
 import java.util.ArrayList;
 
@@ -29,7 +23,9 @@ public class FindLobbyNearMeService extends GenericRestService {
 
     @Override
     protected Object restAction(Intent i) throws Exception {
-        ArrayList lobbies = bingoRepository.getLobbiesNearMe();
+        double longitude = LocationProvider.getLocation().getLongitude();
+        double latitude = LocationProvider.getLocation().getLatitude();
+        ArrayList<Lobby> lobbies = bingoRepository.getLobbiesNearMe(longitude, latitude);
         return lobbies;
     }
 
