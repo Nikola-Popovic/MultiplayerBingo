@@ -64,7 +64,7 @@ router.post("/create", (req : any, res : any, next : any) => {
 // Obtenir une partie par ID
 router.get("/:id", (req : any, res : any, next : any) => {
   const lobby = database.getLobbyById(parseInt(req.params.id, 10));
-  if(lobby !== undefined) {
+  if(lobby !== null) {
     res.send(lobby.toJSON());
   }
   else{
@@ -76,7 +76,7 @@ router.get("/:id", (req : any, res : any, next : any) => {
 router.post("/:id/start", (req : any, res : any, next : any) => {
   const lobby = database.getLobbyById(parseInt(req.params.id, 10));
   
-  if(lobby !== undefined) {
+  if(lobby !== null) {
     if (lobby.estCommencee) {
       res.status(400).send(`La partie ${req.params.id} est déjà démarrée`);
     } else {
