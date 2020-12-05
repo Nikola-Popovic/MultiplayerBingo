@@ -1,13 +1,16 @@
 package com.ift604.bingo.dal.dao;
 
+import android.util.Log;
+
 import com.androidnetworking.common.ANResponse;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.model.Participant;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class LobbyDAO extends GenericDataHandler {
@@ -81,11 +84,12 @@ public class LobbyDAO extends GenericDataHandler {
     }
 
     public Participant createUser(String username) throws Exception {
-
+        Task<String> getTokenTask = FirebaseMessaging.getInstance().getToken();
+        String token = Tasks.await(getTokenTask);
         String url = userPath;
         JSONObject jsonObject = new JSONObject();
-        //TODO GET USERNAME
         jsonObject.put("username", username);
+        jsonObject.put("token", token);
         ANResponse response = postDataToUrl(url, jsonObject);
         if (response.isSuccess()) {
             return lobbyMapper.mapUserToJson(response.getResult().toString());
@@ -95,16 +99,34 @@ public class LobbyDAO extends GenericDataHandler {
         }
     }
 
+
+    public void updateUser(int userId, String userName) throws Exception {
+        Task<String> getTokenTask = FirebaseMessaging.getInstance().getToken();
+        String token = Tasks.await(getTokenTask);
+        String url = String.format("%s/%s", userPath, String.valueOf(userId));
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("username", userName);
+        jsonObject.put("token", token);
+        ANResponse response = putDataToUrl(url, jsonObject);
+        String msg = String.format("User%s : %s", userId, userName);
+        if (response.isSuccess()) {
+            Log.i("UPDATE_USER_SUCCESS", msg);
+        }
+        else {
+            Log.e("UPDATE_USER_FAILED", msg, response.getError().fillInStackTrace());
+        }
+    }
+
     public void leaveLobby(int lobbyId, int userId) throws Exception {
         String url = String.format("%s/%s%s", lobbyPath, String.valueOf(lobbyId), userPath);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("joueurId", String.valueOf(userId));
         ANResponse response = deleteDataToUrl(url, jsonObject);
         if (response.isSuccess()) {
-
         }
         else {
             throw new Exception("Error");
         }
     }
+
 }

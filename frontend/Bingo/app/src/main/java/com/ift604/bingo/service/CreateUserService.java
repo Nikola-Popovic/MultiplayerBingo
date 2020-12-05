@@ -34,6 +34,12 @@ public class CreateUserService extends GenericRestService {
 
     @Override
     protected Intent onSuccess(Object o, Intent intentOutput) {
+        // save part
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("IS_CREATED", true);
+        editor.commit();
+
         intentOutput.putExtra(CREATE_USER_EXTRA, (Participant) o);
         return intentOutput;
     }

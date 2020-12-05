@@ -4,14 +4,16 @@ import Lobby from "./lobby";
 export default class Joueur{
     readonly id : number;
     private _lobby : Lobby;
-    readonly username : string;
+    private _token : string;
+    private _username : string;
     static nextId : number = 0;
 
-    constructor(username : string) {
+    constructor(username : string, token : string) {
         database.addJoueur(this);
         this.id = Joueur.nextId++;
         this._lobby = null;
-        this.username = username;
+        this._username = username;
+        this._token = token;
     }
 
     assignerALobby(lobby : Lobby){
@@ -24,6 +26,22 @@ export default class Joueur{
 
     get lobby(){
         return this._lobby;
+    }
+
+    get token() {
+        return this._token;
+    }
+
+    updateToken(newToken : string) {
+        this._token = newToken;
+    }
+
+    get username() {
+        return this._username;
+    }
+
+    updateUsername(newUsername : string) {
+        this._username = newUsername;
     }
 
     toJSON(){

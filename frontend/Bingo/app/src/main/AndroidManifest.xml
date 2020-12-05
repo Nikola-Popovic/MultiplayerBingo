@@ -47,6 +47,9 @@
             android:name=".service.GetLobbyByAttributeService"
             android:exported="true"></service>
         <service
+            android:name=".service.UpdateUserService"
+            android:exported="true"></service>
+        <service
             android:name=".service.JoinLobbyService"
             android:exported="true" />
         <service
