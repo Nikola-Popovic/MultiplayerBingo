@@ -6,6 +6,7 @@ export default class Carte{
     readonly cases : number[][];
     readonly id : number;
     readonly lobbyId : number;
+    static nextId : number = 0;
 
     constructor (lobbyId : number){
         this.lobbyId = lobbyId;
@@ -23,7 +24,7 @@ export default class Carte{
             }
         }
         database.cartes.push(this);
-        this.id = database.cartes.length;
+        this.id = Carte.nextId++;
     }
 
     valider(lobbyId : number, numeroGagnants : Case[] ){
