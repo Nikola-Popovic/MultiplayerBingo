@@ -25,24 +25,24 @@ router.post("/", (req : any, res : any, next : any) => {
 });
 
 // Créer une partie
-router.post("/create", (req : any, res : any, next : any) => {
+router.post("/", (req : any, res : any, next : any) => {
   const host = database.getJoueurById(parseInt(req.body.hostId, 10));
   const lobbyName = req.body.nom;
   const longitude = req.body.longitude;
   const latitude = req.body.latitude;
-
+  
   if(lobbyName === "" || lobbyName === undefined){
     res.status(400);
     res.send("Veuillez envoyer un nom de lobby.");
   }
 
-  if (longitude === null || latitude === null) {
+  if (longitude === undefined || latitude === undefined) {
     res.status(400);
     res.send("Veuillez entrer la longitude et latitude courante.");
   }
 
   else {
-    if (host != null) {
+    if (host !== null) {
       const lobby = new Lobby(host, lobbyName, new GeoLocation(longitude, latitude));
       res.send(lobby.toJSON());
     } else {
