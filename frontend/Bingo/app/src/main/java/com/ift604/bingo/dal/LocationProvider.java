@@ -19,7 +19,17 @@ public class LocationProvider {
     private static Location location;
     private static FusedLocationProviderClient fusedLocationProviderClient;
 
-    public LocationProvider(Context context, Activity activity) {
+    private static LocationProvider instance;
+
+    public static LocationProvider getInstance(Context context, Activity activity)
+    {
+        if (instance == null)
+            instance = new LocationProvider(context, activity);
+        return instance;
+    }
+
+    private LocationProvider(Context context, Activity activity)
+    {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
 
         location = new Location(LocationManager.GPS_PROVIDER);
