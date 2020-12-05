@@ -4,7 +4,7 @@ import * as database from '../database'
 import Carte from "../models/carte";
 import Lobby from "../models/lobby";
 import GeoLocation from "../models/geolocation";
-import { sendCardToTokens } from "../messaging";
+import { sendCardToTokens, subscribeTokensToLobbyTopic } from "../messaging";
 
 // Obtenir les parties dans un range acceptable
 router.get("/", (req : any, res : any, next : any) => {
@@ -75,7 +75,10 @@ router.post("/:id/start", (req : any, res : any, next : any) => {
         lobby.startGame();
         database.saveLobby(lobby);
         
-        sendCardToTokens(lobby.joueurs.map(joueur => joueur.token), lobby.id);
+        const tokens = lobby.joueurs.map(joueur => joueur.token);
+
+        sendCardToTokens(tokens, lobby.id);
+        subscribeTokensToLobbyTopic(tokens, lobby.id);
 
         res.status(204).end();
       } else {

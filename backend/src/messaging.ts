@@ -11,3 +11,8 @@ export function sendCardToTokens(tokens : string[], lobbyId : number) {
     });
   });
 }
+
+export function subscribeTokensToLobbyTopic(tokens : string[], lobbyId : number) {
+  const topic = `lobby${lobbyId}Topic`;
+  firebase.messaging().subscribeToTopic(tokens, topic);
+}
