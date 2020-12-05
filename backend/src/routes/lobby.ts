@@ -4,6 +4,7 @@ import * as database from '../database'
 import Carte from "../models/carte";
 import Lobby from "../models/lobby";
 import GeoLocation from "../models/geolocation";
+import { sendCardToTokens } from "../messaging";
 
 // Obtenir les parties dans un range acceptable
 router.get("/", (req : any, res : any, next : any) => {
@@ -73,6 +74,9 @@ router.post("/:id/start", (req : any, res : any, next : any) => {
       if (req.body.hostId == lobby.host.id) {
         lobby.startGame();
         database.saveLobby(lobby);
+        
+        sendCardToTokens(lobby.joueurs.map(joueur => joueur.token), lobby.id);
+
         res.status(204).end();
       } else {
         res.status(400).send("Seul le host peut démarrer la partie.")
