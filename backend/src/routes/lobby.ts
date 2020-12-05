@@ -5,15 +5,6 @@ import Carte from "../models/carte";
 import Lobby from "../models/lobby";
 import GeoLocation from "../models/geolocation";
 
-// Obtenir toutes les parties
-router.get("/", (req : any, res : any, next : any) => {
-  const lobbies : any[] = [];
-  for(const lobby of database.lobbies.filter(l => !l.estCommencee)){
-    lobbies.push(lobby.toJSON());
-  }
-  res.send(lobbies);
-})
-
 router.post("/", (req : any, res : any, next : any) => {
   const lobbies : any[] = [];
   const longitude = req.body.longitude;
