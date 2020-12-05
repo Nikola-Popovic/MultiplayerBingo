@@ -24,11 +24,8 @@ public class LobbyDAO extends GenericDataHandler {
     }
 
     public ArrayList<Lobby> getLobbiesNearMe(double longitude, double latitude) throws Exception {
-        String url = lobbyPath;
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("longitude", longitude);
-        jsonObject.put("latitude", latitude);
-        ANResponse response = postDataToUrl(url, jsonObject);
+        String url = String.format("%s?longitude=%f&latitude=%f", lobbyPath, longitude, latitude);
+        ANResponse response = getDataFromUrl(url);
         if (response.isSuccess()) {
             return lobbyMapper.buildLobbies(response.getResult().toString());
         } else {
@@ -52,7 +49,7 @@ public class LobbyDAO extends GenericDataHandler {
         jsonObject.put("nom", name);
         jsonObject.put("longitude", longitude);
         jsonObject.put("latitude", latitude);
-        ANResponse response = postDataToUrl(lobbyPath + "/create", jsonObject);
+        ANResponse response = postDataToUrl(lobbyPath, jsonObject);
         if (response.isSuccess()) {
             return lobbyMapper.buildLobby(response.getResult().toString());
         } else {
