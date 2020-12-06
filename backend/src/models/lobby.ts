@@ -3,6 +3,7 @@ import * as database from '../database'
 import GeoLocation from "./geolocation";
 import Util from "../util";
 import shuffle from 'lodash.shuffle';
+import { sendNextBouleToLobby, sendGameOverToLobby, unSubscribeTokenToLobbyTopic } from "../messaging";
 
 export default class Lobby{
     private _joueurs : Joueur[];
@@ -14,6 +15,7 @@ export default class Lobby{
     private _boulesPiges : string[];
     private _estCommencee : boolean;
     private _nextBoules : string[];
+    private _terminee : boolean;
     static nextId : number = 0;
 
     constructor(host : Joueur, name : string, geolocation: GeoLocation){
@@ -28,6 +30,7 @@ export default class Lobby{
         this._joueurs.push(this._host);
         host.assignerALobby(this);
         this._estCommencee = false;
+        this._terminee = false;
     }
 
     private generateRandomNextBoules() : string[] {
@@ -74,6 +77,27 @@ export default class Lobby{
 
     startGame() {
         this._estCommencee = true;
+        const timer = setInterval(() => {
+            if (this._terminee) {
+                const tokens = this.joueurs.map(joueur => joueur.token);
+                unSubscribeTokenToLobbyTopic(tokens, this.id);
+                clearInterval(timer);
+                console.log('clearInterval');
+            } else {
+                const nextBoule = this.getNextBoule();
+
+                if (nextBoule !== null) {
+                    sendNextBouleToLobby(this.getNextBoule(), this.id);
+                } else {
+                    this.stopGame();
+                    sendGameOverToLobby(this.id);
+                }
+            }
+        }, 30 * 1000);
+    }
+
+    stopGame() {
+        this._terminee = true;
     }
 
     selectNewRandomHost() {
@@ -94,7 +118,7 @@ export default class Lobby{
         return this._geolocation.distanceToLocation(location) / 1000 < Util.MAX_LOBBY_DISTANCE
     }
 
-    getNextBoule() : string {
+    private getNextBoule() : string {
         if (this._nextBoules.length !== 0) {   
             const nextNumber = this._nextBoules.pop();
             this._boulesPiges.push(nextNumber);
@@ -113,7 +137,9 @@ export default class Lobby{
             "id" : this.id,
             "nom" : this.nom,
             "host" : this._host.toJSON(),
-            "participants" : participants
+            "participants" : participants,
+            "estDemaree": this.estCommencee,
+            "nextNumbers": this._nextBoules
         }
     }
 

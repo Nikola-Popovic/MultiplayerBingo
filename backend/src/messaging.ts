@@ -14,7 +14,7 @@ export function subscribeTokenToLobbyTopic(token : string, lobbyId : number) {
   firebase.messaging().subscribeToTopic(token, getLobbyTopic(lobbyId));
 }
 
-export function unSubscribeTokenToLobbyTopic(token : string, lobbyId : number) {
+export function unSubscribeTokenToLobbyTopic(token : string | string[], lobbyId : number) {
   firebase.messaging().unsubscribeFromTopic(token, getLobbyTopic(lobbyId));
 }
 
@@ -30,15 +30,21 @@ export function sendRemovedPlayerMessageToLobby(joueur : Joueur, lobbyId : numbe
   });
 }
 
-export function sendNextNumberToLobby(nextNumber : number, lobbyId : number) {
+export function sendNextBouleToLobby(nextBoule : string, lobbyId : number) {
   firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
-    data: formatMessage("nextNumber", nextNumber.toString())
+    data: formatMessage("nextBoule", nextBoule)
   });
 }
 
 export function sendWinnerToLobby(joueur : Joueur, lobbyId : number) {
   firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
     data: formatMessage("winner", JSON.stringify(joueur.toJSON()))
+  });
+}
+
+export function sendGameOverToLobby(lobbyId : number) { 
+  firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
+    data: formatMessage("gameOver", "")
   });
 }
 

@@ -186,6 +186,7 @@ router.post("/:id/win", (req : any, res : any, next : any) => {
       const joueur = database.getJoueurById(parseInt(req.body.joueurId, 10));
       if (joueur !== undefined) {
         sendWinnerToLobby(joueur, lobby.id);
+        lobby.stopGame();
         res.send({
           "valide" : true
         });
