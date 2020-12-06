@@ -80,6 +80,7 @@ export default class Lobby{
         const timer = setInterval(() => {
             if (this._terminee) {
                 const tokens = this.joueurs.map(joueur => joueur.token);
+                this.joueurs.forEach(joueur => joueur.resetLobby());
                 unSubscribeTokenToLobbyTopic(tokens, this.id);
                 clearInterval(timer);
                 console.log('clearInterval');
