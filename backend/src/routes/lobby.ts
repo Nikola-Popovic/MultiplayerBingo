@@ -1,7 +1,6 @@
 import express from 'express'
 const router = express.Router();
 import * as database from '../database'
-import Carte from "../models/carte";
 import Lobby from "../models/lobby";
 import GeoLocation from "../models/geolocation";
 import { sendCardToTokens, subscribeTokenToLobbyTopic, sendAddedPlayerMessageToLobby, unSubscribeTokenToLobbyTopic, sendRemovedPlayerMessageToLobby, sendWinnerToLobby } from "../messaging";
@@ -85,19 +84,6 @@ router.post("/:id/start", (req : any, res : any, next : any) => {
         res.status(400).send("Seul le host peut démarrer la partie.")
       }
     }
-  }
-  else{
-    res.status(400);
-    res.send("Le id recu ne correspond pas a un lobby connu.");
-  }
-});
-
-// Créer une carte pour une partie
-router.get("/carte/:id", (req : any, res : any, next : any) => {
-  const id = parseInt(req.params.id, 10);
-  if(database.lobbyExiste(id)){
-    const carte = new Carte(id);
-    res.send(carte.toJSON());
   }
   else{
     res.status(400);
