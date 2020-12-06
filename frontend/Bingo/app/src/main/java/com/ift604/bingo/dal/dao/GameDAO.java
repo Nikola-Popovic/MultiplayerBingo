@@ -15,6 +15,7 @@ public class GameDAO extends GenericDataHandler {
 
     public GameDAO() {
         super();
+        gameDatamapper = new GameDatamapper();
     }
 
     public void startGame(int lobbyId, int hostId) {
@@ -37,7 +38,7 @@ public class GameDAO extends GenericDataHandler {
     }
 
     public Boolean winGame(int cardId, int participantId, int lobbyId) throws Exception {
-        String url = String.format("%s%d/win", lobbyPath, lobbyId);
+        String url = String.format("%s/%d/win", lobbyPath, lobbyId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("carteId", cardId);
         jsonObject.put("joueurId", participantId);

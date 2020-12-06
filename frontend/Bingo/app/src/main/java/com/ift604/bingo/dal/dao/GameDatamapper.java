@@ -8,6 +8,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.ift604.bingo.model.Box;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Coordinate;
@@ -54,8 +55,8 @@ public class GameDatamapper {
             return customGson.fromJson(jsonCard, Card.class);
         }
 
-    public Boolean mapWinGameResult(String toString) throws JSONException {
-        JSONObject jsonObject = new JSONObject(toString);
-        return jsonObject.getBoolean("valide");
+    public Boolean mapWinGameResult(String isValidJson) throws JSONException {
+        JsonObject jsonObject = JsonParser.parseString(isValidJson).getAsJsonObject();
+        return jsonObject.get("valide").getAsBoolean();
     }
 }

@@ -95,6 +95,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
 
     private void startWinService() {
         winGameService = new Intent(this, WinGameService.class);
+        winGameService.setAction(WinGameService.WIN_GAME_ACTION);
         winGameService.putExtra(WinGameService.LOBBY_ID_EXTRA, gameController.getPlayerCard().getLobbyId());
         winGameService.putExtra(WinGameService.WINNER_ID_EXTRA, Util.getConnectedUserId(this));
         winGameService.putExtra(WinGameService.CARD_ID_EXTRA, gameController.getPlayerCard().getId());
