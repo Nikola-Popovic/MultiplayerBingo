@@ -7,8 +7,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         setContentView(R.layout.activity_main);
         startCreateUserService();
         registerCreateUserReceiver();
-        locationProvider = new LocationProvider(getApplicationContext(), this);
+        locationProvider = LocationProvider.getInstance(getApplicationContext(), this);
 
 
         Button findLobbyBtn = findViewById(R.id.menu_find_lobby_button);
