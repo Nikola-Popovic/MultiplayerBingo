@@ -53,8 +53,8 @@ public class DummyCard {
         bColList.putAll(nColList);
         bColList.putAll(gColList);
         bColList.putAll(oColList);
-
-        return new Card(bColList, 5, 5);
+        return null;
+        // return new Card(bColList, 5, 5);
     }
 
     private static ArrayList<Participant> dummyParticipant(int lobbyId) {

@@ -9,14 +9,15 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ift604.bingo.R;
@@ -24,8 +25,10 @@ import com.ift604.bingo.controller.GameController;
 import com.ift604.bingo.controller.IListener;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Coordinate;
-import com.ift604.bingo.service.DrawnNumberService;
-import com.ift604.bingo.service.PlayerCardService;
+import com.ift604.bingo.model.Participant;
+import com.ift604.bingo.service.MyFirebaseMessagingService;
+import com.ift604.bingo.service.WinGameService;
+import com.ift604.bingo.util.Util;
 
 public class GameActivity extends AppCompatActivity implements IListener {
 
@@ -39,32 +42,46 @@ public class GameActivity extends AppCompatActivity implements IListener {
     LinearLayout previousNumberLayout;
     RecyclerView previousRecyclerView;
 
+    Intent winGameService;
+    WinGameReceiver winGameReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         gameActivity = this;
-        Intent generateCardService = new Intent(this, PlayerCardService.class);
-        Intent previousNumberService = new Intent(this, DrawnNumberService.class);
         setContentView(R.layout.activity_game);
+        Card card = (Card) getIntent().getSerializableExtra(MyFirebaseMessagingService.GENERATED_CARD_EXTRA);
+        gameController = new GameController(card);
         playerCardFrameLayout = findViewById(R.id.player_card_frame_layout);
-        startService(generateCardService);
-        startService(previousNumberService);
-        registerPlayerCardReceiver();
-        registerNewNumberReceiver();
+
         previousNumbersFrameLayout = findViewById(R.id.previous_numbers_frame_layout);
         previousNumbers = findViewById(R.id.previous_number_text);
+
+        Button button = findViewById(R.id.bingo_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startWinService();
+                registerWinService();
+            }
+        });
+
         /*
          * Layouts to switch after a screen orientation change
          */
         mainGameLayout = findViewById(R.id.game_activity_layout);
         previousNumberLayout = findViewById(R.id.previous_number_layout);
         previousRecyclerView = findViewById(R.id.previous_number_recycler_view);
+
+
+        getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "un autre joli tag").commit();
+
         int orientation = getResources().getConfiguration().orientation;
 
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-           handleLandscapeOrientation();
+            handleLandscapeOrientation();
         } else {
-          handlePortraitOrientation();
+            handlePortraitOrientation();
         }
 
         //TODO WILL SUBSCRIBE HERE FOR WIN
@@ -76,32 +93,19 @@ public class GameActivity extends AppCompatActivity implements IListener {
         //TODO WHEN NUMBER ARE CALLED, THE NUMBER SHOULD BE DISPLAYED
     }
 
-    private void registerNewNumberReceiver() {
-        PreviousNumberReceiver receiver = new PreviousNumberReceiver();
+    private void startWinService() {
+        winGameService = new Intent(this, WinGameService.class);
+        winGameService.putExtra(WinGameService.LOBBY_ID_EXTRA, gameController.getPlayerCard().getLobbyId());
+        winGameService.putExtra(WinGameService.WINNER_ID_EXTRA, Util.getConnectedUserId(this));
+        winGameService.putExtra(WinGameService.CARD_ID_EXTRA, gameController.getPlayerCard().getId());
+        startService(winGameService);
+    }
+
+    private void registerWinService() {
+        winGameReceiver = new WinGameReceiver();
         IntentFilter intentFilter = new IntentFilter();
-    }
-
-
-    private void registerPlayerCardReceiver() {
-        PlayerCardReceiver receiver = new PlayerCardReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("PLAYER_CARD_RECEIVER");
-        registerReceiver(receiver, intentFilter);
-    }
-
-    public class PlayerCardReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Card card = (Card) intent.getBundleExtra("playerCard").getSerializable("generatedCard");
-            gameController = new GameController(card);
-            getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "un autre joli tag").commit();
-        }
-    }
-
-    public class PreviousNumberReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-        }
+        intentFilter.addAction(MyFirebaseMessagingService.WIN_GAME_ACTION);
+        this.registerReceiver(winGameReceiver, intentFilter);
     }
 
     @Override
@@ -110,11 +114,9 @@ public class GameActivity extends AppCompatActivity implements IListener {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             handleLandscapeOrientation();
         } else {
-            // Portrait
             handlePortraitOrientation();
         }
     }
-
 
     private void handlePortraitOrientation() {
         // Text field
@@ -134,16 +136,23 @@ public class GameActivity extends AppCompatActivity implements IListener {
         playerCardFrameLayout.setLayoutParams(fp);
         playerCardFrameLayout.setForegroundGravity(Gravity.CENTER_HORIZONTAL);
         /** Todo: Change the orientation of recyclerview
-        // Recycler view
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        previousRecyclerView.setLayoutManager(linearLayoutManager);
+         // Recycler view
+         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+         previousRecyclerView.setLayoutManager(linearLayoutManager);
          **/
+    }
+
+    @Override
+    public void onDestroy() {
+        stopService(winGameService);
+        unregisterReceiver(winGameReceiver);
+        super.onDestroy();
     }
 
     private void handleLandscapeOrientation() {
         // Text field
-       //rotateTextSideways();
+        //rotateTextSideways();
         // Main Layout
         //LinearLayout.LayoutParams mp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         //mp.gravity = Gravity.CENTER_HORIZONTAL;
@@ -164,10 +173,10 @@ public class GameActivity extends AppCompatActivity implements IListener {
         playerCardFrameLayout.setLayoutParams(fp);
         playerCardFrameLayout.setForegroundGravity(Gravity.CENTER_HORIZONTAL);
         /**
-        // Recycler view
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-        previousRecyclerView.setLayoutManager(linearLayoutManager);**/
+         // Recycler view
+         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+         previousRecyclerView.setLayoutManager(linearLayoutManager);**/
 
     }
 
@@ -184,14 +193,17 @@ public class GameActivity extends AppCompatActivity implements IListener {
                         public void onClick(DialogInterface dialog, int id) {
                             GameActivity.this.finish();
                         }
-                    }).setNegativeButton(R.string.cancel,new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            return;
-                        }});
+                    }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    return;
+                }
+            });
             AlertDialog alert = builder.create();
             alert.show();
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
         }
-        return super.onKeyDown(keyCode, event);
     }
 
     private void rotateTextSideways() {
@@ -210,6 +222,42 @@ public class GameActivity extends AppCompatActivity implements IListener {
         gameController.markBoxForPlayer(coordinate);
         if (gameController.verifyIfBingo(coordinate)) {
             findViewById(R.id.bingo_button).setEnabled(true);
+        }
+    }
+
+    void showWinnerDialog(Participant winner) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final GameActivity activity = this;
+        builder.setMessage("Un joueur a gagné. Etes-vous d'accord ?")
+                .setCancelable(false)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        activity.finish();
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                activity.finish();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private class WinGamePushReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Participant participantWinner = (Participant) intent.getSerializableExtra(MyFirebaseMessagingService.WINNER_EXTRA);
+            showWinnerDialog(participantWinner);
+        }
+    }
+
+    private class WinGameReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Boolean isValid = intent.getBooleanExtra(WinGameService.IS_VALID_EXTRA, false);
+            if (isValid)
+                showWinnerDialog(null);
+
         }
     }
 }

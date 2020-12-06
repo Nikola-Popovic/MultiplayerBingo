@@ -117,4 +117,7 @@ public class GameController {
 //                && numberCalled.contains(bottomRightBox.getNumber());
     }
 
+    public Card getPlayerCard() {
+        return playerCard;
+    }
 }

@@ -1,15 +1,12 @@
 package com.ift604.bingo.service;
 
-import android.app.IntentService;
 import android.content.Intent;
 
-import com.ift604.bingo.dal.IBingoRepository;
-import com.ift604.bingo.dal.RestServiceDatasource;
 //TODO START GAME SERVICE
 public class StartGameService extends GenericRestService {
     public static final String START_GAME_SERVICE = "START_GAME_SERVICE";
     public static final String LOBBY_ID_PARAM ="LOBBY_ID_PARAM";
-    public static final String LOBBY_HOST ="LOBBY_HOST_PARAM";
+    public static final String PLAYER_ID ="LOBBY_HOST_PARAM";
     public static final String LOBBY_EXTRA ="LOBBY_EXTRA";
 
 
@@ -20,7 +17,7 @@ public class StartGameService extends GenericRestService {
     @Override
     protected Object restAction(Intent i) throws Exception {
         final int lobbyId = i.getIntExtra(LOBBY_ID_PARAM, 0);
-        final int lobbyHost = i.getIntExtra(LOBBY_HOST, 0);
+        final int lobbyHost = i.getIntExtra(PLAYER_ID, 0);
         bingoRepository.startGame(lobbyId, lobbyHost);
         return null;
     }

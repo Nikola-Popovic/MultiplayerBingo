@@ -29,6 +29,8 @@ public class WaitLobbyActivity extends AppCompatActivity {
     private FrameLayout waitLobbyListFrameLayout;
     private GetLobbyResponseReceiver getLobbyResponseReceiver;
     private Intent getLobbyByAttributeService;
+    private Intent startGameService;
+    private WaitLobbyReceiver startGameReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,26 +80,24 @@ public class WaitLobbyActivity extends AppCompatActivity {
 
 
     private void registerWaitingLobby() {
-        WaitLobbyReceiver receiver = new WaitLobbyReceiver();
+        startGameReceiver = new WaitLobbyReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(StartGameService.START_GAME_SERVICE);
-        registerReceiver(receiver, intentFilter);
-    }
-
-    private void startGameActivity() {
-        Intent gameIntent = new Intent(this, GameActivity.class);
-        startActivity(gameIntent);
+        registerReceiver(startGameReceiver, intentFilter);
     }
 
     private void startStartGameService() {
-        Intent intent = new Intent(this, StartGameService.class);
-        startService(intent);
+        startGameService = new Intent(this, StartGameService.class);
+        startGameService.putExtra(StartGameService.LOBBY_ID_PARAM, lobby.getId());
+        startGameService.putExtra(StartGameService.PLAYER_ID, Util.getConnectedUserId(this));
+        startService(startGameService);
     }
 
     public class WaitLobbyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            startGameActivity();
+            stopService(startGameService);
+            unregisterReceiver(startGameReceiver);
         }
     }
 
@@ -144,8 +144,7 @@ public class WaitLobbyActivity extends AppCompatActivity {
             Button startGameButton = findViewById(R.id.wait_lobby_start_button);
             int hostId = lobby.getHost().getId();
             int userId = Util.getConnectedUserId(context);
-            if (hostId != userId)
-            {
+            if (hostId != userId) {
                 startGameButton.setEnabled(false);
                 startGameButton.setVisibility(View.GONE);
             }
@@ -153,10 +152,8 @@ public class WaitLobbyActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if ((keyCode == KeyEvent.KEYCODE_BACK))
-        {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             leaveLobby();
         }
         return super.onKeyDown(keyCode, event);

@@ -56,7 +56,8 @@ public class PreviousNumberGrid extends DialogFragment {
     private Card generateFullGrid() {
         final int amountOfRowInBingo = 15;
         ArrayList<String> bingo = Util.bingo;
-        return new Card(createColumn(amountOfRowInBingo, bingo), Util.bingo.size(), amountOfRowInBingo);
+      return null;
+        //  return new Card(createColumn(amountOfRowInBingo, bingo), Util.bingo.size(), amountOfRowInBingo);
     }
 
     private HashMap<Coordinate, Box> createColumn(int amountOfRowInBingo, ArrayList<String> bingo) {

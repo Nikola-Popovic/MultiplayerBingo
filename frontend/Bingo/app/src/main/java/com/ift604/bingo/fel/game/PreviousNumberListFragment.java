@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ift604.bingo.R;
 import com.ift604.bingo.fel.decorator.HorizontalSpaceItemDecoration;
-import com.ift604.bingo.service.DrawnNumberService;
 import com.ift604.bingo.util.CollectionUtil;
 
 import java.util.ArrayList;
@@ -48,17 +47,7 @@ public class PreviousNumberListFragment extends Fragment {
         this.adapter = new PreviousNumberAdapter(previousNumbers);
 
         this.previousNumberRecyclerView.setAdapter(adapter);
-        Intent lobbiesService = new Intent(getActivity(), DrawnNumberService.class);
-        getActivity().startService(lobbiesService);
-        registerResponseReceiver();
         return view;
-    }
-
-    private void registerResponseReceiver() {
-        PreviousNumberReceiver receiver = new PreviousNumberReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(DrawnNumberService.NUMBER_DRAWN_ACTION);
-        requireActivity().registerReceiver(receiver, intentFilter);
     }
 
     private void updatePreviousNumbers(String newNumber) {
@@ -68,18 +57,19 @@ public class PreviousNumberListFragment extends Fragment {
         previousNumbers.add(newNumber);
     }
 
-    public class PreviousNumberReceiver extends BroadcastReceiver {
-
-        public PreviousNumberReceiver() {
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String newNumber = (String) intent.getExtras().getSerializable(DrawnNumberService.NEW_NUMBER_EXTRA);
-            updatePreviousNumbers(newNumber);
-            adapter.setPreviousNumbers(CollectionUtil.reverse(previousNumbers));
-            adapter.notifyItemRangeChanged(0, MAX_ITEM);
-            adapter.notifyDataSetChanged();
-        }
-    }
+    //TODO CODE TO REMOVE AFTER
+//    public class PreviousNumberReceiver extends BroadcastReceiver {
+//
+//        public PreviousNumberReceiver() {
+//        }
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            String newNumber = (String) intent.getExtras().getSerializable(DrawnNumberService.NEW_NUMBER_EXTRA);
+//            updatePreviousNumbers(newNumber);
+//            adapter.setPreviousNumbers(CollectionUtil.reverse(previousNumbers));
+//            adapter.notifyItemRangeChanged(0, MAX_ITEM);
+//            adapter.notifyDataSetChanged();
+//        }
+//    }
 }

@@ -17,12 +17,14 @@
         android:usesCleartextTraffic="true">
 
 
-        <activity android:name=".fel.waitlobby.WaitLobbyActivity"
-            android:noHistory="true"/>
+        <activity
+            android:name=".fel.waitlobby.WaitLobbyActivity"
+            android:noHistory="true" />
         <activity android:name=".fel.lobby.FindLobbyActivity" />
-        <activity android:name=".fel.game.GameActivity"
-            android:noHistory="true"
-            android:configChanges = "keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".fel.game.GameActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:noHistory="true" />
         <activity android:name=".fel.lobby.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,9 +34,6 @@
         </activity>
 
         <service
-            android:name=".service.PlayerCardService"
-            android:enabled="true" />
-        <service
             android:name=".service.FindLobbyNearMeService"
             android:enabled="true" />
         <service
@@ -42,6 +41,9 @@
             android:enabled="true" />
         <service
             android:name=".service.CreateUserService"
+            android:enabled="true" />
+        <service
+            android:name=".service.WinGameService"
             android:enabled="true" />
         <service
             android:name=".service.GetLobbyByAttributeService"
@@ -55,6 +57,14 @@
         <service
             android:name=".service.StartGameService"
             android:exported="true" />
+
+        <service
+            android:name=".service.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
