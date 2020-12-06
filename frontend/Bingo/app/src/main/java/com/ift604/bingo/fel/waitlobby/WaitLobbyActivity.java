@@ -143,6 +143,15 @@ public class WaitLobbyActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopService(getLobbyByAttributeService);
+        stopService(startGameService);
+        unregisterReceiver(startGameReceiver);
+        unregisterReceiver(getLobbyResponseReceiver);
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             leaveLobby();

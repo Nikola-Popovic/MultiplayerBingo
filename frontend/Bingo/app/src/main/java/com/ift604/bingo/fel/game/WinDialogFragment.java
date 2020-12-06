@@ -1,5 +1,6 @@
 package com.ift604.bingo.fel.game;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -27,6 +28,13 @@ public class WinDialogFragment extends DialogFragment {
     public static WinDialogFragment newInstance() {
         WinDialogFragment fragment = new WinDialogFragment();
         return fragment;
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstance) {
+        Dialog d = super.onCreateDialog(savedInstance);
+        d.setCanceledOnTouchOutside(false);
+        return d;
     }
 
     @Override
