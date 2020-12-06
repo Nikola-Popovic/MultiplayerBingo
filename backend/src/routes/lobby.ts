@@ -96,8 +96,8 @@ router.put("/:id/user", (req : any, res : any, next : any) => {
   let erreur = ""
   const joueur = database.getJoueurById(parseInt(req.body.joueurId, 10));
   if(joueur != null){
-    const lobby = database.getLobbyById(parseInt(req.params.id, 10));
-    if(lobby != null) {
+    const lobby = database.getLobbyById(parseInt(req.params.id, 10)) || database.getLobbyByName(req.params.id);
+    if(lobby != null && lobby != undefined) {
       if (!lobby.estCommencee) {
         if (joueur.lobby === null) {
           lobby.addToLobby(joueur);

@@ -51,6 +51,10 @@ export function getLobbyById(id : number){
     return lobby.length === 0 ? null : lobby[0];
 }
 
+export function getLobbyByName(name : string) : Lobby {
+    return lobbies.find(lobby => lobby.nom === name);
+}
+
 export function getCarteById(id : number){
     const carte = cartes.filter(c => c.id === id);
     return carte.length === 0 ? null : carte[0];
