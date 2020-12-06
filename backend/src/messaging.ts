@@ -14,6 +14,10 @@ export function subscribeTokenToLobbyTopic(token : string, lobbyId : number) {
   firebase.messaging().subscribeToTopic(token, getLobbyTopic(lobbyId));
 }
 
+export function unSubscribeTokenToLobbyTopic(token : string, lobbyId : number) {
+  firebase.messaging().unsubscribeFromTopic(token, getLobbyTopic(lobbyId));
+}
+
 export function sendAddedPlayerMessageToLobby(joueur : Joueur, lobbyId : number) {
   firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
     data: formatMessage("addedPlayer", JSON.stringify(joueur.toJSON()))

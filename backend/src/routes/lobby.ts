@@ -4,7 +4,7 @@ import * as database from '../database'
 import Carte from "../models/carte";
 import Lobby from "../models/lobby";
 import GeoLocation from "../models/geolocation";
-import { sendCardToTokens, subscribeTokensToLobbyTopic } from "../messaging";
+import { sendCardToTokens, subscribeTokenToLobbyTopic, sendAddedPlayerMessageToLobby, unSubscribeTokenToLobbyTopic, sendRemovedPlayerMessageToLobby } from "../messaging";
 
 // Obtenir les parties dans un range acceptable
 router.get("/", (req : any, res : any, next : any) => {
@@ -78,7 +78,6 @@ router.post("/:id/start", (req : any, res : any, next : any) => {
         const tokens = lobby.joueurs.map(joueur => joueur.token);
 
         sendCardToTokens(tokens, lobby.id);
-        subscribeTokensToLobbyTopic(tokens, lobby.id);
 
         res.status(204).end();
       } else {
@@ -116,6 +115,8 @@ router.put("/:id/user", (req : any, res : any, next : any) => {
         lobby.addToLobby(joueur);
         database.saveLobby(lobby);
         joueur.assignerALobby(lobby);
+        subscribeTokenToLobbyTopic(joueur.token, lobby.id);
+        sendAddedPlayerMessageToLobby(joueur, lobby.id);
         res.status(204).end();
       } else {
         erreur = "Le joueur recu est deja inscrit dans un lobby.";
@@ -144,6 +145,9 @@ router.delete("/:id/user", (req : any, res : any, next : any) => {
       if(joueur.lobby?.equals(lobby)) {
         lobby.removeFromLobby(joueur);
         joueur.quitterPartie();
+
+        unSubscribeTokenToLobbyTopic(joueur.token, lobby.id);
+        sendRemovedPlayerMessageToLobby(joueur, lobby.id);
 
         if (lobby.joueurs.length === 0) {
           database.deleteLobby(lobby);
