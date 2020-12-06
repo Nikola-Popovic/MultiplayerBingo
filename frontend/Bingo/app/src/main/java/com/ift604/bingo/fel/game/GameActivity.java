@@ -30,9 +30,11 @@ import com.github.jinatonic.confetti.CommonConfetti;
 import com.ift604.bingo.R;
 import com.ift604.bingo.controller.GameController;
 import com.ift604.bingo.controller.IListener;
+import com.ift604.bingo.fel.waitlobby.WaitLobbyActivity;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Coordinate;
 import com.ift604.bingo.model.Participant;
+import com.ift604.bingo.service.JoinLobbyService;
 import com.ift604.bingo.service.MyFirebaseMessagingService;
 import com.ift604.bingo.service.WinGameService;
 import com.ift604.bingo.util.Util;
@@ -151,12 +153,22 @@ public class GameActivity extends AppCompatActivity implements IListener {
         previousRecyclerView.setLayoutManager(linearLayoutManager);
     }
 
+
+    private void leaveLobby() {
+        Intent leaveLobbyService = new Intent(this, JoinLobbyService.class);
+        leaveLobbyService.setAction(JoinLobbyService.LEAVE_LOBBY_ACTION);
+        leaveLobbyService.putExtra(JoinLobbyService.LOBBY_ID, this.getLobbyId());
+        leaveLobbyService.putExtra(JoinLobbyService.USER_ID, Util.getConnectedUserId(this));
+        startService(leaveLobbyService);
+    }
+
     @Override
     public void onDestroy() {
         if (winGameService != null) {
             stopService(winGameService);
             unregisterReceiver(winGameReceiver);
         }
+        leaveLobby();
         super.onDestroy();
     }
 
@@ -257,4 +269,6 @@ public class GameActivity extends AppCompatActivity implements IListener {
 
         }
     }
+
+
 }
