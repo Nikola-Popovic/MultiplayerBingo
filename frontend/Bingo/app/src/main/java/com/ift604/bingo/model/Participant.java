@@ -1,7 +1,6 @@
 package com.ift604.bingo.model;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class Participant implements Serializable {
     Integer id;

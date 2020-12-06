@@ -1,6 +1,5 @@
 package com.ift604.bingo.dal;
 
-import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.model.Participant;
 

@@ -3,9 +3,7 @@ package com.ift604.bingo.dal.dao;
 import android.util.Log;
 
 import com.androidnetworking.common.ANResponse;
-import com.ift604.bingo.exception.ResponseException;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GameDAO extends GenericDataHandler {

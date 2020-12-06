@@ -26,9 +26,9 @@ import java.util.List;
 public class PreviousNumberListFragment extends Fragment {
 
     final static int MAX_ITEM = 4;
-    RecyclerView previousNumberRecyclerView;
-    List<String> previousNumbers = new ArrayList<>();
-    PreviousNumberAdapter adapter;
+    private RecyclerView previousNumberRecyclerView;
+    private List<String> previousNumbers = new ArrayList<>();
+    private PreviousNumberAdapter adapter;
     private int lobbyId;
 
     public PreviousNumberListFragment() {

@@ -7,10 +7,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.androidnetworking.common.ANResponse;
 import com.ift604.bingo.dal.IBingoRepository;
 import com.ift604.bingo.dal.RestServiceDatasource;
-import com.ift604.bingo.exception.ResponseException;
 import com.ift604.bingo.util.Util;
 
 public abstract class GenericRestService<T> extends IntentService {

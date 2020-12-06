@@ -1,12 +1,9 @@
 package com.ift604.bingo.dal.dao;
 
-import android.util.Log;
-
 import com.androidnetworking.common.ANResponse;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.ift604.bingo.exception.ResponseException;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.model.Participant;
 

@@ -1,7 +1,5 @@
 package com.ift604.bingo.fel.game;
 
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

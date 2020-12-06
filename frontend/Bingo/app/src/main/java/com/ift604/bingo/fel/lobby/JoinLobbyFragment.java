@@ -25,8 +25,8 @@ import com.ift604.bingo.util.Util;
  * create an instance of this fragment.
  */
 public class JoinLobbyFragment extends DialogFragment {
-    Intent joinLobbyService;
-    JoinLobbyReceiver joinLobbyReceiver;
+    private Intent joinLobbyService;
+    private JoinLobbyReceiver joinLobbyReceiver;
 
     public JoinLobbyFragment() {
     }
