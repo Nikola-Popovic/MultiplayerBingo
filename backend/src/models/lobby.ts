@@ -138,9 +138,7 @@ export default class Lobby{
             "id" : this.id,
             "nom" : this.nom,
             "host" : this._host.toJSON(),
-            "participants" : participants,
-            "estDemaree": this.estCommencee,
-            "nextNumbers": this._nextBoules
+            "participants" : participants
         }
     }
 
