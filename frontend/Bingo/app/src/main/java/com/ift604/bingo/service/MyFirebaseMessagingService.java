@@ -31,8 +31,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private final String ADDED_PLAYER = "addedPlayer";
     private final String REMOVED_PLAYER = "removedPlayer";
     public final static String ADDED_PLAYER_EXTRA = "ADDED_PLAYER_EXTRA";
-    private static final String NEXT_BALL_EXTRA = "NEXT_BALL_EXTRA";
-    public final static String REMOVED_PLAYER_EXTRA= "REMOVED_PLAYER_EXTRA";
+    public static final String NEXT_BALL_EXTRA = "NEXT_BALL_EXTRA";
+    public final static String REMOVED_PLAYER_EXTRA = "REMOVED_PLAYER_EXTRA";
     public final static String WINNER_EXTRA = "WINNER_EXTRA";
 
     @Override
