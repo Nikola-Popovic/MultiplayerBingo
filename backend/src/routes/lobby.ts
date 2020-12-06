@@ -105,7 +105,7 @@ router.get("/carte/:id", (req : any, res : any, next : any) => {
 });
 
 // Ajouter un joueur à une partie
-router.put("/:id/user", (req : any, res : any, next : any) => {
+router.put("/:id/user", async (req : any, res : any, next : any) => {
   let erreur = ""
   const joueur = database.getJoueurById(parseInt(req.body.joueurId, 10));
   if(joueur != null){
@@ -115,8 +115,8 @@ router.put("/:id/user", (req : any, res : any, next : any) => {
         lobby.addToLobby(joueur);
         database.saveLobby(lobby);
         joueur.assignerALobby(lobby);
-        subscribeTokenToLobbyTopic(joueur.token, lobby.id);
-        sendAddedPlayerMessageToLobby(joueur, lobby.id);
+        await subscribeTokenToLobbyTopic(joueur.token, lobby.id);
+        await sendAddedPlayerMessageToLobby(joueur, lobby.id);
         res.status(204).end();
       } else {
         erreur = "Le joueur recu est deja inscrit dans un lobby.";
