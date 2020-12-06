@@ -55,23 +55,27 @@ public class LobbyItemListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_lobby_item_list, container, false);
         this.lobbyRecyclerView = view.findViewById(R.id.lobby_recycle_view);
         this.swipeRefreshLayout = view.findViewById(R.id.lobby_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //TODO REFRESH
-                swipeRefreshLayout.setRefreshing(false);
+               getLobbyByLocation();
             }
         });
         lobbyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         this.adapter = new LobbyItemAdapter(lobbies);
 
         this.lobbyRecyclerView.setAdapter(adapter);
-        Intent lobbiesService = new Intent(getActivity(), FindLobbyNearMeService.class);
+        getLobbyByLocation();
 
+        return view;
+    }
+
+    private void getLobbyByLocation() {
+        Intent lobbiesService = new Intent(getActivity(), FindLobbyNearMeService.class);
+        swipeRefreshLayout.setRefreshing(true);
         // TODO: figure out why we need this check
         double lon = 0;
         double lat = 0;
@@ -85,7 +89,6 @@ public class LobbyItemListFragment extends Fragment {
 
         getActivity().startService(lobbiesService);
         registerResponseReceiver();
-        return view;
     }
 
     private void registerResponseReceiver() {
@@ -113,8 +116,7 @@ public class LobbyItemListFragment extends Fragment {
             adapter.setLobbies(lobbies);
             adapter.notifyItemRangeChanged(position, lobbies.size());
             adapter.notifyDataSetChanged();
-            //TODO REFRESH
-      //      swipeRefreshLayout.setRefreshing(false);
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 }

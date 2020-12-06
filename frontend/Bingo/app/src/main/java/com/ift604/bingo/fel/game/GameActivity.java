@@ -231,7 +231,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
     }
 
     void showWinnerDialog() {
-        CommonConfetti.rainingConfetti((ConstraintLayout) findViewById(R.id.main_screen), new int[]{Color.GREEN})
+        CommonConfetti.rainingConfetti((ConstraintLayout) findViewById(R.id.main_screen), new int[]{Color.GREEN, Color.YELLOW, Color.RED, Color.LTGRAY})
                 .infinite();
         FragmentManager fm = getSupportFragmentManager();
         WinDialogFragment winDialogFragment = WinDialogFragment.newInstance();

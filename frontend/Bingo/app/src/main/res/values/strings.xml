@@ -24,4 +24,5 @@
     <string name="anonyme">Anonyme</string>
     <string name="error_joining">This lobby doesn\'t exist</string>
     <string name="error_empty_lobby_name">Lobby name cannot be empty</string>
+    <string name="win_dialog_winner_text">Félicitations ! Vous avez gagné</string>
 </resources>

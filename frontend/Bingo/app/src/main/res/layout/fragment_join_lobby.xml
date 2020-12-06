@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".fel.lobby.JoinLobbyFragment">
 
-<!--    todo maybe inflate same layout-->
     <LinearLayout
         android:background="@drawable/big_rounded_square"
         android:layout_width="300sp"
