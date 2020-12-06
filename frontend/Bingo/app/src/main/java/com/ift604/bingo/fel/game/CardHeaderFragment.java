@@ -18,7 +18,9 @@ import com.ift604.bingo.R;
  */
 public class CardHeaderFragment extends Fragment {
     private static final String HEADER_LETTER = "headerLetter";
-    public CardHeaderFragment() { }
+
+    public CardHeaderFragment() {
+    }
 
     public static CardHeaderFragment newInstance(String headerLetter) {
         CardHeaderFragment fragment = new CardHeaderFragment();
@@ -31,7 +33,6 @@ public class CardHeaderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override

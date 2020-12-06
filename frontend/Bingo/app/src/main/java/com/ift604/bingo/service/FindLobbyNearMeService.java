@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class FindLobbyNearMeService extends GenericRestService {
     public static String GET_LOBBY_BY_LOCATION_ACTION = "GET_LOBBY_BY_LOCATION_ACTION";
+
     public static String LOBBY_NEAR_ME_EXTRA = "LOBBY_NEAR_ME_EXTRA";
 
     public FindLobbyNearMeService(String name) {

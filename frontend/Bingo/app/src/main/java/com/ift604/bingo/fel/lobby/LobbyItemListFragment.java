@@ -24,14 +24,16 @@ import java.util.ArrayList;
 
 public class LobbyItemListFragment extends Fragment {
 
-    int position;
-    RecyclerView lobbyRecyclerView;
-    ArrayList<Lobby> lobbies = new ArrayList<>();
-    LobbyItemAdapter adapter;
+    private RecyclerView lobbyRecyclerView;
+    private LobbyItemAdapter adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
+    private int position;
+    private ArrayList<Lobby> lobbies = new ArrayList<>();
+
+    //TODO REMOVE STATIC
     static LocationProvider locationProvider;
 
-    SwipeRefreshLayout swipeRefreshLayout;
 
     public LobbyItemListFragment() {
 

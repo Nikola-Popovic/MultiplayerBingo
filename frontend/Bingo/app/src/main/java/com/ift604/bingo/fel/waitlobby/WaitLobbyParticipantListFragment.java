@@ -63,9 +63,13 @@ public class WaitLobbyParticipantListFragment extends Fragment {
         adapter = new WaitLobbyAdapter(participants);
         waitLobbyRecyclerView.setAdapter(adapter);
 
+        registerPlayerMovedLocalBroadcastReceiver();
+        return view;
+    }
+
+    private void registerPlayerMovedLocalBroadcastReceiver() {
         IntentFilter i = new IntentFilter(MyFirebaseMessagingService.PLAYER_MOVED_ACTION);
         LocalBroadcastManager.getInstance(this.getContext()).registerReceiver(new PlayerMovedReceiver(), i);
-        return view;
     }
 
     public void updateRecyclerView() {

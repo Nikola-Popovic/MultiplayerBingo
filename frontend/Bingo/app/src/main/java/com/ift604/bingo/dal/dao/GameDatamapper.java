@@ -9,7 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import com.ift604.bingo.model.Boule;
+import com.ift604.bingo.model.Ball;
 import com.ift604.bingo.model.Box;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Coordinate;
@@ -68,9 +68,9 @@ public class GameDatamapper {
             return customGson.fromJson(jsonCard, Card.class);
         }
 
-    public static Boule buildBoule(String bouleJsonInfo) {
+    public static Ball buildBoule(String bouleJsonInfo) {
         JsonObject jsonObject = JsonParser.parseString(bouleJsonInfo).getAsJsonObject();
-        Boule boule = new Boule(jsonObject.get("nextBoule").getAsString(), jsonObject.get("lobbyId").getAsInt());
+        Ball boule = new Ball(jsonObject.get("nextBoule").getAsString(), jsonObject.get("lobbyId").getAsInt());
         return boule;
     }
 

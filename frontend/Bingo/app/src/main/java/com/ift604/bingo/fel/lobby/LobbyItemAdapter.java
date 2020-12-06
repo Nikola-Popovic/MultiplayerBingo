@@ -53,9 +53,6 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
                 ctx = v.getContext();
                 startJoinLobbyService(item.getId());
                 registerJoinLobbyReceiver();
-//                Intent intent = new Intent(v.getContext(), WaitLobbyActivity.class);
-//                intent.putExtra(WaitLobbyActivity.LOBBY_ID, item.getId());
-//                v.getContext().startActivity(intent);
             }
         });
     }
@@ -93,7 +90,7 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
 
     private void populateData(@NonNull ViewHolder holder, Lobby item) {
         holder.lobbyName.setText(item.getName());
-        holder.playerAmount.setText(item.getParticipants().size() + " Participants");
+        holder.playerAmount.setText(item.getParticipants().size() + R.string.participants);
     }
 
     @Override

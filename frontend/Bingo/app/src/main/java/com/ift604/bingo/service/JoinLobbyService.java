@@ -12,6 +12,7 @@ import com.ift604.bingo.util.Util;
 public class JoinLobbyService extends IntentService {
     public static final String JOIN_LOBBY_ACTION = "JOIN_LOBBY_ACTION";
     public static final String LEAVE_LOBBY_ACTION = "LEAVE_LOBBY_ACTION";
+
     public static final String LOBBY_ID = "LOBBY_ID";
     public static final String USER_ID = "USER_ID";
     RestServiceDatasource bingoRepository;

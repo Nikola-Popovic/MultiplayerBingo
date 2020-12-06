@@ -38,17 +38,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         registerCreateUserReceiver();
         locationProvider = new LocationProvider(getApplicationContext(), this);
 
-
         Button findLobbyBtn = findViewById(R.id.menu_find_lobby_button);
         findLobbyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent lobbyIntent = new Intent(MainActivity.this, FindLobbyActivity.class);
-
                 startActivity(lobbyIntent);
             }
         });
-
 
         Button createLobbyBtn = findViewById(R.id.menu_create_game_button);
         createLobbyBtn.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         final EditText playerName = findViewById(R.id.player_name);
         // Get preferences
+        //TODO
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         final String userName = settings.getString("Username", "Anonyme");
         playerName.setText(userName);

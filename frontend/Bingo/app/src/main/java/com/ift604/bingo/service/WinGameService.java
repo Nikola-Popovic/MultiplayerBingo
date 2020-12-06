@@ -6,6 +6,7 @@ import com.ift604.bingo.dal.RestServiceDatasource;
 
 public class WinGameService extends GenericRestService {
     public static final String WIN_GAME_ACTION = "WIN_GAME_ACTION";
+
     public static final String CARD_ID_EXTRA = "CARD_ID_EXTRA";
     public static final String WINNER_ID_EXTRA = "WINNER_ID_EXTRA";
     public static final String LOBBY_ID_EXTRA = "LOBBY_ID_EXTRA";

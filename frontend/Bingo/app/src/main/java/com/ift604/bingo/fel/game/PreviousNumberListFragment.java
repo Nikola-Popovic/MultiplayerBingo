@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ift604.bingo.R;
 import com.ift604.bingo.fel.decorator.MarginItemDecoration;
-import com.ift604.bingo.model.Boule;
+import com.ift604.bingo.model.Ball;
 import com.ift604.bingo.service.MyFirebaseMessagingService;
 import com.ift604.bingo.util.CollectionUtil;
 
@@ -65,7 +65,7 @@ public class PreviousNumberListFragment extends Fragment {
         return view;
     }
 
-    private void updatePreviousNumbers(Boule newNumber) {
+    private void updatePreviousNumbers(Ball newNumber) {
         if (newNumber.getLobbyId() == lobbyId) {
             if(previousNumbers.size() >= MAX_ITEM) {
                 previousNumbers.remove(0);
@@ -81,7 +81,7 @@ public class PreviousNumberListFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Boule newNumber = (Boule) intent.getSerializableExtra(MyFirebaseMessagingService.NEXT_BALL_EXTRA);
+            Ball newNumber = (Ball) intent.getSerializableExtra(MyFirebaseMessagingService.NEXT_BALL_EXTRA);
             updatePreviousNumbers(newNumber);
             adapter.setPreviousNumbers(CollectionUtil.reverse(previousNumbers));
             adapter.notifyItemRangeChanged(0, MAX_ITEM);

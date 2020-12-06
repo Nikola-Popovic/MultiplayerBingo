@@ -50,25 +50,26 @@ public class JoinLobbyFragment extends DialogFragment {
         view.findViewById(R.id.join_lobby_create_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String textValue = lobbyIdEditText.getText().toString();
-                if(validateNotEmpty(textValue)) {
-                    startJoinLobbyService(Integer.valueOf(lobbyIdEditText.getText().toString()));
-                    registerJoinLobbyReceiver();
-                }
-                else {
-                    Toast.makeText(dialog.getContext(), getResources().getString(R.string.error_empty_lobby_name), Toast.LENGTH_SHORT).show();
-                }
+                joinLobbyAction(lobbyIdEditText, dialog);
             }
         });
-
         view.findViewById(R.id.join_lobby_cancel_button).setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
         return view;
+    }
+
+    private void joinLobbyAction(EditText lobbyIdEditText, DialogFragment dialog) {
+        String textValue = lobbyIdEditText.getText().toString();
+        if (validateNotEmpty(textValue)) {
+            startJoinLobbyService(Integer.valueOf(lobbyIdEditText.getText().toString()));
+            registerJoinLobbyReceiver();
+        } else {
+            Toast.makeText(dialog.getContext(), getResources().getString(R.string.error_empty_lobby_name), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean validateNotEmpty(String textValue) {

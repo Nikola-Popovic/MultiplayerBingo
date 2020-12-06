@@ -40,19 +40,21 @@ import com.ift604.bingo.util.Util;
 
 public class GameActivity extends AppCompatActivity implements IListener {
 
-    FrameLayout playerCardFrameLayout;
-    LinearLayout previousNumbersLinearLayout;
+    private FrameLayout playerCardFrameLayout;
+    private LinearLayout previousNumbersLinearLayout;
+    private LinearLayout mainGameLayout;
+    private LinearLayout previousNumberLayout;
+
+    private GameActivity gameActivity;
+
+    private TextView previousNumbers;
+    private RecyclerView previousRecyclerView;
+
+    private Intent winGameService;
+    private WinGameReceiver winGameReceiver;
+
+    private int lobbyId;
     public GameController gameController;
-    GameActivity gameActivity;
-
-    TextView previousNumbers;
-    LinearLayout mainGameLayout;
-    LinearLayout previousNumberLayout;
-    RecyclerView previousRecyclerView;
-    int lobbyId;
-
-    Intent winGameService;
-    WinGameReceiver winGameReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +62,13 @@ public class GameActivity extends AppCompatActivity implements IListener {
         gameActivity = this;
         setContentView(R.layout.activity_game);
         Card card = (Card) getIntent().getSerializableExtra(MyFirebaseMessagingService.GENERATED_CARD_EXTRA);
+
         gameController = new GameController(card);
-        playerCardFrameLayout = findViewById(R.id.player_card_frame_layout);
         lobbyId = card.getLobbyId();
+
+        playerCardFrameLayout = findViewById(R.id.player_card_frame_layout);
         previousNumbersLinearLayout = findViewById(R.id.previous_numbers_frame_layout);
         previousNumbers = findViewById(R.id.previous_number_text);
-
         Button button = findViewById(R.id.bingo_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,27 +78,24 @@ public class GameActivity extends AppCompatActivity implements IListener {
             }
         });
 
-        /*
-         * Layouts to switch after a screen orientation change
-         */
-        mainGameLayout = findViewById(R.id.game_activity_layout);
-        previousNumberLayout = findViewById(R.id.previous_number_layout);
-        previousRecyclerView = findViewById(R.id.previous_number_recycler_view);
-
-
+        initSwitchableLayout();
         getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "playerCardFrameLayout").commit();
-
 
         IntentFilter i = new IntentFilter(MyFirebaseMessagingService.WIN_GAME_PUSH_ACTION);
         LocalBroadcastManager.getInstance(this).registerReceiver(new WinGamePushReceiver(), i);
 
         int orientation = getResources().getConfiguration().orientation;
-
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             handleLandscapeOrientation();
         } else {
             handlePortraitOrientation();
         }
+    }
+
+    private void initSwitchableLayout() {
+        mainGameLayout = findViewById(R.id.game_activity_layout);
+        previousNumberLayout = findViewById(R.id.previous_number_layout);
+        previousRecyclerView = findViewById(R.id.previous_number_recycler_view);
     }
 
     private void startWinService() {
@@ -192,7 +192,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
             //Display confirmation here, finish() activity.
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            builder.setMessage("Are you sure you want to exit?")
+            builder.setMessage(R.string.exit_game_confirmation)
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -209,17 +209,6 @@ public class GameActivity extends AppCompatActivity implements IListener {
         } else {
             return super.onKeyDown(keyCode, event);
         }
-    }
-
-    private void rotateTextSideways() {
-        String text = previousNumbers.getText().toString();
-        // Ajoute une new row pour chaque caractere
-        String newText = text.replaceAll("(.{1})", "$1\n");
-        previousNumbers.setText(newText);
-    }
-
-    private void resetPreviousNumberTextView() {
-        previousNumbers.setText(R.string.previous_numbers);
     }
 
     @Override
@@ -247,7 +236,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
     }
 
     void showInvalidCard() {
-        Toast.makeText(this, "Vous avez coché des cases qui n'ont pas été pigées par le boulier !", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.invalid_bingo, Toast.LENGTH_SHORT).show();
     }
 
     private class WinGamePushReceiver extends BroadcastReceiver {

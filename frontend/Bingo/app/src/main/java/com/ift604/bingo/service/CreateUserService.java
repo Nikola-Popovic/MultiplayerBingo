@@ -14,6 +14,7 @@ import com.ift604.bingo.util.Util;
 
 public class CreateUserService extends GenericRestService {
     public static  String CREATE_USER_ACTION = "CREATE_USER_ACTION";
+
     public static  String CREATE_USER_EXTRA = "CREATE_USER_EXTRA";
 
     public CreateUserService(String name) {
@@ -34,7 +35,7 @@ public class CreateUserService extends GenericRestService {
 
     @Override
     protected Intent onSuccess(Object o, Intent intentOutput) {
-        // save part
+        //todo save part maybe in sharedprof
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("IS_CREATED", true);
