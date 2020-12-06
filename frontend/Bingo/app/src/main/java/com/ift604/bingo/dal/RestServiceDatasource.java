@@ -41,6 +41,11 @@ public class RestServiceDatasource implements IBingoRepository {
     }
 
     @Override
+    public void joinLobby(String lobbyName, int userId) throws Exception {
+        lobbyDAO.addPersonToLobby(lobbyName, userId);
+    }
+
+    @Override
     public void leaveLobby(int lobbyId, int userId) throws Exception {
         lobbyDAO.leaveLobby(lobbyId, userId);
     }

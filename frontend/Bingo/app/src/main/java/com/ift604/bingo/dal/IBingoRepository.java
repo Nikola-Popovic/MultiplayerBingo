@@ -14,6 +14,7 @@ public interface IBingoRepository {
     Lobby createLobby(int hostId, String name, double longitude, double latitude) throws Exception;
 
     void joinLobby(int lobbyId, int userId) throws Exception;
+    void joinLobby(String lobbyName, int userId) throws Exception;
 
     void leaveLobby(int lobbyId, int userId) throws Exception;
 

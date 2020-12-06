@@ -144,6 +144,7 @@ public class WaitLobbyActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
+        leaveLobby();
         super.onDestroy();
         if(getLobbyByAttributeService != null) {
             stopService(getLobbyByAttributeService);
