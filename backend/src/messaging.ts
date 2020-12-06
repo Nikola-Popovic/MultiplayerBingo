@@ -36,8 +36,9 @@ export function unSubscribeTokenToLobbyTopic(token : string | string[], lobbyId 
 }
 
 export function sendAddedPlayerMessageToLobby(joueur : Joueur, lobbyId : number) {
-  firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
-    data: formatMessage("addedPlayer", JSON.stringify(joueur.toJSON()))
+  firebase.messaging().send({
+    data: formatMessage("addedPlayer", JSON.stringify(joueur.toJSON())),
+    topic: getLobbyTopic(lobbyId)
   }).then(response => {
     console.log(response);
   })
@@ -47,8 +48,9 @@ export function sendAddedPlayerMessageToLobby(joueur : Joueur, lobbyId : number)
 }
 
 export function sendRemovedPlayerMessageToLobby(joueur : Joueur, lobbyId : number) {
-  firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
-    data: formatMessage("removedPlayer", JSON.stringify(joueur.toJSON()))
+  firebase.messaging().send({
+    data: formatMessage("removedPlayer", JSON.stringify(joueur.toJSON())),
+    topic: getLobbyTopic(lobbyId)
   }).then(response => {
     console.log(response);
   })
@@ -58,8 +60,9 @@ export function sendRemovedPlayerMessageToLobby(joueur : Joueur, lobbyId : numbe
 }
 
 export function sendNextBouleToLobby(nextBoule : string, lobbyId : number) {
-  firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
-    data: formatMessage("nextBoule", nextBoule)
+  firebase.messaging().send({
+    data: formatMessage("nextBoule", nextBoule),
+    topic: getLobbyTopic(lobbyId)
   }).then(response => {
     console.log(response);
   })
@@ -69,8 +72,9 @@ export function sendNextBouleToLobby(nextBoule : string, lobbyId : number) {
 }
 
 export function sendWinnerToLobby(joueur : Joueur, lobbyId : number) {
-  firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
-    data: formatMessage("winner", JSON.stringify(joueur.toJSON()))
+  firebase.messaging().send({
+    data: formatMessage("winner", JSON.stringify(joueur.toJSON())),
+    topic: getLobbyTopic(lobbyId)
   }).then(response => {
     console.log(response);
   })
@@ -80,8 +84,9 @@ export function sendWinnerToLobby(joueur : Joueur, lobbyId : number) {
 }
 
 export function sendGameOverToLobby(lobbyId : number) { 
-  firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
-    data: formatMessage("gameOver", "")
+  firebase.messaging().send({
+    data: formatMessage("gameOver", ""),
+    topic: getLobbyTopic(lobbyId)
   }).then(response => {
     console.log(response);
   })
