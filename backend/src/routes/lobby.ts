@@ -44,8 +44,9 @@ router.post("/", (req : any, res : any, next : any) => {
   }
 
   if (host !== null) {
-      const lobby = new Lobby(host, lobbyName, new GeoLocation(longitude, latitude));
-      res.send(lobby.toJSON());
+    const lobby = new Lobby(host, lobbyName, new GeoLocation(longitude, latitude));
+    subscribeTokenToLobbyTopic(host.token, lobby.id);
+    res.send(lobby.toJSON());
   } else {
       res.status(400);
       res.send("Le hostId ne correspond pas a un joueur connu.");
