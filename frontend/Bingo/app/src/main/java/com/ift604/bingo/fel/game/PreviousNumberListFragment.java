@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ift604.bingo.R;
-import com.ift604.bingo.fel.decorator.HorizontalSpaceItemDecoration;
+import com.ift604.bingo.fel.decorator.MarginItemDecoration;
 import com.ift604.bingo.service.MyFirebaseMessagingService;
 import com.ift604.bingo.util.CollectionUtil;
 
@@ -45,7 +45,7 @@ public class PreviousNumberListFragment extends Fragment {
         this.previousNumberRecyclerView = view.findViewById(R.id.previous_number_recycler_view);
         previousNumberRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        previousNumberRecyclerView.addItemDecoration(new HorizontalSpaceItemDecoration((int) getResources().getDimension(R.dimen.default_padding)));
+        previousNumberRecyclerView.addItemDecoration(new MarginItemDecoration((int) getResources().getDimension(R.dimen.default_padding_horizontal), (int) getResources().getDimension(R.dimen.default_padding_vertical)));
         this.adapter = new PreviousNumberAdapter(previousNumbers);
 
         this.previousNumberRecyclerView.setAdapter(adapter);

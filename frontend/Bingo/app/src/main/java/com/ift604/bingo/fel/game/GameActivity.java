@@ -19,6 +19,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ift604.bingo.LostGameDialogFragment;
@@ -78,7 +79,6 @@ public class GameActivity extends AppCompatActivity implements IListener {
 
 
         getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "un autre joli tag").commit();
-       // getSupportFragmentManager().beginTransaction().add(previousNumberLayout.getId(), PreviousNumberGrid.newInstance(card, gameActivity), "un autre joli tag").commit();
 
         int orientation = getResources().getConfiguration().orientation;
 
@@ -87,14 +87,6 @@ public class GameActivity extends AppCompatActivity implements IListener {
         } else {
             handlePortraitOrientation();
         }
-
-        //TODO WILL SUBSCRIBE HERE FOR WIN
-        //TODO WHEN SOMEONE WIN, THE GAME ENDS FOR EVERYBODY
-
-        //TODO WILL SUBSCRIBE HERE FOR NUMBER CALLED.
-        //TODO WHEN NUMBER ARE CALLED, PREVIOUSNUMBERGRID SHOULD BE UPDATED
-        //TODO WHEN NUMBER ARE CALLED, THE VALUE SHOULD BE SAVED
-        //TODO WHEN NUMBER ARE CALLED, THE NUMBER SHOULD BE DISPLAYED
     }
 
     private void startWinService() {
@@ -124,28 +116,26 @@ public class GameActivity extends AppCompatActivity implements IListener {
     }
 
     private void handlePortraitOrientation() {
-        // Text field
         // Main Layout
         mainGameLayout.setOrientation(LinearLayout.VERTICAL);
         mainGameLayout.setGravity(Gravity.CENTER_HORIZONTAL);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0);
-        lp.weight = 0.1f;
+        lp.weight = 0.20f;
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         previousNumberLayout.setLayoutParams(lp);
         previousNumberLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 
         // Player Card Frame Layout
         LinearLayout.LayoutParams fp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
-        fp.weight = 0.75f;
+        fp.weight = 0.7f;
         fp.gravity = Gravity.CENTER_HORIZONTAL;
         playerCardFrameLayout.setLayoutParams(fp);
         playerCardFrameLayout.setForegroundGravity(Gravity.CENTER_HORIZONTAL);
-        /** Todo: Change the orientation of recyclerview
-         // Recycler view
-         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-         previousRecyclerView.setLayoutManager(linearLayoutManager);
-         **/
+        previousNumberLayout.setOrientation(LinearLayout.VERTICAL);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        previousRecyclerView.setLayoutManager(linearLayoutManager);
     }
 
     @Override
@@ -158,19 +148,15 @@ public class GameActivity extends AppCompatActivity implements IListener {
     }
 
     private void handleLandscapeOrientation() {
-        // Text field
-        //rotateTextSideways();
-        // Main Layout
-        //LinearLayout.LayoutParams mp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        //mp.gravity = Gravity.CENTER_HORIZONTAL;
         mainGameLayout.setOrientation(LinearLayout.HORIZONTAL);
         //mainGameLayout.setLayoutParams(mp);
         mainGameLayout.setGravity(Gravity.CENTER_HORIZONTAL);
         //Previous numbers layout
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.weight = 0.3f;
+        lp.weight = 0.25f;
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         previousNumberLayout.setLayoutParams(lp);
+        //previousNumberLayout.setOrientation(LinearLayout.HORIZONTAL);
         previousNumberLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 
         // Player Card Frame Layout
@@ -179,11 +165,10 @@ public class GameActivity extends AppCompatActivity implements IListener {
         fp.gravity = Gravity.CENTER_HORIZONTAL;
         playerCardFrameLayout.setLayoutParams(fp);
         playerCardFrameLayout.setForegroundGravity(Gravity.CENTER_HORIZONTAL);
-        /**
-         // Recycler view
-         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-         previousRecyclerView.setLayoutManager(linearLayoutManager);**/
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        previousRecyclerView.setLayoutManager(linearLayoutManager);
 
     }
 
