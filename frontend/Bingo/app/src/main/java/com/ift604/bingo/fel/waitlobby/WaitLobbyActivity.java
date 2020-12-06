@@ -130,7 +130,7 @@ public class WaitLobbyActivity extends AppCompatActivity {
 
             roomName.setText(lobby.getName());
             waitLobbyParticipantListFragment = WaitLobbyParticipantListFragment.newInstance(lobby.getParticipants());
-            getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), waitLobbyParticipantListFragment, "un autre joli tag").commit();
+            getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), waitLobbyParticipantListFragment, "waitLobbyListFrameLayout").commit();
 
             Button startGameButton = findViewById(R.id.wait_lobby_start_button);
             int hostId = lobby.getHost().getId();
@@ -172,26 +172,4 @@ public class WaitLobbyActivity extends AppCompatActivity {
         }
     }
 
-
-    public class GetLobbyResponseReceiver extends BroadcastReceiver {
-        public GetLobbyResponseReceiver() {
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            lobby = (Lobby) intent.getSerializableExtra(GetLobbyByAttributeService.LOBBY_EXTRA);
-            if (lobby == null)
-                return;
-            waitLobbyParticipantListFragment = WaitLobbyParticipantListFragment.newInstance(lobby.getParticipants());
-            getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), waitLobbyParticipantListFragment, "waitLobbyListFrameLayout").commit();
-
-            Button startGameButton = findViewById(R.id.wait_lobby_start_button);
-            int hostId = lobby.getHost().getId();
-            int userId = Util.getConnectedUserId(context);
-            if (hostId != userId) {
-                startGameButton.setEnabled(false);
-                startGameButton.setVisibility(View.GONE);
-            }
-        }
-    }
 }
