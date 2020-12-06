@@ -25,7 +25,7 @@
     <string name="error_joining">This lobby doesn\'t exist</string>
     <string name="error_empty_lobby_name">Lobby name cannot be empty</string>
     <string name="win_dialog_winner_text">Félicitations ! Vous avez gagné</string>
-    <string name="participants">Participants</string>
+    <string name="participants">Participant(s)</string>
     <string name="exit_game_confirmation">Are you sure you want to exit?</string>
     <string name="invalid_bingo">Vous avez coché des cases qui n\'ont pas été pigées par le boulier !</string>
 </resources>

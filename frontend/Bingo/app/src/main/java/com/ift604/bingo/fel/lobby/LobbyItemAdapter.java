@@ -90,7 +90,7 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
 
     private void populateData(@NonNull ViewHolder holder, Lobby item) {
         holder.lobbyName.setText(item.getName());
-        holder.playerAmount.setText(item.getParticipants().size() + R.string.participants);
+        holder.playerAmount.setText(item.getParticipants().size() + " " +  holder.itemView.getContext().getString(R.string.participants));
     }
 
     @Override
