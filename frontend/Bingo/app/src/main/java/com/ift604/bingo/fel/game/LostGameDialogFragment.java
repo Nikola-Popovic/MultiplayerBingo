@@ -1,4 +1,4 @@
-package com.ift604.bingo;
+package com.ift604.bingo.fel.game;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,37 +12,48 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.ift604.bingo.R;
 import com.ift604.bingo.fel.lobby.MainActivity;
 import com.ift604.bingo.model.Participant;
 import com.ift604.bingo.util.Util;
 
-import org.w3c.dom.Text;
-
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link WinDialogFragment#newInstance} factory method to
+ * Use the {@link LostGameDialogFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WinDialogFragment extends DialogFragment {
-    public WinDialogFragment() {
+public class LostGameDialogFragment extends DialogFragment {
+    private static final String PARTICIPANT_WINNER = "PARTICIPANT_WINNER";
+    private Participant winner;
+
+    public LostGameDialogFragment() {
         // Required empty public constructor
     }
 
-    public static WinDialogFragment newInstance() {
-        WinDialogFragment fragment = new WinDialogFragment();
+    public static LostGameDialogFragment newInstance(Participant participantWinner) {
+        LostGameDialogFragment fragment = new LostGameDialogFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(PARTICIPANT_WINNER, participantWinner);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            winner = (Participant) getArguments().getSerializable(PARTICIPANT_WINNER);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_win_dialog, container, false);
-        Button confirmation = view.findViewById(R.id.win_dialog_confirmation_button);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_lost_game_dialog, container, false);
+        TextView winnerText = view.findViewById(R.id.winner_dialog_text);
+        winnerText.setText(Util.formatPlayerName(winner));
+        Button confirmation = view.findViewById(R.id.lose_dialog_confirmation_button);
         confirmation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,6 +61,7 @@ public class WinDialogFragment extends DialogFragment {
                 v.getContext().startActivity(intent);
             }
         });
+
         return view;
     }
 }

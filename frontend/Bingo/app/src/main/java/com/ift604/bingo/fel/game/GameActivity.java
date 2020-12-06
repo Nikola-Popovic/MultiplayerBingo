@@ -19,14 +19,14 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ift604.bingo.LostGameDialogFragment;
 import com.ift604.bingo.R;
-import com.ift604.bingo.WinDialogFragment;
 import com.ift604.bingo.controller.GameController;
 import com.ift604.bingo.controller.IListener;
+import com.ift604.bingo.fel.waitlobby.WaitLobbyParticipantListFragment;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Coordinate;
 import com.ift604.bingo.model.Participant;
@@ -81,6 +81,10 @@ public class GameActivity extends AppCompatActivity implements IListener {
 
         getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "un autre joli tag").commit();
 
+
+        IntentFilter i = new IntentFilter(MyFirebaseMessagingService.WIN_GAME_PUSH_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(new WinGamePushReceiver(), i);
+
         int orientation = getResources().getConfiguration().orientation;
 
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -106,7 +110,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
     private void registerWinService() {
         winGameReceiver = new WinGameReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(MyFirebaseMessagingService.WIN_GAME_ACTION);
+        intentFilter.addAction(MyFirebaseMessagingService.WIN_GAME_PUSH_ACTION);
         this.registerReceiver(winGameReceiver, intentFilter);
     }
 

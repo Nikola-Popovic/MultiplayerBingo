@@ -21,7 +21,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String GENERATED_CARD_EXTRA = "GENERATED_CARD_EXTRA";
     public static final String PLAYER_MOVED_ACTION = "PLAYER_MOVED_ACTION";
-    public static final String WIN_GAME_ACTION = "WIN_GAME_ACTION";
+    public static final String WIN_GAME_PUSH_ACTION = "WIN_GAME_ACTION";
     public static final String NEXT_BALL_ACTION = "NEXT_BALL_ACTION";
     private final String TYPE = "type";
     private final String PAYLOAD = "payload";
@@ -104,7 +104,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void playerWonBroadcast(Participant p) {
         Intent i = new Intent();
-        i.setAction(WIN_GAME_ACTION);
+        i.setAction(WIN_GAME_PUSH_ACTION);
         i.putExtra(WINNER_EXTRA, p);
         LocalBroadcastManager.getInstance(this).sendBroadcast(i);
     }

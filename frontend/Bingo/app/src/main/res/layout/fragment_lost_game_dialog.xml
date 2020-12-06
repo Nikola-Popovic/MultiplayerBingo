@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:background="@null"
     android:layout_height="wrap_content"
-    tools:context=".LostGameDialogFragment">
+    tools:context=".fel.game.LostGameDialogFragment">
 
     <LinearLayout
         android:gravity="center"
