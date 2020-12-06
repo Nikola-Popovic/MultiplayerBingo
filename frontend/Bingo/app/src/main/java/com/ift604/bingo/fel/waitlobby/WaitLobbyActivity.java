@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,6 +32,7 @@ public class WaitLobbyActivity extends AppCompatActivity {
     private Intent getLobbyByAttributeService;
     private Intent startGameService;
     private WaitLobbyReceiver startGameReceiver;
+    private TextView roomName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class WaitLobbyActivity extends AppCompatActivity {
         registerGetLobbyReceiver();
 
         waitLobbyListFrameLayout = findViewById(R.id.wait_lobby_participant_frame_layout);
+        roomName = findViewById(R.id.wait_lobby_room_name);
 
         Button cancelButton = findViewById(R.id.wait_lobby_cancel_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +138,8 @@ public class WaitLobbyActivity extends AppCompatActivity {
             lobby = (Lobby) intent.getSerializableExtra(GetLobbyByAttributeService.LOBBY_EXTRA);
             if (lobby == null)
                 return;
+
+            roomName.setText(lobby.getName());
             waitLobbyParticipantListFragment = WaitLobbyParticipantListFragment.newInstance(lobby.getParticipants());
             getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), waitLobbyParticipantListFragment, "un autre joli tag").commit();
 
