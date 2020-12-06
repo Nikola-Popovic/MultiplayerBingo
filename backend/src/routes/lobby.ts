@@ -4,7 +4,7 @@ import * as database from '../database'
 import Carte from "../models/carte";
 import Lobby from "../models/lobby";
 import GeoLocation from "../models/geolocation";
-import { sendCardToTokens, subscribeTokenToLobbyTopic, sendAddedPlayerMessageToLobby, unSubscribeTokenToLobbyTopic, sendRemovedPlayerMessageToLobby } from "../messaging";
+import { sendCardToTokens, subscribeTokenToLobbyTopic, sendAddedPlayerMessageToLobby, unSubscribeTokenToLobbyTopic, sendRemovedPlayerMessageToLobby, sendWinnerToLobby } from "../messaging";
 
 // Obtenir les parties dans un range acceptable
 router.get("/", (req : any, res : any, next : any) => {
@@ -182,12 +182,17 @@ router.post("/:id/win", (req : any, res : any, next : any) => {
   const lobby = database.getLobbyById(parseInt(req.params.id, 10));
   if(lobby !== undefined){
     const carte = database.getCarteById(parseInt(req.body.carteId, 10));
-    const numeroGagnants = req.body.numeros;
     if(carte !== undefined){
-      const valide = lobby.givenNumbersWereDrawn(numeroGagnants) && carte.valider(lobby.id, numeroGagnants);
-      res.send({
-        "valide" : valide
-      });
+      const joueur = database.getJoueurById(parseInt(req.body.joueurId, 10));
+      if (joueur !== undefined) {
+        sendWinnerToLobby(joueur, lobby.id);
+        res.send({
+          "valide" : true
+        });
+      }
+      else {
+        erreur += "Le joueur n'existe pas\n";
+      }
     }
     else {
       erreur += "La carte n'existe pas\n"
