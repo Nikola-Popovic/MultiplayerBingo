@@ -20,19 +20,21 @@
             android:orientation="vertical">
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-smallcaps"
+                android:text="@string/there_is_a_winner"
+                android:gravity="center"
                 android:textColor="#363636"
-                android:textSize="24sp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Il y a un gagnant ! " />
+                android:textSize="24sp" />
 
             <TextView
                 android:fontFamily="sans-serif-smallcaps"
                 android:textColor="#363636"
                 android:textSize="24sp"
+                android:gravity="center"
                 android:id="@+id/winner_dialog_text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
