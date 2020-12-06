@@ -11,41 +11,41 @@ export function sendCardToTokens(tokens : string[], lobbyId : number) {
 }
 
 export function subscribeTokenToLobbyTopic(token : string, lobbyId : number) {
-  firebase.messaging().subscribeToTopic(token, getLobbyTopic(lobbyId));
+  firebase.messaging().subscribeToTopic(token, getLobbyTopic(lobbyId)).catch(err => console.log(err));
 }
 
 export function unSubscribeTokenToLobbyTopic(token : string | string[], lobbyId : number) {
-  firebase.messaging().unsubscribeFromTopic(token, getLobbyTopic(lobbyId));
+  firebase.messaging().unsubscribeFromTopic(token, getLobbyTopic(lobbyId)).catch(err => console.log(err));
 }
 
 export function sendAddedPlayerMessageToLobby(joueur : Joueur, lobbyId : number) {
   firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
     data: formatMessage("addedPlayer", JSON.stringify(joueur.toJSON()))
-  });
+  }).catch(err => console.log(err));
 }
 
 export function sendRemovedPlayerMessageToLobby(joueur : Joueur, lobbyId : number) {
   firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
     data: formatMessage("removedPlayer", JSON.stringify(joueur.toJSON()))
-  });
+  }).catch(err => console.log(err));
 }
 
 export function sendNextBouleToLobby(nextBoule : string, lobbyId : number) {
   firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
     data: formatMessage("nextBoule", nextBoule)
-  });
+  }).catch(err => console.log(err));
 }
 
 export function sendWinnerToLobby(joueur : Joueur, lobbyId : number) {
   firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
     data: formatMessage("winner", JSON.stringify(joueur.toJSON()))
-  });
+  }).catch(err => console.log(err));
 }
 
 export function sendGameOverToLobby(lobbyId : number) { 
   firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
     data: formatMessage("gameOver", "")
-  });
+  }).catch(err => console.log(err));
 }
 
 function getLobbyTopic(lobbyId : number) {
