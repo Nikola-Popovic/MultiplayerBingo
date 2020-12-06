@@ -80,7 +80,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         LocalBroadcastManager.getInstance(this).sendBroadcast(i);
     }
 
-    //TODO SI ON A DU TEMPS, BOUGER CA DANS STARTGAMEACTIVITY AVEC UN BROADCAST
     private void startGameActivity(Card card) {
         Intent gameIntent = new Intent(this, GameActivity.class);
         gameIntent.putExtra(GENERATED_CARD_EXTRA, card);

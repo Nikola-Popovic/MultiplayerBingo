@@ -24,10 +24,9 @@ import com.ift604.bingo.util.Util;
 public class CreateLobbyFragment extends DialogFragment {
     private static final String LOCATION_PROVIDER = "LOCATION_PROVIDER";
 
-    Intent createLobbyService;
-    CreateLobbyReceiver createLobbyReceiver;
-    //todo is static ?
-    LocationProvider locationProvider;
+    private Intent createLobbyService;
+    private CreateLobbyReceiver createLobbyReceiver;
+    private LocationProvider locationProvider;
 
     public CreateLobbyFragment() {
     }

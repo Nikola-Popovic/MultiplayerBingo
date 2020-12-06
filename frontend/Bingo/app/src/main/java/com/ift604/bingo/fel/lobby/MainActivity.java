@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         final EditText playerName = findViewById(R.id.player_name);
         // Get preferences
-        //TODO
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         final String userName = settings.getString("Username", "Anonyme");
         playerName.setText(userName);
