@@ -188,6 +188,7 @@ router.post("/:id/win", (req : any, res : any, next : any) => {
       if (joueur !== undefined) {
         sendWinnerToLobby(joueur, lobby.id);
         lobby.stopGame();
+        lobby.joueurs.forEach(joueur => joueur.resetLobby());
         res.send({
           "valide" : true
         });
