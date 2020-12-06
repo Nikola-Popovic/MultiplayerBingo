@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 
 public interface IBingoRepository {
-  Card getPlayerCard();
-  String getPreviousNumber();
   void sendWinnerCardForValidation();
   ArrayList<Lobby> getLobbiesNearMe(double longitude, double latitude) throws Exception;
   Lobby getLobby(int lobbyId) throws Exception;
@@ -19,4 +17,5 @@ public interface IBingoRepository {
   Participant createUser(String username) throws Exception;
   void startGame(int lobbyId, int hostId);
   void updateUser(int userId, String userName);
+  Boolean winGame(int cardId, int participantId, int lobbyId) throws Exception;
 }

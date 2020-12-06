@@ -28,6 +28,10 @@ export default class Joueur{
         return this._lobby;
     }
 
+    resetLobby() {
+        this._lobby = null;
+    }
+
     get token() {
         return this._token;
     }

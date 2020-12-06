@@ -1,29 +1,33 @@
 import Util from "../util";
 import * as database from '../database'
 import Case from "./case";
+import range from 'lodash.range';
+import shuffle from 'lodash.shuffle';
 
 export default class Carte{
     readonly cases : number[][];
     readonly id : number;
     readonly lobbyId : number;
+    static nextId : number = 0;
 
     constructor (lobbyId : number){
         this.lobbyId = lobbyId;
-        this.cases = [];
-        const generatedNumbers : number[] = [];
-        for(let i = 0; i < Util.TAILLE_BINGO; i++){
-            this.cases[i] = []
-            for(let j = 0; j < Util.TAILLE_BINGO; j++){
-                let chiffre = 0;
-                do {
-                    chiffre = Math.ceil(Math.random() * Util.LIMIT_PAR_COLONNE) + Util.LIMIT_PAR_COLONNE * i;
-                } while(generatedNumbers.includes(chiffre));
-                this.cases[i][j] = chiffre;
-                generatedNumbers.push(chiffre);
-            }
-        }
+        this.cases = Carte.generateCases();
         database.cartes.push(this);
-        this.id = database.cartes.length;
+        this.id = Carte.nextId++;
+    }
+
+    private static generateCases() : number[][] {
+        let generatedNumbers : number[][] = Array(5);
+        
+        for (let index = 0; index < Util.TAILLE_BINGO; index++) {
+            generatedNumbers[index] = shuffle(range(index * Util.LIMIT_PAR_COLONNE + 1, index * Util.LIMIT_PAR_COLONNE + 15)).slice(0, Util.TAILLE_BINGO);
+        }
+
+        // Case free
+        generatedNumbers[2][2] = 0;
+        
+        return generatedNumbers;
     }
 
     valider(lobbyId : number, numeroGagnants : Case[] ){

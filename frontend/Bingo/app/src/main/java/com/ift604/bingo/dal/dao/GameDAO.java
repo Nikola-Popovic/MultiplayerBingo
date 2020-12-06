@@ -1,28 +1,21 @@
 package com.ift604.bingo.dal.dao;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.androidnetworking.common.ANResponse;
-import com.ift604.bingo.fel.DummyCard;
-import com.ift604.bingo.model.Card;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 public class GameDAO extends GenericDataHandler {
     GameDatamapper gameDatamapper;
     private final String lobbyPath = "/lobby";
     private final String gamePath = "/game";
     private final String userPath = gamePath + "/joueur";
+
     public GameDAO() {
         super();
-    }
-
-    public Card getPlayerCard() {
-        return DummyCard.generateDummyCard();
+        gameDatamapper = new GameDatamapper();
     }
 
     public void startGame(int lobbyId, int hostId) {
@@ -32,7 +25,7 @@ public class GameDAO extends GenericDataHandler {
             jsonObject.put("hostId", hostId);
             ANResponse response = postDataToUrl(url, jsonObject);
 
-            if(response.isSuccess()) {
+            if (response.isSuccess()) {
                 // Great !
                 String message = String.format("Game %s started.", lobbyId);
                 Log.i("START_GAME_SUCCESS", message);
@@ -40,11 +33,22 @@ public class GameDAO extends GenericDataHandler {
             } else {
                 Log.e("START_GAME_FAILED", response.getError().getMessage(), response.getError().getCause());
             }
-       } catch (JSONException j) {}
+        } catch (JSONException j) {
+        }
     }
 
-    public String getPreviousNumber() {
-        // TODO : Supp fellas. Goota push them balls
-        return "B5";
+    public Boolean winGame(int cardId, int participantId, int lobbyId) throws Exception {
+        String url = String.format("%s/%d/win", lobbyPath, lobbyId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("carteId", cardId);
+        jsonObject.put("joueurId", participantId);
+        ANResponse response = postDataToUrl(url, jsonObject);
+
+        if (response.isSuccess()) {
+            return gameDatamapper.mapWinGameResult(response.getResult().toString());
+        } else {
+            throw new Exception("Exception");
+        }
+
     }
 }

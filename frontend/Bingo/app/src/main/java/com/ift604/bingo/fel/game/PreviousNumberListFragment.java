@@ -10,12 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ift604.bingo.R;
-import com.ift604.bingo.fel.decorator.HorizontalSpaceItemDecoration;
-import com.ift604.bingo.service.DrawnNumberService;
+import com.ift604.bingo.fel.decorator.MarginItemDecoration;
+import com.ift604.bingo.model.Boule;
+import com.ift604.bingo.service.MyFirebaseMessagingService;
 import com.ift604.bingo.util.CollectionUtil;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ public class PreviousNumberListFragment extends Fragment {
     RecyclerView previousNumberRecyclerView;
     List<String> previousNumbers = new ArrayList<>();
     PreviousNumberAdapter adapter;
+    private int lobbyId;
 
     public PreviousNumberListFragment() {
     }
@@ -37,6 +40,12 @@ public class PreviousNumberListFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        lobbyId = ((GameActivity) getActivity()).getLobbyId();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -44,28 +53,25 @@ public class PreviousNumberListFragment extends Fragment {
         this.previousNumberRecyclerView = view.findViewById(R.id.previous_number_recycler_view);
         previousNumberRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        previousNumberRecyclerView.addItemDecoration(new HorizontalSpaceItemDecoration((int) getResources().getDimension(R.dimen.default_padding)));
+        previousNumberRecyclerView.addItemDecoration(new MarginItemDecoration((int) getResources().getDimension(R.dimen.default_padding_horizontal), (int) getResources().getDimension(R.dimen.default_padding_vertical)));
         this.adapter = new PreviousNumberAdapter(previousNumbers);
 
         this.previousNumberRecyclerView.setAdapter(adapter);
-        Intent lobbiesService = new Intent(getActivity(), DrawnNumberService.class);
-        getActivity().startService(lobbiesService);
-        registerResponseReceiver();
+
+
+        IntentFilter i = new IntentFilter(MyFirebaseMessagingService.NEXT_BALL_ACTION);
+        LocalBroadcastManager.getInstance(this.getContext()).registerReceiver(new PreviousNumberReceiver(), i);
+
         return view;
     }
 
-    private void registerResponseReceiver() {
-        PreviousNumberReceiver receiver = new PreviousNumberReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(DrawnNumberService.NUMBER_DRAWN_ACTION);
-        requireActivity().registerReceiver(receiver, intentFilter);
-    }
-
-    private void updatePreviousNumbers(String newNumber) {
-        if(previousNumbers.size() >= MAX_ITEM) {
-            previousNumbers.remove(0);
+    private void updatePreviousNumbers(Boule newNumber) {
+        if (newNumber.getLobbyId() == lobbyId) {
+            if(previousNumbers.size() >= MAX_ITEM) {
+                previousNumbers.remove(0);
+            }
+            previousNumbers.add(newNumber.getNumber());
         }
-        previousNumbers.add(newNumber);
     }
 
     public class PreviousNumberReceiver extends BroadcastReceiver {
@@ -75,7 +81,7 @@ public class PreviousNumberListFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            String newNumber = (String) intent.getExtras().getSerializable(DrawnNumberService.NEW_NUMBER_EXTRA);
+            Boule newNumber = (Boule) intent.getSerializableExtra(MyFirebaseMessagingService.NEXT_BALL_EXTRA);
             updatePreviousNumbers(newNumber);
             adapter.setPreviousNumbers(CollectionUtil.reverse(previousNumbers));
             adapter.notifyItemRangeChanged(0, MAX_ITEM);

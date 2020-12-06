@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:background="@null"
+    android:layout_height="wrap_content"
+    tools:context=".fel.game.WinDialogFragment">
+
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:background="@drawable/big_rounded_square"
+        android:layout_width="300sp"
+        android:layout_height="300sp"
+        android:orientation="vertical">
+<!--    Todo put dans string-->
+    <TextView
+        android:fontFamily="sans-serif-smallcaps"
+        android:textColor="#363636"
+        android:textSize="24sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Félicitations ! Vous avez gagné"/>
+
+    <Button
+        android:layout_width="90sp"
+        android:layout_height="40sp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="#feffec"
+        android:background="@drawable/black_btn"
+        android:textSize="16sp"
+        android:id="@+id/win_dialog_confirmation_button"
+        android:text="Ok" />
+    </LinearLayout>
+</FrameLayout>

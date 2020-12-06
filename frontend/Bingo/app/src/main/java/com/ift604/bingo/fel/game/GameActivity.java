@@ -6,31 +6,42 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.jinatonic.confetti.CommonConfetti;
 import com.ift604.bingo.R;
 import com.ift604.bingo.controller.GameController;
 import com.ift604.bingo.controller.IListener;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Coordinate;
-import com.ift604.bingo.service.DrawnNumberService;
-import com.ift604.bingo.service.PlayerCardService;
+import com.ift604.bingo.model.Participant;
+import com.ift604.bingo.service.MyFirebaseMessagingService;
+import com.ift604.bingo.service.WinGameService;
+import com.ift604.bingo.util.Util;
+
 
 public class GameActivity extends AppCompatActivity implements IListener {
 
     FrameLayout playerCardFrameLayout;
-    FrameLayout previousNumbersFrameLayout;
+    LinearLayout previousNumbersLinearLayout;
     public GameController gameController;
     GameActivity gameActivity;
 
@@ -38,70 +49,73 @@ public class GameActivity extends AppCompatActivity implements IListener {
     LinearLayout mainGameLayout;
     LinearLayout previousNumberLayout;
     RecyclerView previousRecyclerView;
+    int lobbyId;
+
+    Intent winGameService;
+    WinGameReceiver winGameReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         gameActivity = this;
-        Intent generateCardService = new Intent(this, PlayerCardService.class);
-        Intent previousNumberService = new Intent(this, DrawnNumberService.class);
         setContentView(R.layout.activity_game);
+        Card card = (Card) getIntent().getSerializableExtra(MyFirebaseMessagingService.GENERATED_CARD_EXTRA);
+        gameController = new GameController(card);
         playerCardFrameLayout = findViewById(R.id.player_card_frame_layout);
-        startService(generateCardService);
-        startService(previousNumberService);
-        registerPlayerCardReceiver();
-        registerNewNumberReceiver();
-        previousNumbersFrameLayout = findViewById(R.id.previous_numbers_frame_layout);
+        lobbyId = card.getLobbyId();
+        previousNumbersLinearLayout = findViewById(R.id.previous_numbers_frame_layout);
         previousNumbers = findViewById(R.id.previous_number_text);
+
+        Button button = findViewById(R.id.bingo_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startWinService();
+                registerWinService();
+            }
+        });
+
         /*
          * Layouts to switch after a screen orientation change
          */
         mainGameLayout = findViewById(R.id.game_activity_layout);
         previousNumberLayout = findViewById(R.id.previous_number_layout);
         previousRecyclerView = findViewById(R.id.previous_number_recycler_view);
+
+
+        getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "un autre joli tag").commit();
+
+
+        IntentFilter i = new IntentFilter(MyFirebaseMessagingService.WIN_GAME_PUSH_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(new WinGamePushReceiver(), i);
+
         int orientation = getResources().getConfiguration().orientation;
 
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-           handleLandscapeOrientation();
+            handleLandscapeOrientation();
         } else {
-          handlePortraitOrientation();
+            handlePortraitOrientation();
         }
-
-        //TODO WILL SUBSCRIBE HERE FOR WIN
-        //TODO WHEN SOMEONE WIN, THE GAME ENDS FOR EVERYBODY
-
-        //TODO WILL SUBSCRIBE HERE FOR NUMBER CALLED.
-        //TODO WHEN NUMBER ARE CALLED, PREVIOUSNUMBERGRID SHOULD BE UPDATED
-        //TODO WHEN NUMBER ARE CALLED, THE VALUE SHOULD BE SAVED
-        //TODO WHEN NUMBER ARE CALLED, THE NUMBER SHOULD BE DISPLAYED
     }
 
-    private void registerNewNumberReceiver() {
-        PreviousNumberReceiver receiver = new PreviousNumberReceiver();
+    private void startWinService() {
+        winGameService = new Intent(this, WinGameService.class);
+        winGameService.setAction(WinGameService.WIN_GAME_ACTION);
+        winGameService.putExtra(WinGameService.LOBBY_ID_EXTRA, gameController.getPlayerCard().getLobbyId());
+        winGameService.putExtra(WinGameService.WINNER_ID_EXTRA, Util.getConnectedUserId(this));
+        winGameService.putExtra(WinGameService.CARD_ID_EXTRA, gameController.getPlayerCard().getId());
+        startService(winGameService);
+    }
+
+    public int getLobbyId() {
+        return lobbyId;
+    }
+
+    private void registerWinService() {
+        winGameReceiver = new WinGameReceiver();
         IntentFilter intentFilter = new IntentFilter();
-    }
-
-
-    private void registerPlayerCardReceiver() {
-        PlayerCardReceiver receiver = new PlayerCardReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("PLAYER_CARD_RECEIVER");
-        registerReceiver(receiver, intentFilter);
-    }
-
-    public class PlayerCardReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Card card = (Card) intent.getBundleExtra("playerCard").getSerializable("generatedCard");
-            gameController = new GameController(card);
-            getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "un autre joli tag").commit();
-        }
-    }
-
-    public class PreviousNumberReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-        }
+        intentFilter.addAction(MyFirebaseMessagingService.WIN_GAME_PUSH_ACTION);
+        this.registerReceiver(winGameReceiver, intentFilter);
     }
 
     @Override
@@ -110,51 +124,52 @@ public class GameActivity extends AppCompatActivity implements IListener {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             handleLandscapeOrientation();
         } else {
-            // Portrait
             handlePortraitOrientation();
         }
     }
 
-
     private void handlePortraitOrientation() {
-        // Text field
         // Main Layout
         mainGameLayout.setOrientation(LinearLayout.VERTICAL);
         mainGameLayout.setGravity(Gravity.CENTER_HORIZONTAL);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0);
-        lp.weight = 0.1f;
+        lp.weight = 0.20f;
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         previousNumberLayout.setLayoutParams(lp);
         previousNumberLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 
         // Player Card Frame Layout
         LinearLayout.LayoutParams fp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
-        fp.weight = 0.75f;
+        fp.weight = 0.7f;
         fp.gravity = Gravity.CENTER_HORIZONTAL;
         playerCardFrameLayout.setLayoutParams(fp);
         playerCardFrameLayout.setForegroundGravity(Gravity.CENTER_HORIZONTAL);
-        /** Todo: Change the orientation of recyclerview
-        // Recycler view
+        previousNumberLayout.setOrientation(LinearLayout.VERTICAL);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         previousRecyclerView.setLayoutManager(linearLayoutManager);
-         **/
+    }
+
+    @Override
+    public void onDestroy() {
+        if (winGameService != null) {
+            stopService(winGameService);
+            unregisterReceiver(winGameReceiver);
+        }
+        super.onDestroy();
     }
 
     private void handleLandscapeOrientation() {
-        // Text field
-       //rotateTextSideways();
-        // Main Layout
-        //LinearLayout.LayoutParams mp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        //mp.gravity = Gravity.CENTER_HORIZONTAL;
         mainGameLayout.setOrientation(LinearLayout.HORIZONTAL);
         //mainGameLayout.setLayoutParams(mp);
         mainGameLayout.setGravity(Gravity.CENTER_HORIZONTAL);
         //Previous numbers layout
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.weight = 0.3f;
+        lp.weight = 0.25f;
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         previousNumberLayout.setLayoutParams(lp);
+        //previousNumberLayout.setOrientation(LinearLayout.HORIZONTAL);
         previousNumberLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 
         // Player Card Frame Layout
@@ -163,11 +178,10 @@ public class GameActivity extends AppCompatActivity implements IListener {
         fp.gravity = Gravity.CENTER_HORIZONTAL;
         playerCardFrameLayout.setLayoutParams(fp);
         playerCardFrameLayout.setForegroundGravity(Gravity.CENTER_HORIZONTAL);
-        /**
-        // Recycler view
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-        previousRecyclerView.setLayoutManager(linearLayoutManager);**/
+        previousRecyclerView.setLayoutManager(linearLayoutManager);
 
     }
 
@@ -184,14 +198,17 @@ public class GameActivity extends AppCompatActivity implements IListener {
                         public void onClick(DialogInterface dialog, int id) {
                             GameActivity.this.finish();
                         }
-                    }).setNegativeButton(R.string.cancel,new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            return;
-                        }});
+                    }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    return;
+                }
+            });
             AlertDialog alert = builder.create();
             alert.show();
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
         }
-        return super.onKeyDown(keyCode, event);
     }
 
     private void rotateTextSideways() {
@@ -210,6 +227,46 @@ public class GameActivity extends AppCompatActivity implements IListener {
         gameController.markBoxForPlayer(coordinate);
         if (gameController.verifyIfBingo(coordinate)) {
             findViewById(R.id.bingo_button).setEnabled(true);
+        }
+    }
+
+    void showWinnerDialog() {
+        CommonConfetti.rainingConfetti((ConstraintLayout) findViewById(R.id.main_screen), new int[]{Color.GREEN})
+                .infinite();
+        FragmentManager fm = getSupportFragmentManager();
+        WinDialogFragment winDialogFragment = WinDialogFragment.newInstance();
+        winDialogFragment.show(fm, "");
+    }
+
+    void showLoserDialog(Participant winner) {
+        if (winner.getId() != Util.getConnectedUserId(this)) {
+            FragmentManager fm = getSupportFragmentManager();
+            LostGameDialogFragment lostDialogFragment = LostGameDialogFragment.newInstance(winner);
+            lostDialogFragment.show(fm, "");
+        }
+    }
+
+    void showInvalidCard() {
+        Toast.makeText(this, "Vous avez coché des cases qui n'ont pas été pigées par le boulier !", Toast.LENGTH_SHORT).show();
+    }
+
+    private class WinGamePushReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Participant participantWinner = (Participant) intent.getSerializableExtra(MyFirebaseMessagingService.WINNER_EXTRA);
+            showLoserDialog(participantWinner);
+        }
+    }
+
+    private class WinGameReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Boolean isValid = intent.getBooleanExtra(WinGameService.IS_VALID_EXTRA, false);
+            if (isValid)
+                showWinnerDialog();
+            else
+                showInvalidCard();
+
         }
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="popup_height">600dp</dimen>
-    <dimen name="default_padding">8dp</dimen>
+    <dimen name="default_padding_horizontal">5dp</dimen>
+    <dimen name="default_padding_vertical">3dp</dimen>
 </resources>

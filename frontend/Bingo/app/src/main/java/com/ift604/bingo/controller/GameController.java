@@ -7,8 +7,6 @@ import com.ift604.bingo.model.Coordinate;
 import java.util.List;
 
 public class GameController {
-    //TODO CETTE INFO DEVRA SRM ETRE GARDÉ SOMEWHERE ELSE
-    //TODO ON VEUT TU PERMETTRE DE UNMARK
     Card playerCard;
     List<String> numberCalled;
 
@@ -117,4 +115,7 @@ public class GameController {
 //                && numberCalled.contains(bottomRightBox.getNumber());
     }
 
+    public Card getPlayerCard() {
+        return playerCard;
+    }
 }
