@@ -186,11 +186,12 @@ router.post("/:id/win", (req : any, res : any, next : any) => {
     if(carte !== undefined){
       const joueur = database.getJoueurById(parseInt(req.body.joueurId, 10));
       if (joueur !== undefined) {
+		unSubscribeTokenToLobbyTopic(joueur.token, lobby.id);
         sendWinnerToLobby(joueur, lobby.id);
         lobby.stopGame();
         lobby.joueurs.forEach(joueur => joueur.resetLobby());
         res.send({
-          "valide" : true
+          "valide" : false
         });
       }
       else {

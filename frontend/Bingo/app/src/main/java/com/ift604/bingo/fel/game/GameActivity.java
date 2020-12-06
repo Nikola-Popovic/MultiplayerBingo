@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -15,24 +16,27 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.jinatonic.confetti.CommonConfetti;
 import com.ift604.bingo.R;
 import com.ift604.bingo.controller.GameController;
 import com.ift604.bingo.controller.IListener;
-import com.ift604.bingo.fel.waitlobby.WaitLobbyParticipantListFragment;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Coordinate;
 import com.ift604.bingo.model.Participant;
 import com.ift604.bingo.service.MyFirebaseMessagingService;
 import com.ift604.bingo.service.WinGameService;
 import com.ift604.bingo.util.Util;
+
 
 public class GameActivity extends AppCompatActivity implements IListener {
 
@@ -149,7 +153,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
 
     @Override
     public void onDestroy() {
-        if(winGameService != null) {
+        if (winGameService != null) {
             stopService(winGameService);
             unregisterReceiver(winGameReceiver);
         }
@@ -227,15 +231,23 @@ public class GameActivity extends AppCompatActivity implements IListener {
     }
 
     void showWinnerDialog() {
+        CommonConfetti.rainingConfetti((ConstraintLayout) findViewById(R.id.main_screen), new int[]{Color.GREEN})
+                .infinite();
         FragmentManager fm = getSupportFragmentManager();
         WinDialogFragment winDialogFragment = WinDialogFragment.newInstance();
         winDialogFragment.show(fm, "");
     }
 
     void showLoserDialog(Participant winner) {
-        FragmentManager fm = getSupportFragmentManager();
-        LostGameDialogFragment lostDialogFragment = LostGameDialogFragment.newInstance(winner);
-        lostDialogFragment.show(fm, "");
+        if (winner.getId() != Util.getConnectedUserId(this)) {
+            FragmentManager fm = getSupportFragmentManager();
+            LostGameDialogFragment lostDialogFragment = LostGameDialogFragment.newInstance(winner);
+            lostDialogFragment.show(fm, "");
+        }
+    }
+
+    void showInvalidCard() {
+        Toast.makeText(this, "Vous avez coché des cases qui n'ont pas été pigées par le boulier !", Toast.LENGTH_SHORT).show();
     }
 
     private class WinGamePushReceiver extends BroadcastReceiver {
@@ -252,6 +264,8 @@ public class GameActivity extends AppCompatActivity implements IListener {
             Boolean isValid = intent.getBooleanExtra(WinGameService.IS_VALID_EXTRA, false);
             if (isValid)
                 showWinnerDialog();
+            else
+                showInvalidCard();
 
         }
     }
