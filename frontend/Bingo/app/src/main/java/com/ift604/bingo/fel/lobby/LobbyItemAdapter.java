@@ -60,7 +60,7 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
     private void registerJoinLobbyReceiver() {
         joinLobbyReceiver = new JoinLobbyReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(JoinLobbyService.JOIN_LOBBY_ACTION);
+        intentFilter.addAction(JoinLobbyService.JOIN_LOBBY_BY_ID_ACTION);
         ctx.registerReceiver(joinLobbyReceiver, intentFilter);
     }
 
@@ -74,7 +74,7 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
         joinLobbyService = new Intent(ctx, JoinLobbyService.class);
         joinLobbyService.putExtra(JoinLobbyService.LOBBY_ID, lobbyId);
         joinLobbyService.putExtra(JoinLobbyService.USER_ID, Util.getConnectedUserId(ctx));
-        joinLobbyService.setAction(JoinLobbyService.JOIN_LOBBY_ACTION);
+        joinLobbyService.setAction(JoinLobbyService.JOIN_LOBBY_BY_ID_ACTION);
         ctx.startService(joinLobbyService);
     }
 

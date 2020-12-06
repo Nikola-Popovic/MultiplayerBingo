@@ -10,11 +10,13 @@ import com.ift604.bingo.util.Util;
 
 
 public class JoinLobbyService extends IntentService {
-    public static final String JOIN_LOBBY_ACTION = "JOIN_LOBBY_ACTION";
+    public static final String JOIN_LOBBY_BY_ID_ACTION = "JOIN_LOBBY_BY_ACTION";
+    public static final String JOIN_LOBBY_BY_NAME_ACTION = "JOIN_LOBBY_BY_NAME_ACTION";
     public static final String LEAVE_LOBBY_ACTION = "LEAVE_LOBBY_ACTION";
 
     public static final String LOBBY_ID = "LOBBY_ID";
     public static final String USER_ID = "USER_ID";
+    public static final String LOBBY_NAME = "LOBBY_NAME";
     RestServiceDatasource bingoRepository;
 
     public JoinLobbyService() {
@@ -28,8 +30,12 @@ public class JoinLobbyService extends IntentService {
         int userId = intent.getIntExtra(USER_ID, 0);
         Intent i = new Intent();
         switch (intent.getAction()) {
-            case JOIN_LOBBY_ACTION:
-                joinLobbyAction(lobbyId, userId, i);
+            case JOIN_LOBBY_BY_ID_ACTION:
+                joinLobbyByIdAction(lobbyId, userId, i);
+                break;
+            case JOIN_LOBBY_BY_NAME_ACTION:
+                String lobbyName = intent.getStringExtra(LOBBY_NAME);
+                joinLobbyByNameAction(lobbyName, userId, i);
                 break;
             case LEAVE_LOBBY_ACTION:
                 try {
@@ -44,7 +50,7 @@ public class JoinLobbyService extends IntentService {
         }
     }
 
-    private void joinLobbyAction(int lobbyId, int userId, Intent i) {
+    private void joinLobbyByIdAction(int lobbyId, int userId, Intent i) {
         try {
             bingoRepository.joinLobby(lobbyId, userId);
             i.putExtra(LOBBY_ID, lobbyId);
@@ -52,7 +58,19 @@ public class JoinLobbyService extends IntentService {
         } catch (Exception e) {
             i.putExtra(Util.IS_SUCCESS, false);
         }
-        i.setAction(JOIN_LOBBY_ACTION);
+        i.setAction(JOIN_LOBBY_BY_ID_ACTION);
+        sendBroadcast(i);
+    }
+
+    private void joinLobbyByNameAction(String name, int userId, Intent i) {
+        try {
+            bingoRepository.joinLobby(name, userId);
+            i.putExtra(LOBBY_NAME, name);
+            i.putExtra(Util.IS_SUCCESS, true);
+        } catch (Exception e) {
+            i.putExtra(Util.IS_SUCCESS, false);
+        }
+        i.setAction(JOIN_LOBBY_BY_NAME_ACTION);
         sendBroadcast(i);
     }
 }

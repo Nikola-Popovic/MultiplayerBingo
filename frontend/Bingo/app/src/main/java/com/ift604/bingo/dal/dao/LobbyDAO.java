@@ -69,10 +69,9 @@ public class LobbyDAO extends GenericDataHandler {
     }
 
     public void addPersonToLobby(String lobbyName, int userId) throws Exception {
-        String url = String.format("%s/%s", lobbyPath, userPath);
+        String url = String.format("%s/%s%s", lobbyPath, lobbyName, userPath);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("joueurId", String.valueOf(userId));
-        jsonObject.put("nom", lobbyName);
         ANResponse response = putDataToUrl(url, jsonObject);
         if (!response.isSuccess()) {
             this.handleResponseError(response);
