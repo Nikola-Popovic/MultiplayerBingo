@@ -82,6 +82,7 @@ export default class Lobby{
                 const tokens = this.joueurs.map(joueur => joueur.token);
                 unSubscribeTokenToLobbyTopic(tokens, this.id);
                 clearInterval(timer);
+                console.log('clearInterval');
             } else {
                 const nextBoule = this.getNextBoule();
 
