@@ -57,9 +57,6 @@ public class WaitLobbyActivity extends AppCompatActivity {
                 registerWaitingLobby();
             }
         });
-        //TODO WILL SUBSCRIBE HERE. WHEN A NEW PERSON ENTER THE LOBBY, HIS NAME WILL BE THERE
-        //TODO WILL SUBSCRIBE HERE. WHEN A NEW PERSON LEAVE THE LOBBY, HIS NAME WILL BE REMOVED
-        //TODO WILL SUBSCRIBE HERE. WHEN THE HOST START THE GAME, THE GameActivity SHOULD START
     }
 
     private void leaveLobby() {

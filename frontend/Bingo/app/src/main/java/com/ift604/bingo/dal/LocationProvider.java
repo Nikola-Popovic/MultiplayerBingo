@@ -16,51 +16,25 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 public class LocationProvider {
-    private static LocationManager _locationManager;
-    private static LocationListener _locationListener;
     private static Location location;
     private static FusedLocationProviderClient fusedLocationProviderClient;
 
-    public LocationProvider(Context context, Activity activity)
-    {
+    public LocationProvider(Context context, Activity activity) {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
 
         location = new Location(LocationManager.GPS_PROVIDER);
-//        _locationManager = getSystemService(context, LocationManager.class);
-//        _locationListener = new LocationListener() {
-//            @Override
-//            public void onLocationChanged(@NonNull Location location) {
-//                changeLocation(location);
-//            }
-//            @Override
-//            public void onStatusChanged(String provider,
-//                                        int status,
-//                                        Bundle extras)
-//            {
-//                // Here to fix a bug from version Android 28 and less
-//            }
-//        };
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             String[] permissions = new String[2];
             permissions[0] = Manifest.permission.ACCESS_FINE_LOCATION;
             permissions[1] = Manifest.permission.ACCESS_COARSE_LOCATION;
             ActivityCompat.requestPermissions(activity, permissions, 0);
-        }
-        else
+        } else
             startListening();
     }
 
     @SuppressLint("MissingPermission")
-    public static void startListening()
-    {
+    public static void startListening() {
         //_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, _locationListener, Looper.getMainLooper());
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
@@ -70,13 +44,11 @@ public class LocationProvider {
         });
     }
 
-    public static void changeLocation(Location newLocation)
-    {
+    public static void changeLocation(Location newLocation) {
         location = newLocation;
     }
 
-    public static Location getLocation()
-    {
+    public static Location getLocation() {
         return location;
     }
 }

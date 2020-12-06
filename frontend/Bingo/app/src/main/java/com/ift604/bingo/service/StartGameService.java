@@ -2,7 +2,6 @@ package com.ift604.bingo.service;
 
 import android.content.Intent;
 
-//TODO START GAME SERVICE
 public class StartGameService extends GenericRestService {
     public static final String START_GAME_SERVICE = "START_GAME_SERVICE";
     public static final String LOBBY_ID_PARAM ="LOBBY_ID_PARAM";

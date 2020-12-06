@@ -14,14 +14,14 @@
         android:layout_width="300sp"
         android:layout_height="300sp"
         android:orientation="vertical">
-<!--    Todo put dans string-->
+
     <TextView
         android:fontFamily="sans-serif-smallcaps"
         android:textColor="#363636"
         android:textSize="24sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Félicitations ! Vous avez gagné"/>
+        android:text="@string/win_dialog_winner_text"/>
 
     <Button
         android:layout_width="90sp"
