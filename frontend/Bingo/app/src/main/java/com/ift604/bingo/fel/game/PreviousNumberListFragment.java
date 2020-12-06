@@ -10,11 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ift604.bingo.R;
 import com.ift604.bingo.fel.decorator.HorizontalSpaceItemDecoration;
+import com.ift604.bingo.fel.waitlobby.WaitLobbyParticipantListFragment;
+import com.ift604.bingo.service.MyFirebaseMessagingService;
 import com.ift604.bingo.util.CollectionUtil;
 
 import java.util.ArrayList;
@@ -47,6 +50,11 @@ public class PreviousNumberListFragment extends Fragment {
         this.adapter = new PreviousNumberAdapter(previousNumbers);
 
         this.previousNumberRecyclerView.setAdapter(adapter);
+
+
+        IntentFilter i = new IntentFilter(MyFirebaseMessagingService.NEXT_BALL_ACTION);
+        LocalBroadcastManager.getInstance(this.getContext()).registerReceiver(new PreviousNumberReceiver(), i);
+
         return view;
     }
 
@@ -57,19 +65,18 @@ public class PreviousNumberListFragment extends Fragment {
         previousNumbers.add(newNumber);
     }
 
-    //TODO CODE TO REMOVE AFTER
-//    public class PreviousNumberReceiver extends BroadcastReceiver {
-//
-//        public PreviousNumberReceiver() {
-//        }
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            String newNumber = (String) intent.getExtras().getSerializable(DrawnNumberService.NEW_NUMBER_EXTRA);
-//            updatePreviousNumbers(newNumber);
-//            adapter.setPreviousNumbers(CollectionUtil.reverse(previousNumbers));
-//            adapter.notifyItemRangeChanged(0, MAX_ITEM);
-//            adapter.notifyDataSetChanged();
-//        }
-//    }
+    public class PreviousNumberReceiver extends BroadcastReceiver {
+
+        public PreviousNumberReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newNumber = (String) intent.getStringExtra(MyFirebaseMessagingService.NEXT_BALL_ACTION);
+            updatePreviousNumbers(newNumber);
+            adapter.setPreviousNumbers(CollectionUtil.reverse(previousNumbers));
+            adapter.notifyItemRangeChanged(0, MAX_ITEM);
+            adapter.notifyDataSetChanged();
+        }
+    }
 }

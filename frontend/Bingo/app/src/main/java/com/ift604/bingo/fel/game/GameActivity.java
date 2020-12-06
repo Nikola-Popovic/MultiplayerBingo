@@ -26,7 +26,6 @@ import com.ift604.bingo.R;
 import com.ift604.bingo.WinDialogFragment;
 import com.ift604.bingo.controller.GameController;
 import com.ift604.bingo.controller.IListener;
-import com.ift604.bingo.fel.lobby.CreateLobbyFragment;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Coordinate;
 import com.ift604.bingo.model.Participant;
@@ -37,7 +36,7 @@ import com.ift604.bingo.util.Util;
 public class GameActivity extends AppCompatActivity implements IListener {
 
     FrameLayout playerCardFrameLayout;
-    FrameLayout previousNumbersFrameLayout;
+    LinearLayout previousNumbersLinearLayout;
     public GameController gameController;
     GameActivity gameActivity;
 
@@ -58,7 +57,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
         gameController = new GameController(card);
         playerCardFrameLayout = findViewById(R.id.player_card_frame_layout);
 
-        previousNumbersFrameLayout = findViewById(R.id.previous_numbers_frame_layout);
+        previousNumbersLinearLayout = findViewById(R.id.previous_numbers_frame_layout);
         previousNumbers = findViewById(R.id.previous_number_text);
 
         Button button = findViewById(R.id.bingo_button);
@@ -79,6 +78,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
 
 
         getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "un autre joli tag").commit();
+       // getSupportFragmentManager().beginTransaction().add(previousNumberLayout.getId(), PreviousNumberGrid.newInstance(card, gameActivity), "un autre joli tag").commit();
 
         int orientation = getResources().getConfiguration().orientation;
 

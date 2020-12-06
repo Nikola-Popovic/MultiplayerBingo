@@ -21,14 +21,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String GENERATED_CARD_EXTRA = "GENERATED_CARD_EXTRA";
     public static final String PLAYER_MOVED_ACTION = "PLAYER_MOVED_ACTION";
     public static final String WIN_GAME_ACTION = "WIN_GAME_ACTION";
+    public static final String NEXT_BALL_ACTION = "NEXT_BALL_ACTION";
     private final String TYPE = "type";
     private final String PAYLOAD = "payload";
 
     private final String CARD = "carte";
     private final String WIN_GAME = "winner";
+    private final String NEXT_BALL = "nextBoule";
     private final String ADDED_PLAYER = "addedPlayer";
     private final String REMOVED_PLAYER = "removedPlayer";
     public final static String ADDED_PLAYER_EXTRA = "ADDED_PLAYER_EXTRA";
+    private static final String NEXT_BALL_EXTRA = "NEXT_BALL_EXTRA";
     public final static String REMOVED_PLAYER_EXTRA= "REMOVED_PLAYER_EXTRA";
     public final static String WINNER_EXTRA = "WINNER_EXTRA";
 
@@ -59,9 +62,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         Participant winner = LobbyDatamapper.buildParticipant(data);
                         playerWonBroadcast(winner);
                         break;
+                    case NEXT_BALL:
+                        String ball = data;
+                        nextBallBroadcast(ball);
+                        break;
                 }
             }
         });
+    }
+
+    private void nextBallBroadcast(String ball) {
+        Intent i = new Intent();
+        i.setAction(NEXT_BALL_ACTION);
+        i.putExtra(NEXT_BALL_EXTRA, ball);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(i);
     }
 
     //TODO SI ON A DU TEMPS, BOUGER CA DANS STARTGAMEACTIVITY AVEC UN BROADCAST
