@@ -19,9 +19,9 @@ public interface IBingoRepository {
     void leaveLobby(int lobbyId, int userId) throws Exception;
 
     Participant createUser(String username) throws Exception;
-    //todo
+
     void startGame(int lobbyId, int hostId);
-    //todo
+
     void updateUser(int userId, String userName);
 
     Boolean winGame(int cardId, int participantId, int lobbyId) throws Exception;

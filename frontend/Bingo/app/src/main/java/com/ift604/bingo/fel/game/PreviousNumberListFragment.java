@@ -48,21 +48,23 @@ public class PreviousNumberListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_previous_number_list, container, false);
-        this.previousNumberRecyclerView = view.findViewById(R.id.previous_number_recycler_view);
+        previousNumberRecyclerView = view.findViewById(R.id.previous_number_recycler_view);
         previousNumberRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         previousNumberRecyclerView.addItemDecoration(new MarginItemDecoration((int) getResources().getDimension(R.dimen.default_padding_horizontal), (int) getResources().getDimension(R.dimen.default_padding_vertical)));
-        this.adapter = new PreviousNumberAdapter(previousNumbers);
+
+        adapter = new PreviousNumberAdapter(previousNumbers);
 
         this.previousNumberRecyclerView.setAdapter(adapter);
 
-
-        IntentFilter i = new IntentFilter(MyFirebaseMessagingService.NEXT_BALL_ACTION);
-        LocalBroadcastManager.getInstance(this.getContext()).registerReceiver(new PreviousNumberReceiver(), i);
+        registerNextBallLocalBroadcast();
 
         return view;
+    }
+
+    private void registerNextBallLocalBroadcast() {
+        IntentFilter i = new IntentFilter(MyFirebaseMessagingService.NEXT_BALL_ACTION);
+        LocalBroadcastManager.getInstance(this.getContext()).registerReceiver(new PreviousNumberReceiver(), i);
     }
 
     private void updatePreviousNumbers(Ball newNumber) {

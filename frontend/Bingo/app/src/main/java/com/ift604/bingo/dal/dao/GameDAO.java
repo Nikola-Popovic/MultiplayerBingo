@@ -16,7 +16,7 @@ public class GameDAO extends GenericDataHandler {
         super();
         gameDatamapper = new GameDatamapper();
     }
-    //todo
+
     public void startGame(int lobbyId, int hostId) {
         try {
             String url = String.format("%s/%s/start", lobbyPath, String.valueOf(lobbyId));
