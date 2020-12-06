@@ -136,7 +136,7 @@ public class WaitLobbyActivity extends AppCompatActivity {
             if (lobby == null)
                 return;
             waitLobbyParticipantListFragment = WaitLobbyParticipantListFragment.newInstance(lobby.getParticipants());
-            getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), waitLobbyParticipantListFragment, "un autre joli tag").commit();
+            getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), waitLobbyParticipantListFragment, "waitLobbyListFrameLayout").commit();
 
             Button startGameButton = findViewById(R.id.wait_lobby_start_button);
             int hostId = lobby.getHost().getId();

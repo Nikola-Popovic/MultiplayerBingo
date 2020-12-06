@@ -28,7 +28,6 @@ public class CardFragment extends Fragment {
     private static final String LISTENER = "listener";
     private IListener listener;
     public CardFragment() {
-        // Required empty public constructor
     }
 
     public static CardFragment newInstance(Card card, IListener listener) {
@@ -72,7 +71,7 @@ public class CardFragment extends Fragment {
             tableRow.setId(id);
             TableLayout.LayoutParams p = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1f);
             tableRow.setLayoutParams(p);
-            getFragmentManager().beginTransaction().add(tableRow.getId(), CardHeaderFragment.newInstance(bingo.get(i)), "joli tag" + id).commit();
+            getFragmentManager().beginTransaction().add(tableRow.getId(), CardHeaderFragment.newInstance(bingo.get(i)), "tableRow" + id).commit();
             table.addView(tableRow);
         }
     }
@@ -85,7 +84,7 @@ public class CardFragment extends Fragment {
                 TableLayout.LayoutParams p = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
                 tableRow.setLayoutParams(p);
                 Coordinate coordinate = new Coordinate(x, y);
-                getFragmentManager().beginTransaction().add(tableRow.getId(), CardNumberFragment.newInstance(coordinate, card.getNumber().get(coordinate), listener), "joli tag" + id).commit();
+                getFragmentManager().beginTransaction().add(tableRow.getId(), CardNumberFragment.newInstance(coordinate, card.getNumber().get(coordinate), listener), "tableRow" + id).commit();
                 table.addView(tableRow);
             }
             id++;

@@ -108,5 +108,4 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         i.putExtra(WINNER_EXTRA, p);
         LocalBroadcastManager.getInstance(this).sendBroadcast(i);
     }
-
 }

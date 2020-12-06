@@ -35,7 +35,6 @@ public class LocationProvider {
 
     @SuppressLint("MissingPermission")
     public static void startListening() {
-        //_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, _locationListener, Looper.getMainLooper());
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {

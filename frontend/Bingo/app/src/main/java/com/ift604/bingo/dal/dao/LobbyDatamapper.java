@@ -15,14 +15,15 @@ import java.util.ArrayList;
 public class LobbyDatamapper {
     public static Participant buildParticipant(String data) {
         Gson gson = new Gson();
-        return (Participant) gson.fromJson(data, new TypeToken<Participant>(){}.getType());
+        return (Participant) gson.fromJson(data, new TypeToken<Participant>() {
+        }.getType());
     }
 
     public Lobby buildLobby(String json) throws JSONException {
-
-            JSONObject jsonObject = new JSONObject(json);
-            Gson gson = new Gson();
-            return (Lobby) gson.fromJson(jsonObject.toString(), new TypeToken<Lobby>(){}.getType());
+        JSONObject jsonObject = new JSONObject(json);
+        Gson gson = new Gson();
+        return (Lobby) gson.fromJson(jsonObject.toString(), new TypeToken<Lobby>() {
+        }.getType());
 
     }
 
@@ -30,7 +31,8 @@ public class LobbyDatamapper {
         try {
             JSONObject jsonObject = new JSONObject(postDataToUrl);
             Gson gson = new Gson();
-            return (Participant) gson.fromJson(jsonObject.toString(), new TypeToken<Participant>(){}.getType());
+            return (Participant) gson.fromJson(jsonObject.toString(), new TypeToken<Participant>() {
+            }.getType());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -40,6 +42,7 @@ public class LobbyDatamapper {
     public ArrayList<Lobby> buildLobbies(String result) throws JSONException {
         JSONArray arr = new JSONArray(result);
         Gson gson = new Gson();
-        return (ArrayList<Lobby>) gson.fromJson(arr.toString(), new TypeToken<ArrayList<Lobby>>(){}.getType());
+        return (ArrayList<Lobby>) gson.fromJson(arr.toString(), new TypeToken<ArrayList<Lobby>>() {
+        }.getType());
     }
 }

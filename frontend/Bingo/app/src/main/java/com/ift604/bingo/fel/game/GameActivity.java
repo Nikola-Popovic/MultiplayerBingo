@@ -83,7 +83,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
         previousRecyclerView = findViewById(R.id.previous_number_recycler_view);
 
 
-        getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "un autre joli tag").commit();
+        getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "playerCardFrameLayout").commit();
 
 
         IntentFilter i = new IntentFilter(MyFirebaseMessagingService.WIN_GAME_PUSH_ACTION);

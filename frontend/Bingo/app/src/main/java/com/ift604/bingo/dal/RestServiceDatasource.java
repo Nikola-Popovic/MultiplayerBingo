@@ -17,11 +17,6 @@ public class RestServiceDatasource implements IBingoRepository {
     }
 
     @Override
-    public void sendWinnerCardForValidation() {
-
-    }
-
-    @Override
     public ArrayList<Lobby> getLobbiesNearMe(double longitude, double latitude) throws Exception{
         return lobbyDAO.getLobbiesNearMe(longitude, latitude);
     }

@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 
-public abstract class GenericDataHandler {
+public class GenericDataHandler {
     private final String serverPath = ApplicationConstants.SERVER_PATH;
     private final String basePath = "/bingo";
     protected final String apiPath = serverPath + basePath;

@@ -11,13 +11,12 @@ public class GameDAO extends GenericDataHandler {
     GameDatamapper gameDatamapper;
     private final String lobbyPath = "/lobby";
     private final String gamePath = "/game";
-    private final String userPath = gamePath + "/joueur";
 
     public GameDAO() {
         super();
         gameDatamapper = new GameDatamapper();
     }
-
+    //todo
     public void startGame(int lobbyId, int hostId) {
         try {
             String url = String.format("%s/%s/start", lobbyPath, String.valueOf(lobbyId));
