@@ -79,7 +79,7 @@ public class WaitLobbyParticipantListFragment extends Fragment {
             Participant addedParticipant = (Participant) intent.getSerializableExtra(MyFirebaseMessagingService.ADDED_PLAYER_EXTRA);
             Participant removedParticipant = (Participant) intent.getSerializableExtra(MyFirebaseMessagingService.REMOVED_PLAYER_EXTRA);
 
-            if(addedParticipant != null) {
+            if(addedParticipant != null && !participants.contains(addedParticipant)) {
                 participants.add(addedParticipant);
             }
 

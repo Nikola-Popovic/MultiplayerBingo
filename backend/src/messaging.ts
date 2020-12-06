@@ -61,7 +61,7 @@ export function sendRemovedPlayerMessageToLobby(joueur : Joueur, lobbyId : numbe
 
 export function sendNextBouleToLobby(nextBoule : string, lobbyId : number) {
   firebase.messaging().send({
-    data: formatMessage("nextBoule", nextBoule),
+    data: formatMessage("nextBoule", JSON.stringify({nextBoule, lobbyId})),
     topic: getLobbyTopic(lobbyId)
   }).then(response => {
     console.log(response);
