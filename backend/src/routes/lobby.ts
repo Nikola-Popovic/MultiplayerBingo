@@ -191,7 +191,7 @@ router.post("/:id/win", (req : any, res : any, next : any) => {
         lobby.stopGame();
         lobby.joueurs.forEach(joueur => joueur.resetLobby());
         res.send({
-          "valide" : false
+          "valide" : true
         });
       }
       else {
