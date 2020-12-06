@@ -4,6 +4,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.common.Priority;
+import com.ift604.bingo.exception.ResponseException;
 import com.ift604.bingo.util.ApplicationConstants;
 
 import org.json.JSONObject;
@@ -99,5 +100,12 @@ public abstract class GenericDataHandler {
 
         ANResponse response = request.executeForString();
         return response;
+    }
+
+
+    protected void handleResponseError(ANResponse response) throws Exception{
+        int responseCode = response.getError().getErrorCode();
+        String reason = response.getError().getErrorDetail();
+        throw new ResponseException(responseCode, reason);
     }
 }

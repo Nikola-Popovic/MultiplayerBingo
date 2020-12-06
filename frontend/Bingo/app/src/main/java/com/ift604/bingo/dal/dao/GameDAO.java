@@ -3,6 +3,7 @@ package com.ift604.bingo.dal.dao;
 import android.util.Log;
 
 import com.androidnetworking.common.ANResponse;
+import com.ift604.bingo.exception.ResponseException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,22 +19,14 @@ public class GameDAO extends GenericDataHandler {
         gameDatamapper = new GameDatamapper();
     }
 
-    public void startGame(int lobbyId, int hostId) {
-        try {
-            String url = String.format("%s/%s/start", lobbyPath, String.valueOf(lobbyId));
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("hostId", hostId);
-            ANResponse response = postDataToUrl(url, jsonObject);
+    public void startGame(int lobbyId, int hostId) throws Exception {
+        String url = String.format("%s/%s/start", lobbyPath, String.valueOf(lobbyId));
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("hostId", hostId);
+        ANResponse response = postDataToUrl(url, jsonObject);
 
-            if (response.isSuccess()) {
-                // Great !
-                String message = String.format("Game %s started.", lobbyId);
-                Log.i("START_GAME_SUCCESS", message);
-                // What to do
-            } else {
-                Log.e("START_GAME_FAILED", response.getError().getMessage(), response.getError().getCause());
-            }
-        } catch (JSONException j) {
+        if (!response.isSuccess()) {
+            this.handleResponseError(response);
         }
     }
 
@@ -45,10 +38,12 @@ public class GameDAO extends GenericDataHandler {
         ANResponse response = postDataToUrl(url, jsonObject);
 
         if (response.isSuccess()) {
+            String message = String.format("Participant %s won.", participantId);
+            Log.d("WIN_GAME_SUCCESS", message);
             return gameDatamapper.mapWinGameResult(response.getResult().toString());
         } else {
-            throw new Exception("Exception");
+            this.handleResponseError(response);
+            return false;
         }
-
     }
 }
