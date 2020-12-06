@@ -112,15 +112,19 @@ router.put("/:id/user", (req : any, res : any, next : any) => {
   if(joueur != null){
     const lobby = database.getLobbyById(parseInt(req.params.id, 10));
     if(lobby != null) {
-      if (joueur.lobby === null) {
-        lobby.addToLobby(joueur);
-        database.saveLobby(lobby);
-        joueur.assignerALobby(lobby);
-        subscribeTokenToLobbyTopic(joueur.token, lobby.id);
-        sendAddedPlayerMessageToLobby(joueur, lobby.id);
-        res.status(204).end();
+      if (!lobby.estCommencee) {
+        if (joueur.lobby === null) {
+          lobby.addToLobby(joueur);
+          database.saveLobby(lobby);
+          joueur.assignerALobby(lobby);
+          subscribeTokenToLobbyTopic(joueur.token, lobby.id);
+          sendAddedPlayerMessageToLobby(joueur, lobby.id);
+          res.status(204).end();
+        } else {
+          erreur = "Le joueur recu est deja inscrit dans un lobby.";
+        }
       } else {
-        erreur = "Le joueur recu est deja inscrit dans un lobby.";
+        erreur = "Vous ne pouvez pas joindre une partie déjà en cours.";
       }
     }
     else {
