@@ -150,8 +150,10 @@ public class GameActivity extends AppCompatActivity implements IListener {
 
     @Override
     public void onDestroy() {
-        stopService(winGameService);
-        unregisterReceiver(winGameReceiver);
+        if(winGameService != null) {
+            stopService(winGameService);
+            unregisterReceiver(winGameReceiver);
+        }
         super.onDestroy();
     }
 

@@ -33,7 +33,7 @@ public class Participant implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Participant that = (Participant) o;
-        return id == that.id;
+        return id == that.id.intValue();
     }
 
 }
