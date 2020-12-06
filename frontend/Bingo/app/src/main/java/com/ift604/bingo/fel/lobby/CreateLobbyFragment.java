@@ -22,17 +22,21 @@ import com.ift604.bingo.service.CreateLobbyService;
 import com.ift604.bingo.util.Util;
 
 public class CreateLobbyFragment extends DialogFragment {
+    private static final String LOCATION_PROVIDER = "LOCATION_PROVIDER";
+
     Intent createLobbyService;
     CreateLobbyReceiver createLobbyReceiver;
     //todo is static ?
-    static LocationProvider locationProvider;
+    LocationProvider locationProvider;
 
     public CreateLobbyFragment() {
     }
 
     public static CreateLobbyFragment newInstance(LocationProvider locationProvider) {
-        setLocationProvider(locationProvider);
         CreateLobbyFragment fragment = new CreateLobbyFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(LOCATION_PROVIDER, locationProvider);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -45,6 +49,8 @@ public class CreateLobbyFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_lobby, container, false);
+        if (getArguments() != null)
+            this.locationProvider = (LocationProvider) getArguments().getSerializable(LOCATION_PROVIDER);
         final EditText lobbyName = view.findViewById(R.id.create_lobby_name_value);
         final DialogFragment dialog = this;
         view.findViewById(R.id.create_lobby_create_button).setOnClickListener(new View.OnClickListener() {
@@ -64,11 +70,10 @@ public class CreateLobbyFragment extends DialogFragment {
 
     private void createLobbyAction(EditText lobbyName, DialogFragment dialog) {
         String textValue = lobbyName.getText().toString();
-        if(validateNotEmpty(textValue)) {
+        if (validateNotEmpty(textValue)) {
             startCreateLobbyService(dialog, textValue);
             registerCreateLobbyReceiver(dialog);
-        }
-        else {
+        } else {
             Toast.makeText(dialog.getContext(), getResources().getString(R.string.error_empty_lobby_name), Toast.LENGTH_SHORT).show();
         }
     }
@@ -113,11 +118,6 @@ public class CreateLobbyFragment extends DialogFragment {
             getActivity().stopService(createLobbyService);
             getActivity().unregisterReceiver(createLobbyReceiver);
         }
-    }
-
-    private static void setLocationProvider(LocationProvider lp)
-    {
-        locationProvider = lp;
     }
 
     public class CreateLobbyReceiver extends BroadcastReceiver {

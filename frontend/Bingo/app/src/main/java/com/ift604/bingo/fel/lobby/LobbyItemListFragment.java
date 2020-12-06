@@ -23,6 +23,8 @@ import com.ift604.bingo.service.FindLobbyNearMeService;
 import java.util.ArrayList;
 
 public class LobbyItemListFragment extends Fragment {
+    private static final String LOCATION_PROVIDER = "LOCATION_PROVIDER";
+
 
     private RecyclerView lobbyRecyclerView;
     private LobbyItemAdapter adapter;
@@ -31,8 +33,7 @@ public class LobbyItemListFragment extends Fragment {
     private int position;
     private ArrayList<Lobby> lobbies = new ArrayList<>();
 
-    //TODO REMOVE STATIC
-    static LocationProvider locationProvider;
+    LocationProvider locationProvider;
 
 
     public LobbyItemListFragment() {
@@ -44,8 +45,10 @@ public class LobbyItemListFragment extends Fragment {
     }
 
     public static LobbyItemListFragment newInstance(LocationProvider locationProvider) {
-        setLocationProvider(locationProvider);
         LobbyItemListFragment fragment = new LobbyItemListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(LOCATION_PROVIDER, locationProvider);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -57,13 +60,16 @@ public class LobbyItemListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_lobby_item_list, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_lobby_item_list, container, false);
+        if (getArguments() != null)
+            this.locationProvider = (LocationProvider) getArguments().getSerializable(LOCATION_PROVIDER);
         this.lobbyRecyclerView = view.findViewById(R.id.lobby_recycle_view);
         this.swipeRefreshLayout = view.findViewById(R.id.lobby_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-               getLobbyByLocation();
+                getLobbyByLocation();
             }
         });
         lobbyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -78,11 +84,9 @@ public class LobbyItemListFragment extends Fragment {
     private void getLobbyByLocation() {
         Intent lobbiesService = new Intent(getActivity(), FindLobbyNearMeService.class);
         swipeRefreshLayout.setRefreshing(true);
-        // TODO: figure out why we need this check
         double lon = 0;
         double lat = 0;
-        if (locationProvider != null)
-        {
+        if (locationProvider != null) {
             lon = locationProvider.getLocation().getLongitude();
             lat = locationProvider.getLocation().getLatitude();
         }
@@ -98,11 +102,6 @@ public class LobbyItemListFragment extends Fragment {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(FindLobbyNearMeService.GET_LOBBY_BY_LOCATION_ACTION);
         requireActivity().registerReceiver(receiver, intentFilter);
-    }
-
-    private static void setLocationProvider(LocationProvider lp)
-    {
-        locationProvider = lp;
     }
 
     public class LobbyResponseReceiver extends BroadcastReceiver {

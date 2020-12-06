@@ -15,7 +15,9 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-public class LocationProvider {
+import java.io.Serializable;
+
+public class LocationProvider implements Serializable {
     private static Location location;
     private static FusedLocationProviderClient fusedLocationProviderClient;
 
