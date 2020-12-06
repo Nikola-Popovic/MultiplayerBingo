@@ -18,10 +18,10 @@ export function sendCardToTokens(tokens : string[], lobbyId : number) {
 export function subscribeTokenToLobbyTopic(token : string, lobbyId : number) {
   firebase.messaging().subscribeToTopic(token, getLobbyTopic(lobbyId))
   .then(response => {
-    console.log(response);
+    console.log('Successfully subscribed to topic:', response);
   })
   .catch(error => {
-    console.log(error);
+    console.log('Error subscribing to topic:', error);
   });
 }
 
