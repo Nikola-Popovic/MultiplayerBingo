@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,6 +34,7 @@ public class WaitLobbyActivity extends AppCompatActivity {
 
     private GetLobbyResponseReceiver getLobbyResponseReceiver;
     private WaitLobbyReceiver startGameReceiver;
+    private TextView roomName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,8 @@ public class WaitLobbyActivity extends AppCompatActivity {
         registerGetLobbyReceiver();
 
         waitLobbyListFrameLayout = findViewById(R.id.wait_lobby_participant_frame_layout);
+        roomName = findViewById(R.id.wait_lobby_room_name);
+
         Button cancelButton = findViewById(R.id.wait_lobby_cancel_button);
         Button startGameButton = findViewById(R.id.wait_lobby_start_button);
 
@@ -112,6 +116,30 @@ public class WaitLobbyActivity extends AppCompatActivity {
         i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();
         startActivity(i);
+    }
+
+    public class GetLobbyResponseReceiver extends BroadcastReceiver {
+        public GetLobbyResponseReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            lobby = (Lobby) intent.getSerializableExtra(GetLobbyByAttributeService.LOBBY_EXTRA);
+            if (lobby == null)
+                return;
+
+            roomName.setText(lobby.getName());
+            waitLobbyParticipantListFragment = WaitLobbyParticipantListFragment.newInstance(lobby.getParticipants());
+            getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), waitLobbyParticipantListFragment, "un autre joli tag").commit();
+
+            Button startGameButton = findViewById(R.id.wait_lobby_start_button);
+            int hostId = lobby.getHost().getId();
+            int userId = Util.getConnectedUserId(context);
+            if (hostId != userId) {
+                startGameButton.setEnabled(false);
+                startGameButton.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
