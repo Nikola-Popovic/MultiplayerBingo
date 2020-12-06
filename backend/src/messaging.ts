@@ -33,7 +33,13 @@ export function sendRemovedPlayerMessageToLobby(joueur : Joueur, lobbyId : numbe
 export function sendNextNumberToLobby(nextNumber : number, lobbyId : number) {
   firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
     data: formatMessage("nextNumber", nextNumber.toString())
-  })
+  });
+}
+
+export function sendWinnerToLobby(joueur : Joueur, lobbyId : number) {
+  firebase.messaging().sendToTopic(getLobbyTopic(lobbyId), {
+    data: formatMessage("winner", JSON.stringify(joueur.toJSON()))
+  });
 }
 
 function getLobbyTopic(lobbyId : number) {
