@@ -6,11 +6,13 @@
     "start": "ts-node-dev ./bin/www"
   },
   "dependencies": {
+    "@types/lodash.range": "^3.2.6",
     "@types/lodash.shuffle": "^4.2.6",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "firebase-admin": "^9.4.1",
+    "lodash.range": "^3.2.0",
     "lodash.shuffle": "^4.2.0",
     "morgan": "~1.9.0"
   },
