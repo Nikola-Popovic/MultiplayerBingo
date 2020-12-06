@@ -12,6 +12,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.ift604.bingo.dal.dao.GameDatamapper;
 import com.ift604.bingo.dal.dao.LobbyDatamapper;
 import com.ift604.bingo.fel.game.GameActivity;
+import com.ift604.bingo.model.Boule;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Participant;
 
@@ -28,6 +29,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private final String CARD = "carte";
     private final String WIN_GAME = "winner";
     private final String NEXT_BALL = "nextBoule";
+    private final String LOBBY_ID = "lobbyId";
     private final String ADDED_PLAYER = "addedPlayer";
     private final String REMOVED_PLAYER = "removedPlayer";
     public final static String ADDED_PLAYER_EXTRA = "ADDED_PLAYER_EXTRA";
@@ -63,7 +65,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         playerWonBroadcast(winner);
                         break;
                     case NEXT_BALL:
-                        String ball = data;
+                        Boule ball = GameDatamapper.buildBoule(data);
                         nextBallBroadcast(ball);
                         break;
                 }
@@ -71,7 +73,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         });
     }
 
-    private void nextBallBroadcast(String ball) {
+    private void nextBallBroadcast(Boule ball) {
         Intent i = new Intent();
         i.setAction(NEXT_BALL_ACTION);
         i.putExtra(NEXT_BALL_EXTRA, ball);

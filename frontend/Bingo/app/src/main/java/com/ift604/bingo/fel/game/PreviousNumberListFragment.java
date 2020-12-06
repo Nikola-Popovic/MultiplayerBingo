@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ift604.bingo.R;
 import com.ift604.bingo.fel.decorator.MarginItemDecoration;
+import com.ift604.bingo.model.Boule;
 import com.ift604.bingo.service.MyFirebaseMessagingService;
 import com.ift604.bingo.util.CollectionUtil;
 
@@ -28,6 +29,7 @@ public class PreviousNumberListFragment extends Fragment {
     RecyclerView previousNumberRecyclerView;
     List<String> previousNumbers = new ArrayList<>();
     PreviousNumberAdapter adapter;
+    private int lobbyId;
 
     public PreviousNumberListFragment() {
     }
@@ -35,6 +37,12 @@ public class PreviousNumberListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        lobbyId = ((GameActivity) getActivity()).getLobbyId();
     }
 
     @Override
@@ -57,11 +65,13 @@ public class PreviousNumberListFragment extends Fragment {
         return view;
     }
 
-    private void updatePreviousNumbers(String newNumber) {
-        if(previousNumbers.size() >= MAX_ITEM) {
-            previousNumbers.remove(0);
+    private void updatePreviousNumbers(Boule newNumber) {
+        if (newNumber.getLobbyId() == lobbyId) {
+            if(previousNumbers.size() >= MAX_ITEM) {
+                previousNumbers.remove(0);
+            }
+            previousNumbers.add(newNumber.getNumber());
         }
-        previousNumbers.add(newNumber);
     }
 
     public class PreviousNumberReceiver extends BroadcastReceiver {
@@ -71,7 +81,7 @@ public class PreviousNumberListFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            String newNumber = (String) intent.getStringExtra(MyFirebaseMessagingService.NEXT_BALL_EXTRA);
+            Boule newNumber = (Boule) intent.getSerializableExtra(MyFirebaseMessagingService.NEXT_BALL_EXTRA);
             updatePreviousNumbers(newNumber);
             adapter.setPreviousNumbers(CollectionUtil.reverse(previousNumbers));
             adapter.notifyItemRangeChanged(0, MAX_ITEM);

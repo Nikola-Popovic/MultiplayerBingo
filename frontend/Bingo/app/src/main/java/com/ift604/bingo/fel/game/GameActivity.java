@@ -45,6 +45,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
     LinearLayout mainGameLayout;
     LinearLayout previousNumberLayout;
     RecyclerView previousRecyclerView;
+    int lobbyId;
 
     Intent winGameService;
     WinGameReceiver winGameReceiver;
@@ -57,7 +58,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
         Card card = (Card) getIntent().getSerializableExtra(MyFirebaseMessagingService.GENERATED_CARD_EXTRA);
         gameController = new GameController(card);
         playerCardFrameLayout = findViewById(R.id.player_card_frame_layout);
-
+        lobbyId = card.getLobbyId();
         previousNumbersLinearLayout = findViewById(R.id.previous_numbers_frame_layout);
         previousNumbers = findViewById(R.id.previous_number_text);
 
@@ -96,6 +97,10 @@ public class GameActivity extends AppCompatActivity implements IListener {
         winGameService.putExtra(WinGameService.WINNER_ID_EXTRA, Util.getConnectedUserId(this));
         winGameService.putExtra(WinGameService.CARD_ID_EXTRA, gameController.getPlayerCard().getId());
         startService(winGameService);
+    }
+
+    public int getLobbyId() {
+        return lobbyId;
     }
 
     private void registerWinService() {
