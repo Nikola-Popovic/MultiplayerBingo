@@ -23,7 +23,7 @@ public class Box implements Serializable {
         return marked;
     }
 
-    public void setMarked(boolean marked) {
-        this.marked = marked;
+    public void markBox() {
+        this.marked = !this.marked;
     }
 }

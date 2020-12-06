@@ -214,9 +214,8 @@ public class GameActivity extends AppCompatActivity implements IListener {
     @Override
     public void onBoxClick(Coordinate coordinate) {
         gameController.markBoxForPlayer(coordinate);
-        if (gameController.verifyIfBingo(coordinate)) {
-            findViewById(R.id.bingo_button).setEnabled(true);
-        }
+        boolean bingo = gameController.verifyIfBingo(coordinate);
+        findViewById(R.id.bingo_button).setEnabled(bingo);
     }
 
     void showWinnerDialog() {

@@ -11,7 +11,7 @@ public class GameController {
     }
 
     public void markBoxForPlayer(Coordinate coordinate) {
-        playerCard.getNumber().get(coordinate).setMarked(true);
+        playerCard.getNumber().get(coordinate).markBox();
     }
 
     public boolean verifyIfBingo(Coordinate coordinate) {
