@@ -18,11 +18,15 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ift604.bingo.LostGameDialogFragment;
 import com.ift604.bingo.R;
+import com.ift604.bingo.WinDialogFragment;
 import com.ift604.bingo.controller.GameController;
 import com.ift604.bingo.controller.IListener;
+import com.ift604.bingo.fel.lobby.CreateLobbyFragment;
 import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Coordinate;
 import com.ift604.bingo.model.Participant;
@@ -226,29 +230,23 @@ public class GameActivity extends AppCompatActivity implements IListener {
         }
     }
 
-    void showWinnerDialog(Participant winner) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final GameActivity activity = this;
-        builder.setMessage("Un joueur a gagné. Etes-vous d'accord ?")
-                .setCancelable(false)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        activity.finish();
-                    }
-                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                activity.finish();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+    void showWinnerDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        WinDialogFragment winDialogFragment = WinDialogFragment.newInstance();
+        winDialogFragment.show(fm, "");
+    }
+
+    void showLoserDialog(Participant winner) {
+        FragmentManager fm = getSupportFragmentManager();
+        LostGameDialogFragment lostDialogFragment = LostGameDialogFragment.newInstance(winner);
+        lostDialogFragment.show(fm, "");
     }
 
     private class WinGamePushReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             Participant participantWinner = (Participant) intent.getSerializableExtra(MyFirebaseMessagingService.WINNER_EXTRA);
-            showWinnerDialog(participantWinner);
+            showLoserDialog(participantWinner);
         }
     }
 
@@ -257,7 +255,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
         public void onReceive(Context context, Intent intent) {
             Boolean isValid = intent.getBooleanExtra(WinGameService.IS_VALID_EXTRA, false);
             if (isValid)
-                showWinnerDialog(null);
+                showWinnerDialog();
 
         }
     }

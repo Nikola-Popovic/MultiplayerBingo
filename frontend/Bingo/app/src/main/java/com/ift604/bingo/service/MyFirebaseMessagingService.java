@@ -25,7 +25,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private final String PAYLOAD = "payload";
 
     private final String CARD = "carte";
-    private final String WIN_GAME = "winGame";
+    private final String WIN_GAME = "winner";
+    private final String ADDED_PLAYER = "addedPlayer";
+    private final String REMOVED_PLAYER = "removedPlayer";
     public final static String ADDED_PLAYER_EXTRA = "ADDED_PLAYER_EXTRA";
     public final static String REMOVED_PLAYER_EXTRA= "REMOVED_PLAYER_EXTRA";
     public final static String WINNER_EXTRA = "WINNER_EXTRA";
@@ -45,11 +47,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         Card card = GameDatamapper.buildCard(data);
                         startGameActivity(card);
                         break;
-                    case ADDED_PLAYER_EXTRA:
+                    case ADDED_PLAYER:
                         Participant addedPlayer = LobbyDatamapper.buildParticipant(data);
                         playerAddedBroadcast(addedPlayer);
                         break;
-                    case REMOVED_PLAYER_EXTRA:
+                    case REMOVED_PLAYER:
                         Participant removedPlayer = LobbyDatamapper.buildParticipant(data);
                         playerRemovedBroadcast(removedPlayer);
                         break;
