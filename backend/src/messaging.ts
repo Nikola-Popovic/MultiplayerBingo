@@ -15,14 +15,14 @@ export function sendCardToTokens(tokens : string[], lobbyId : number) {
   });
 }
 
-export async function subscribeTokenToLobbyTopic(token : string, lobbyId : number) {
-  try {
-    const response = await firebase.messaging().subscribeToTopic(token, getLobbyTopic(lobbyId));
+export function subscribeTokenToLobbyTopic(token : string, lobbyId : number) {
+  firebase.messaging().subscribeToTopic(token, getLobbyTopic(lobbyId))
+  .then(response => {
     console.log('Successfully subscribed to topic:', response);
-  }
-  catch (error) {
+  })
+  .catch(error => {
     console.log('Error subscribing to topic:', error);
-  }
+  });
 }
 
 export function unSubscribeTokenToLobbyTopic(token : string | string[], lobbyId : number) {
@@ -35,17 +35,16 @@ export function unSubscribeTokenToLobbyTopic(token : string | string[], lobbyId 
   });
 }
 
-export async function sendAddedPlayerMessageToLobby(joueur : Joueur, lobbyId : number) {
-  try {
-    const response = await firebase.messaging().send({
-      data: formatMessage("addedPlayer", JSON.stringify(joueur.toJSON())),
-      topic: getLobbyTopic(lobbyId)
-    });
+export function sendAddedPlayerMessageToLobby(joueur : Joueur, lobbyId : number) {
+  firebase.messaging().send({
+    data: formatMessage("addedPlayer", JSON.stringify(joueur.toJSON())),
+    topic: getLobbyTopic(lobbyId)
+  }).then(response => {
     console.log(response);
-  }
-  catch (error) {
+  })
+  .catch(error => {
     console.log(error);
-  }
+  });
 }
 
 export function sendRemovedPlayerMessageToLobby(joueur : Joueur, lobbyId : number) {
