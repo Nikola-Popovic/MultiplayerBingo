@@ -85,9 +85,10 @@ export default class Lobby{
                 console.log('clearInterval');
             } else {
                 const nextBoule = this.getNextBoule();
-
+                
                 if (nextBoule !== null) {
-                    sendNextBouleToLobby(this.getNextBoule(), this.id);
+                    console.log(nextBoule);
+                    sendNextBouleToLobby(nextBoule, this.id);
                 } else {
                     this.stopGame();
                     sendGameOverToLobby(this.id);
