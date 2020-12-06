@@ -145,10 +145,10 @@ public class WaitLobbyActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        stopService(getLobbyByAttributeService);
-        stopService(startGameService);
-        unregisterReceiver(startGameReceiver);
-        unregisterReceiver(getLobbyResponseReceiver);
+        if(getLobbyByAttributeService != null) {
+            stopService(getLobbyByAttributeService);
+            unregisterReceiver(getLobbyResponseReceiver);
+        }
     }
 
     @Override
