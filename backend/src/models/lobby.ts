@@ -107,15 +107,6 @@ export default class Lobby{
         this._host = this._joueurs[ranHostIndex];
     }
 
-    givenNumbersWereDrawn(numberArray: string[]) {
-        for (let i = 0; i < numberArray.length; i ++){
-            if (!this._boulesPiges.includes(numberArray[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     isInAcceptableDistance(location: GeoLocation): boolean {
         return this._geolocation.distanceToLocation(location) / 1000 < Util.MAX_LOBBY_DISTANCE
     }
