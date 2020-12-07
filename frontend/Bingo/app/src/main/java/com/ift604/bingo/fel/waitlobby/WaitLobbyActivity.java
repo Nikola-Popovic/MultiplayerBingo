@@ -41,7 +41,7 @@ public class WaitLobbyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wait_lobby);
 
-        int lobbyId = getIntent().getIntExtra(LOBBY_ID, 0);
+        int lobbyId = getIntent().getIntExtra(LOBBY_ID, -1);
         startGetLobbyService(lobbyId);
         registerGetLobbyReceiver();
 
