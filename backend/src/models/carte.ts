@@ -1,6 +1,5 @@
 import Util from "../util";
 import * as database from '../database'
-import Case from "./case";
 import range from 'lodash.range';
 import shuffle from 'lodash.shuffle';
 
@@ -28,23 +27,6 @@ export default class Carte{
         generatedNumbers[2][2] = 0;
         
         return generatedNumbers;
-    }
-
-    valider(lobbyId : number, numeroGagnants : Case[] ){
-        if (lobbyId !== this.lobbyId )
-            return false;
-
-        numeroGagnants.forEach(num => {
-            if (!this.contientLaCase(num)) {
-                return false;
-            }
-        });
-
-        return true;
-    }
-
-    contientLaCase(caseBingo : Case) {
-        return this.cases[caseBingo.posX][caseBingo.posY] !== caseBingo.valeur
     }
 
     toJSON(){
