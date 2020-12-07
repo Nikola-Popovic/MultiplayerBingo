@@ -41,8 +41,8 @@ public class RestServiceDatasource implements IBingoRepository {
     }
 
     @Override
-    public void joinLobby(String lobbyName, int userId) throws Exception {
-        lobbyDAO.addPersonToLobby(lobbyName, userId);
+    public int joinLobby(String lobbyName, int userId) throws Exception {
+       return lobbyDAO.addPersonToLobby(lobbyName, userId);
     }
 
     @Override

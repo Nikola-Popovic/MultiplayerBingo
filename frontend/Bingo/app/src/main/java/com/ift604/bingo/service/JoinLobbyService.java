@@ -64,8 +64,8 @@ public class JoinLobbyService extends IntentService {
 
     private void joinLobbyByNameAction(String name, int userId, Intent i) {
         try {
-            bingoRepository.joinLobby(name, userId);
-            i.putExtra(LOBBY_NAME, name);
+           int lobbyId = bingoRepository.joinLobby(name, userId);
+            i.putExtra(LOBBY_ID, name);
             i.putExtra(Util.IS_SUCCESS, true);
         } catch (Exception e) {
             i.putExtra(Util.IS_SUCCESS, false);
