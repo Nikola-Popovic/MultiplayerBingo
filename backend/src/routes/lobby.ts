@@ -3,7 +3,14 @@ const router = express.Router();
 import * as database from '../database'
 import Lobby from "../models/lobby";
 import GeoLocation from "../models/geolocation";
-import { sendCardToJoueurs, subscribeTokenToLobbyTopic, sendAddedPlayerMessageToLobby, unSubscribeTokenToLobbyTopic, sendRemovedPlayerMessageToLobby, sendWinnerToLobby } from "../messaging";
+import {
+  sendCardToJoueurs,
+  subscribeTokenToLobbyTopic,
+  sendAddedPlayerMessageToLobby,
+  unSubscribeTokenToLobbyTopic,
+  sendRemovedPlayerMessageToLobby,
+  sendWinnerToLobby
+} from "../messaging";
 import Carte from '../models/carte';
 
 // Obtenir les parties dans un range acceptable
