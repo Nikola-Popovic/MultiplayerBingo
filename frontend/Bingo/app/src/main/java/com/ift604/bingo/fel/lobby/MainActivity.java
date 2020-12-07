@@ -36,17 +36,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         registerCreateUserReceiver();
         locationProvider = LocationProvider.getInstance(getApplicationContext(), this);
 
-
         Button findLobbyBtn = findViewById(R.id.menu_find_lobby_button);
         findLobbyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent lobbyIntent = new Intent(MainActivity.this, FindLobbyActivity.class);
-
                 startActivity(lobbyIntent);
             }
         });
-
 
         Button createLobbyBtn = findViewById(R.id.menu_create_game_button);
         createLobbyBtn.setOnClickListener(new View.OnClickListener() {
@@ -76,15 +73,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         playerName.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
-                {
-                    switch (keyCode)
-                    {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
                         case KeyEvent.KEYCODE_DPAD_CENTER:
                         case KeyEvent.KEYCODE_ENTER:
                             SharedPreferences settings = getSharedPreferences("UserInfo", 0);
                             SharedPreferences.Editor editor = settings.edit();
-                            editor.putString("Username",playerName.getText().toString());
+                            editor.putString("Username", playerName.getText().toString());
                             editor.commit();
                             Intent updateUserService = new Intent(getApplicationContext(), UpdateUserService.class);
                             updateUserService.putExtra(UpdateUserService.UPDATE_USER_ID_EXTRA, Util.getConnectedUserId(getApplicationContext()));
@@ -109,7 +104,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     playerName.setText(username);
                 } else {
                 }
-            }});
+            }
+        });
     }
 
     private void registerCreateUserReceiver() {

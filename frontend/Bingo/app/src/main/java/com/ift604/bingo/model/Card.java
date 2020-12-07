@@ -4,14 +4,26 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class Card implements Serializable {
+    private int id;
+    private int lobbyId;
     private HashMap<Coordinate, Box> number;
     private int maxX;
     private int maxY;
 
-    public Card(HashMap<Coordinate, Box> numbers, int maxX, int maxY) {
+    public Card(int id, int lobbyId, HashMap<Coordinate, Box> numbers, int maxX, int maxY) {
+        this.id = id;
+        this.lobbyId = lobbyId;
         this.number = numbers;
         this.maxX = maxX;
         this.maxY = maxY;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getMaxX() {
@@ -45,5 +57,13 @@ public class Card implements Serializable {
     public boolean isChecked(int x, int y)
     {
         return number.get(new Coordinate(x, y)).isMarked();
+    }
+
+    public int getLobbyId() {
+        return lobbyId;
+    }
+
+    public void setLobbyId(int lobbyId) {
+        this.lobbyId = lobbyId;
     }
 }

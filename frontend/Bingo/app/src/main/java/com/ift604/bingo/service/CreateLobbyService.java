@@ -7,6 +7,7 @@ import com.ift604.bingo.util.Util;
 
 public class CreateLobbyService extends GenericRestService {
     public final static String CREATE_LOBBY_ACTION = "CREATED_LOBBY";
+
     public final static String CREATED_LOBBY_EXTRA = "CREATED_LOBBY_EXTRA";
     public static final String USER_ID = "USER_ID";
     public static final String LOBBY_NAME = "LOBBY_NAME";

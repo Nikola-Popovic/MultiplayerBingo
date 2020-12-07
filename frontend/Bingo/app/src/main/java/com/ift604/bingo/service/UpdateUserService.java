@@ -3,12 +3,11 @@ package com.ift604.bingo.service;
 import android.content.Intent;
 
 import com.ift604.bingo.dal.RestServiceDatasource;
-import com.ift604.bingo.util.Util;
 
 public class UpdateUserService extends GenericRestService {
+    public static final String UPDATE_USER_ACTION = "UPDATE_USER_ACTION";
 
     public static final String UPDATE_USER_NAME_EXTRA = "UPDATE_USER_NAME_EXTRA";
-    public static final String UPDATE_USER_ACTION = "UPDATE_USER_ACTION";
     public static final String UPDATE_USER_ID_EXTRA = "UPDATE_USER_ID_EXTRA";
 
     public UpdateUserService() {

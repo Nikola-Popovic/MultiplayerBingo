@@ -1,7 +1,5 @@
 package com.ift604.bingo.dal.dao;
 
-import android.util.Log;
-
 import com.androidnetworking.common.ANResponse;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -29,7 +27,8 @@ public class LobbyDAO extends GenericDataHandler {
         if (response.isSuccess()) {
             return lobbyMapper.buildLobbies(response.getResult().toString());
         } else {
-            throw new Exception("Error");
+            this.handleResponseError(response);
+            return new ArrayList<>();
         }
     }
 
@@ -39,7 +38,8 @@ public class LobbyDAO extends GenericDataHandler {
         if (response.isSuccess()) {
             return lobbyMapper.buildLobby(response.getResult().toString());
         } else {
-            throw new Exception("Error");
+            this.handleResponseError(response);
+            return null;
         }
     }
 
@@ -53,7 +53,8 @@ public class LobbyDAO extends GenericDataHandler {
         if (response.isSuccess()) {
             return lobbyMapper.buildLobby(response.getResult().toString());
         } else {
-            throw new Exception("Error");
+            this.handleResponseError(response);
+            return null;
         }
     }
 
@@ -62,21 +63,22 @@ public class LobbyDAO extends GenericDataHandler {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("joueurId", String.valueOf(userId));
         ANResponse response = putDataToUrl(url, jsonObject);
-        if (response.isSuccess()) {
-
-        } else {
-            throw new Exception("Error");
+        if (!response.isSuccess()) {
+            this.handleResponseError(response);
         }
     }
 
-    public void removePersonToLobby(int lobbyId, int userId) throws Exception {
-        String url = String.format("%s/%s/%s", lobbyPath, String.valueOf(lobbyId), userPath);
+    public int addPersonToLobby(String lobbyName, int userId) throws Exception {
+        String url = String.format("%s/%s%s", lobbyPath, lobbyName, userPath);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("joueurId", String.valueOf(userId));
         ANResponse response = putDataToUrl(url, jsonObject);
         if (response.isSuccess()) {
-        } else {
-            throw new Exception("Error");
+            return Integer.valueOf(response.getResult().toString());
+        }
+        else {
+            this.handleResponseError(response);
+            return -1;
         }
     }
 
@@ -92,7 +94,8 @@ public class LobbyDAO extends GenericDataHandler {
             return lobbyMapper.mapUserToJson(response.getResult().toString());
         }
         else {
-            throw new Exception("Error");
+            this.handleResponseError(response);
+            return null;
         }
     }
 
@@ -105,12 +108,8 @@ public class LobbyDAO extends GenericDataHandler {
         jsonObject.put("username", userName);
         jsonObject.put("token", token);
         ANResponse response = putDataToUrl(url, jsonObject);
-        String msg = String.format("User%s : %s", userId, userName);
-        if (response.isSuccess()) {
-            Log.i("UPDATE_USER_SUCCESS", msg);
-        }
-        else {
-            Log.e("UPDATE_USER_FAILED", msg, response.getError().fillInStackTrace());
+        if (!response.isSuccess()) {
+            this.handleResponseError(response);
         }
     }
 
@@ -119,10 +118,8 @@ public class LobbyDAO extends GenericDataHandler {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("joueurId", String.valueOf(userId));
         ANResponse response = deleteDataToUrl(url, jsonObject);
-        if (response.isSuccess()) {
-        }
-        else {
-            throw new Exception("Error");
+        if (!response.isSuccess()) {
+            this.handleResponseError(response);
         }
     }
 

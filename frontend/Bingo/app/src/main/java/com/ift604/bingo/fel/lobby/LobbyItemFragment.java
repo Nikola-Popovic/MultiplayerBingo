@@ -10,11 +10,8 @@ import androidx.fragment.app.Fragment;
 import com.ift604.bingo.R;
 
 public class LobbyItemFragment extends Fragment {
-    
-
     public LobbyItemFragment() {
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

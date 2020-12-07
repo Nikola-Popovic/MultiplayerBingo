@@ -13,13 +13,11 @@ public class Lobby implements Serializable {
     double longitude;
     double latitude;
     Participant host;
-    //TODO GERER LA LOCATION
 
 
     public Lobby(Integer id, String name, ArrayList<Participant> participants, double longitude, double latitude) {
         this.id = id;
         this.name = name;
-        this.host = host;
         this.participants = participants;
         this.longitude = longitude;
         this.latitude = latitude;

@@ -9,11 +9,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ift604.bingo.R;
-import com.ift604.bingo.fel.game.GameActivity;
 import com.ift604.bingo.fel.lobby.MainActivity;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.service.GetLobbyByAttributeService;
@@ -25,29 +25,38 @@ public class WaitLobbyActivity extends AppCompatActivity {
     public static final String LOBBY_ID = "LOBBY_ID";
 
     public Lobby lobby;
+
     private WaitLobbyParticipantListFragment waitLobbyParticipantListFragment;
     private FrameLayout waitLobbyListFrameLayout;
-    private GetLobbyResponseReceiver getLobbyResponseReceiver;
+
     private Intent getLobbyByAttributeService;
+    private Intent startGameService;
+
+    private GetLobbyResponseReceiver getLobbyResponseReceiver;
+    private WaitLobbyReceiver startGameReceiver;
+    private TextView roomName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wait_lobby);
-        int lobbyId = getIntent().getIntExtra(LOBBY_ID, 0);
+
+        int lobbyId = getIntent().getIntExtra(LOBBY_ID, -1);
         startGetLobbyService(lobbyId);
         registerGetLobbyReceiver();
 
         waitLobbyListFrameLayout = findViewById(R.id.wait_lobby_participant_frame_layout);
+        roomName = findViewById(R.id.wait_lobby_room_name);
 
         Button cancelButton = findViewById(R.id.wait_lobby_cancel_button);
+        Button startGameButton = findViewById(R.id.wait_lobby_start_button);
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 leaveLobby();
             }
         });
-        Button startGameButton = findViewById(R.id.wait_lobby_start_button);
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,9 +64,6 @@ public class WaitLobbyActivity extends AppCompatActivity {
                 registerWaitingLobby();
             }
         });
-        //TODO WILL SUBSCRIBE HERE. WHEN A NEW PERSON ENTER THE LOBBY, HIS NAME WILL BE THERE
-        //TODO WILL SUBSCRIBE HERE. WHEN A NEW PERSON LEAVE THE LOBBY, HIS NAME WILL BE REMOVED
-        //TODO WILL SUBSCRIBE HERE. WHEN THE HOST START THE GAME, THE GameActivity SHOULD START
     }
 
     private void leaveLobby() {
@@ -78,27 +84,17 @@ public class WaitLobbyActivity extends AppCompatActivity {
 
 
     private void registerWaitingLobby() {
-        WaitLobbyReceiver receiver = new WaitLobbyReceiver();
+        startGameReceiver = new WaitLobbyReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(StartGameService.START_GAME_SERVICE);
-        registerReceiver(receiver, intentFilter);
-    }
-
-    private void startGameActivity() {
-        Intent gameIntent = new Intent(this, GameActivity.class);
-        startActivity(gameIntent);
+        intentFilter.addAction(StartGameService.START_GAME_ACTION);
+        registerReceiver(startGameReceiver, intentFilter);
     }
 
     private void startStartGameService() {
-        Intent intent = new Intent(this, StartGameService.class);
-        startService(intent);
-    }
-
-    public class WaitLobbyReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            startGameActivity();
-        }
+        startGameService = new Intent(this, StartGameService.class);
+        startGameService.putExtra(StartGameService.LOBBY_ID_PARAM, lobby.getId());
+        startGameService.putExtra(StartGameService.PLAYER_ID, Util.getConnectedUserId(this));
+        startService(startGameService);
     }
 
     private void registerGetLobbyReceiver() {
@@ -113,13 +109,6 @@ public class WaitLobbyActivity extends AppCompatActivity {
         getLobbyByAttributeService.setAction(GetLobbyByAttributeService.GET_BY_ID_ACTION);
         getLobbyByAttributeService.putExtra(GetLobbyByAttributeService.LOBBY_ID_PARAM, lobbyId);
         startService(getLobbyByAttributeService);
-    }
-
-    @Override
-    public void onDestroy() {
-        stopService(getLobbyByAttributeService);
-        unregisterReceiver(getLobbyResponseReceiver);
-        super.onDestroy();
     }
 
     public void goBackToMainActivty() {
@@ -138,14 +127,15 @@ public class WaitLobbyActivity extends AppCompatActivity {
             lobby = (Lobby) intent.getSerializableExtra(GetLobbyByAttributeService.LOBBY_EXTRA);
             if (lobby == null)
                 return;
+
+            roomName.setText(lobby.getName());
             waitLobbyParticipantListFragment = WaitLobbyParticipantListFragment.newInstance(lobby.getParticipants());
-            getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), waitLobbyParticipantListFragment, "un autre joli tag").commit();
+            getSupportFragmentManager().beginTransaction().add(waitLobbyListFrameLayout.getId(), waitLobbyParticipantListFragment, "waitLobbyListFrameLayout").commit();
 
             Button startGameButton = findViewById(R.id.wait_lobby_start_button);
             int hostId = lobby.getHost().getId();
             int userId = Util.getConnectedUserId(context);
-            if (hostId != userId)
-            {
+            if (hostId != userId) {
                 startGameButton.setEnabled(false);
                 startGameButton.setVisibility(View.GONE);
             }
@@ -153,10 +143,17 @@ public class WaitLobbyActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if ((keyCode == KeyEvent.KEYCODE_BACK))
-        {
+    public void onDestroy() {
+        super.onDestroy();
+        if(getLobbyByAttributeService != null) {
+            stopService(getLobbyByAttributeService);
+            unregisterReceiver(getLobbyResponseReceiver);
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             leaveLobby();
         }
         return super.onKeyDown(keyCode, event);
@@ -174,4 +171,14 @@ public class WaitLobbyActivity extends AppCompatActivity {
             goBackToMainActivty();
         }
     }
+
+
+    public class WaitLobbyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            stopService(startGameService);
+            unregisterReceiver(startGameReceiver);
+        }
+    }
+
 }

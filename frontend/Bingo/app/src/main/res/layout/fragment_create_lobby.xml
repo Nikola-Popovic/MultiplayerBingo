@@ -21,8 +21,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="30dp"
-            android:fontFamily="sans-serif-smallcaps"
             android:text="@string/enter_room_name"
+            android:fontFamily="sans-serif-smallcaps"
             android:textColor="#363636"
             android:textSize="24sp" />
 

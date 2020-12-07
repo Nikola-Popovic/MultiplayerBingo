@@ -1,9 +1,17 @@
 import express from 'express'
 const router = express.Router();
 import * as database from '../database'
-import Carte from "../models/carte";
 import Lobby from "../models/lobby";
 import GeoLocation from "../models/geolocation";
+import {
+  sendCardToJoueurs,
+  subscribeTokenToLobbyTopic,
+  sendAddedPlayerMessageToLobby,
+  unSubscribeTokenToLobbyTopic,
+  sendRemovedPlayerMessageToLobby,
+  sendWinnerToLobby
+} from "../messaging";
+import Carte from '../models/carte';
 
 // Obtenir les parties dans un range acceptable
 router.get("/", (req : any, res : any, next : any) => {
@@ -43,8 +51,10 @@ router.post("/", (req : any, res : any, next : any) => {
   }
 
   if (host !== null) {
-      const lobby = new Lobby(host, lobbyName, new GeoLocation(longitude, latitude));
-      res.send(lobby.toJSON());
+    const lobby = new Lobby(host, lobbyName, new GeoLocation(longitude, latitude));
+    host.setCarte(new Carte(lobby.id));
+    subscribeTokenToLobbyTopic(host.token, lobby.id);
+    res.send(lobby.toJSON());
   } else {
       res.status(400);
       res.send("Le hostId ne correspond pas a un joueur connu.");
@@ -73,6 +83,7 @@ router.post("/:id/start", (req : any, res : any, next : any) => {
       if (req.body.hostId == lobby.host.id) {
         lobby.startGame();
         database.saveLobby(lobby);
+        sendCardToJoueurs(lobby.joueurs, lobby.id);
         res.status(204).end();
       } else {
         res.status(400).send("Seul le host peut démarrer la partie.")
@@ -85,33 +96,27 @@ router.post("/:id/start", (req : any, res : any, next : any) => {
   }
 });
 
-// Créer une carte pour une partie
-router.get("/carte/:id", (req : any, res : any, next : any) => {
-  const id = parseInt(req.params.id, 10);
-  if(database.lobbyExiste(id)){
-    const carte = new Carte(id);
-    res.send(carte.toJSON());
-  }
-  else{
-    res.status(400);
-    res.send("Le id recu ne correspond pas a un lobby connu.");
-  }
-});
-
 // Ajouter un joueur à une partie
 router.put("/:id/user", (req : any, res : any, next : any) => {
   let erreur = ""
   const joueur = database.getJoueurById(parseInt(req.body.joueurId, 10));
   if(joueur != null){
-    const lobby = database.getLobbyById(parseInt(req.params.id, 10));
-    if(lobby != null) {
-      if (joueur.lobby === null) {
-        lobby.addToLobby(joueur);
-        database.saveLobby(lobby);
-        joueur.assignerALobby(lobby);
-        res.status(204).end();
+    const lobby = database.getLobbyById(parseInt(req.params.id, 10)) || database.getLobbyByName(req.params.id);
+    if(lobby != null && lobby != undefined) {
+      if (!lobby.estCommencee) {
+        if (joueur.lobby === null) {
+          lobby.addToLobby(joueur);
+          database.saveLobby(lobby);
+          joueur.assignerALobby(lobby);
+          joueur.setCarte(new Carte(lobby.id));
+          subscribeTokenToLobbyTopic(joueur.token, lobby.id);
+          sendAddedPlayerMessageToLobby(joueur, lobby.id);
+          res.send(lobby.id.toString());
+        } else {
+          erreur = "Le joueur recu est deja inscrit dans un lobby.";
+        }
       } else {
-        erreur = "Le joueur recu est deja inscrit dans un lobby.";
+        erreur = "Vous ne pouvez pas joindre une partie déjà en cours.";
       }
     }
     else {
@@ -137,6 +142,9 @@ router.delete("/:id/user", (req : any, res : any, next : any) => {
       if(joueur.lobby?.equals(lobby)) {
         lobby.removeFromLobby(joueur);
         joueur.quitterPartie();
+
+        unSubscribeTokenToLobbyTopic(joueur.token, lobby.id);
+        sendRemovedPlayerMessageToLobby(joueur, lobby.id);
 
         if (lobby.joueurs.length === 0) {
           database.deleteLobby(lobby);
@@ -171,12 +179,26 @@ router.post("/:id/win", (req : any, res : any, next : any) => {
   const lobby = database.getLobbyById(parseInt(req.params.id, 10));
   if(lobby !== undefined){
     const carte = database.getCarteById(parseInt(req.body.carteId, 10));
-    const numeroGagnants = req.body.numeros;
     if(carte !== undefined){
-      const valide = lobby.givenNumbersWereDrawn(numeroGagnants) && carte.valider(lobby.id, numeroGagnants);
-      res.send({
-        "valide" : valide
-      });
+      const joueur = database.getJoueurById(parseInt(req.body.joueurId, 10));
+      if (joueur !== undefined) {
+        if (lobby.validateCardForPlayer(joueur.id)) {
+          unSubscribeTokenToLobbyTopic(joueur.token, lobby.id);
+          sendWinnerToLobby(joueur, lobby.id);
+          lobby.stopGame();
+          lobby.joueurs.forEach(joueur => joueur.resetLobby());
+          res.send({
+            "valide" : true
+          });  
+        } else {
+          res.send({
+            "valide" : false
+          });  
+        }
+      }
+      else {
+        erreur += "Le joueur n'existe pas\n";
+      }
     }
     else {
       erreur += "La carte n'existe pas\n"

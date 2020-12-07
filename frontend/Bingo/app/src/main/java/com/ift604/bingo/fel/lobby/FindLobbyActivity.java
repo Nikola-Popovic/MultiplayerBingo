@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ift604.bingo.R;
 
 public class FindLobbyActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

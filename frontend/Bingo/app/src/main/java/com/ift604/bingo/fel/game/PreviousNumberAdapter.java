@@ -28,7 +28,7 @@ public class PreviousNumberAdapter extends RecyclerView.Adapter<PreviousNumberAd
     @Override
     public PreviousNumberAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_wait_lobby_participant_item, parent, false);
+                .inflate(R.layout.fragment_previous_number_item, parent, false);
         return new PreviousNumberAdapter.ViewHolder(view);
     }
 

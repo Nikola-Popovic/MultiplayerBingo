@@ -5,17 +5,22 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class HorizontalSpaceItemDecoration extends RecyclerView.ItemDecoration{
+public class MarginItemDecoration extends RecyclerView.ItemDecoration{
 
     private final int horizontalSpaceWidth;
+    private final int verticalSpaceWidth;
 
-    public HorizontalSpaceItemDecoration(int horizontalSpaceWidth) {
+    public MarginItemDecoration(int horizontalSpaceWidth, int verticalSpace) {
         this.horizontalSpaceWidth = horizontalSpaceWidth;
+        this.verticalSpaceWidth = verticalSpace;
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
                                RecyclerView.State state) {
         outRect.left = horizontalSpaceWidth;
+        outRect.right = horizontalSpaceWidth;
+        outRect.bottom = verticalSpaceWidth;
+        outRect.top = verticalSpaceWidth;
     }
 }

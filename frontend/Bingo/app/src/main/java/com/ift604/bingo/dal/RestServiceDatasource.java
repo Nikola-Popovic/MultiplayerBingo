@@ -2,7 +2,6 @@ package com.ift604.bingo.dal;
 
 import com.ift604.bingo.dal.dao.GameDAO;
 import com.ift604.bingo.dal.dao.LobbyDAO;
-import com.ift604.bingo.model.Card;
 import com.ift604.bingo.model.Lobby;
 import com.ift604.bingo.model.Participant;
 
@@ -15,21 +14,6 @@ public class RestServiceDatasource implements IBingoRepository {
     public RestServiceDatasource() {
         gameDAO = new GameDAO();
         lobbyDAO = new LobbyDAO();
-    }
-
-    @Override
-    public Card getPlayerCard() {
-        return gameDAO.getPlayerCard();
-    }
-
-    @Override
-    public String getPreviousNumber() {
-        return gameDAO.getPreviousNumber();
-    }
-
-    @Override
-    public void sendWinnerCardForValidation() {
-
     }
 
     @Override
@@ -54,6 +38,11 @@ public class RestServiceDatasource implements IBingoRepository {
     @Override
     public void joinLobby(int lobbyId, int userId) throws Exception {
         lobbyDAO.addPersonToLobby(lobbyId, userId);
+    }
+
+    @Override
+    public int joinLobby(String lobbyName, int userId) throws Exception {
+       return lobbyDAO.addPersonToLobby(lobbyName, userId);
     }
 
     @Override
@@ -82,5 +71,10 @@ public class RestServiceDatasource implements IBingoRepository {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Boolean winGame(int cardId, int participantId, int lobbyId) throws Exception {
+        return gameDAO.winGame(cardId, participantId, lobbyId);
     }
 }

@@ -4,19 +4,16 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.common.Priority;
+import com.ift604.bingo.exception.ResponseException;
 import com.ift604.bingo.util.ApplicationConstants;
 
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 
-public abstract class GenericDataHandler {
+public class GenericDataHandler {
     private final String serverPath = ApplicationConstants.SERVER_PATH;
     private final String basePath = "/bingo";
     protected final String apiPath = serverPath + basePath;
@@ -99,5 +96,12 @@ public abstract class GenericDataHandler {
 
         ANResponse response = request.executeForString();
         return response;
+    }
+
+
+    protected void handleResponseError(ANResponse response) throws Exception{
+        int responseCode = response.getError().getErrorCode();
+        String reason = response.getError().getErrorDetail();
+        throw new ResponseException(responseCode, reason);
     }
 }

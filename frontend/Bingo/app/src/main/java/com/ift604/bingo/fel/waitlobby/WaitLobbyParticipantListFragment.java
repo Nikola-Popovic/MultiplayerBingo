@@ -1,16 +1,22 @@
 package com.ift604.bingo.fel.waitlobby;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ift604.bingo.R;
 import com.ift604.bingo.model.Participant;
+import com.ift604.bingo.service.MyFirebaseMessagingService;
 
 import java.util.ArrayList;
 
@@ -56,11 +62,35 @@ public class WaitLobbyParticipantListFragment extends Fragment {
         waitLobbyRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         adapter = new WaitLobbyAdapter(participants);
         waitLobbyRecyclerView.setAdapter(adapter);
+
+        registerPlayerMovedLocalBroadcastReceiver();
         return view;
+    }
+
+    private void registerPlayerMovedLocalBroadcastReceiver() {
+        IntentFilter i = new IntentFilter(MyFirebaseMessagingService.PLAYER_MOVED_ACTION);
+        LocalBroadcastManager.getInstance(this.getContext()).registerReceiver(new PlayerMovedReceiver(), i);
     }
 
     public void updateRecyclerView() {
         adapter.notifyItemRangeChanged(position, participants.size());
         adapter.notifyDataSetChanged();
+    }
+
+    private class  PlayerMovedReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Participant addedParticipant = (Participant) intent.getSerializableExtra(MyFirebaseMessagingService.ADDED_PLAYER_EXTRA);
+            Participant removedParticipant = (Participant) intent.getSerializableExtra(MyFirebaseMessagingService.REMOVED_PLAYER_EXTRA);
+
+            if(addedParticipant != null && !participants.contains(addedParticipant)) {
+                participants.add(addedParticipant);
+            }
+
+            if(removedParticipant != null) {
+                participants.remove(removedParticipant);
+            }
+            updateRecyclerView();
+        }
     }
 }

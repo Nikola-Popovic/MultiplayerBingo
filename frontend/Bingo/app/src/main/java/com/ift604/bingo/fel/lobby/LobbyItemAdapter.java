@@ -53,9 +53,6 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
                 ctx = v.getContext();
                 startJoinLobbyService(item.getId());
                 registerJoinLobbyReceiver();
-//                Intent intent = new Intent(v.getContext(), WaitLobbyActivity.class);
-//                intent.putExtra(WaitLobbyActivity.LOBBY_ID, item.getId());
-//                v.getContext().startActivity(intent);
             }
         });
     }
@@ -63,7 +60,7 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
     private void registerJoinLobbyReceiver() {
         joinLobbyReceiver = new JoinLobbyReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(JoinLobbyService.JOIN_LOBBY_ACTION);
+        intentFilter.addAction(JoinLobbyService.JOIN_LOBBY_BY_ID_ACTION);
         ctx.registerReceiver(joinLobbyReceiver, intentFilter);
     }
 
@@ -77,7 +74,7 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
         joinLobbyService = new Intent(ctx, JoinLobbyService.class);
         joinLobbyService.putExtra(JoinLobbyService.LOBBY_ID, lobbyId);
         joinLobbyService.putExtra(JoinLobbyService.USER_ID, Util.getConnectedUserId(ctx));
-        joinLobbyService.setAction(JoinLobbyService.JOIN_LOBBY_ACTION);
+        joinLobbyService.setAction(JoinLobbyService.JOIN_LOBBY_BY_ID_ACTION);
         ctx.startService(joinLobbyService);
     }
 
@@ -93,7 +90,7 @@ public class LobbyItemAdapter extends RecyclerView.Adapter<LobbyItemAdapter.View
 
     private void populateData(@NonNull ViewHolder holder, Lobby item) {
         holder.lobbyName.setText(item.getName());
-        holder.playerAmount.setText(item.getParticipants().size() + " Participants");
+        holder.playerAmount.setText(item.getParticipants().size() + " " +  holder.itemView.getContext().getString(R.string.participants));
     }
 
     @Override

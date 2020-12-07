@@ -25,8 +25,8 @@ import com.ift604.bingo.util.Util;
  * create an instance of this fragment.
  */
 public class JoinLobbyFragment extends DialogFragment {
-    Intent joinLobbyService;
-    JoinLobbyReceiver joinLobbyReceiver;
+    private Intent joinLobbyService;
+    private JoinLobbyReceiver joinLobbyReceiver;
 
     public JoinLobbyFragment() {
     }
@@ -46,29 +46,30 @@ public class JoinLobbyFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_join_lobby, container, false);
         final DialogFragment dialog = this;
-        final EditText lobbyIdEditText = view.findViewById(R.id.join_lobby_id_value);
+        final EditText lobbyNameEditText = view.findViewById(R.id.join_lobby_name_value);
         view.findViewById(R.id.join_lobby_create_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String textValue = lobbyIdEditText.getText().toString();
-                if(validateNotEmpty(textValue)) {
-                    startJoinLobbyService(Integer.valueOf(lobbyIdEditText.getText().toString()));
-                    registerJoinLobbyReceiver();
-                }
-                else {
-                    Toast.makeText(dialog.getContext(), getResources().getString(R.string.error_empty_lobby_name), Toast.LENGTH_SHORT).show();
-                }
+                joinLobbyAction(lobbyNameEditText, dialog);
             }
         });
-
         view.findViewById(R.id.join_lobby_cancel_button).setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
         return view;
+    }
+
+    private void joinLobbyAction(EditText lobbyNameEditText, DialogFragment dialog) {
+        String textValue = lobbyNameEditText.getText().toString();
+        if (validateNotEmpty(textValue)) {
+            startJoinLobbyService(lobbyNameEditText.getText().toString());
+            registerJoinLobbyReceiver();
+        } else {
+            Toast.makeText(dialog.getContext(), getResources().getString(R.string.error_empty_lobby_name), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean validateNotEmpty(String textValue) {
@@ -86,18 +87,18 @@ public class JoinLobbyFragment extends DialogFragment {
         Toast.makeText(this.getContext(), R.string.error_joining, Toast.LENGTH_SHORT).show();
     }
 
-    private void startJoinLobbyService(int lobbyId) {
+    private void startJoinLobbyService(String lobbyName) {
         joinLobbyService = new Intent(getActivity(), JoinLobbyService.class);
-        joinLobbyService.putExtra(JoinLobbyService.LOBBY_ID, lobbyId);
+        joinLobbyService.putExtra(JoinLobbyService.LOBBY_NAME, lobbyName);
         joinLobbyService.putExtra(JoinLobbyService.USER_ID, Util.getConnectedUserId(getContext()));
-        joinLobbyService.setAction(JoinLobbyService.JOIN_LOBBY_ACTION);
+        joinLobbyService.setAction(JoinLobbyService.JOIN_LOBBY_BY_NAME_ACTION);
         getActivity().startService(joinLobbyService);
     }
 
     private void registerJoinLobbyReceiver() {
         joinLobbyReceiver = new JoinLobbyReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(JoinLobbyService.JOIN_LOBBY_ACTION);
+        intentFilter.addAction(JoinLobbyService.JOIN_LOBBY_BY_NAME_ACTION);
         requireActivity().registerReceiver(joinLobbyReceiver, intentFilter);
     }
 

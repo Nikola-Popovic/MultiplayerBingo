@@ -1,13 +1,12 @@
 package com.ift604.bingo.fel.game;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import com.ift604.bingo.R;
 
@@ -18,7 +17,9 @@ import com.ift604.bingo.R;
  */
 public class CardHeaderFragment extends Fragment {
     private static final String HEADER_LETTER = "headerLetter";
-    public CardHeaderFragment() { }
+
+    public CardHeaderFragment() {
+    }
 
     public static CardHeaderFragment newInstance(String headerLetter) {
         CardHeaderFragment fragment = new CardHeaderFragment();
@@ -31,7 +32,6 @@ public class CardHeaderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
