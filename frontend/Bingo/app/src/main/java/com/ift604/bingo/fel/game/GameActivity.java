@@ -81,7 +81,7 @@ public class GameActivity extends AppCompatActivity implements IListener {
         });
 
         initSwitchableLayout();
-        getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "playerCardFrameLayout").commit();
+        getSupportFragmentManager().beginTransaction().add(playerCardFrameLayout.getId(), CardFragment.newInstance(card, gameActivity), "playerCardFrameLayout").commitAllowingStateLoss();
 
         IntentFilter i = new IntentFilter(MyFirebaseMessagingService.WIN_GAME_PUSH_ACTION);
         LocalBroadcastManager.getInstance(this).registerReceiver(new WinGamePushReceiver(), i);
