@@ -29,6 +29,36 @@ export default class Carte{
         return generatedNumbers;
     }
 
+    getRow(rowId : number) : number[] {
+        return this.cases[rowId];
+    }
+
+    getColumn(colId : number) : number[] {
+        let cols : number[] = [];
+        for (let i = 0; i < Util.TAILLE_BINGO; i++) {
+            cols.push(this.cases[i][colId]);
+        }
+        return cols;
+    }
+
+    getFirstDiag() : number[] {
+        let diag = [];
+        for (let i = 0; i < Util.TAILLE_BINGO; i++) {
+            diag.push(this.cases[i][i]);
+        }
+        return diag;
+    }
+
+    getSecondDiag() : number[] {
+        let diag = [];
+        for (let i = 0; i < Util.TAILLE_BINGO; i++) {
+            for (let j = Util.TAILLE_BINGO - 1; j >= 0; j--) {
+                diag.push(this.cases[i][j]);
+            }
+        }
+        return diag;
+    }
+
     toJSON(){
         return {
             "id" : this.id,

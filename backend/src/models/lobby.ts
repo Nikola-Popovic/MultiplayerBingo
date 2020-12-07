@@ -12,7 +12,7 @@ export default class Lobby{
 
     readonly id : number;
     readonly nom : string;
-    private _boulesPiges : string[];
+    private _boulesPiges : number[];
     private _estCommencee : boolean;
     private _nextBoules : string[];
     private _terminee : boolean;
@@ -24,7 +24,7 @@ export default class Lobby{
         this._geolocation = geolocation;
         database.addLobby(this);
         this.id = Lobby.nextId++;
-        this._boulesPiges = [];
+        this._boulesPiges = [0];
         this._nextBoules = this.generateRandomNextBoules();
         this._joueurs = [];
         this._joueurs.push(this._host);
@@ -86,7 +86,7 @@ export default class Lobby{
                 console.log('clearInterval');
             } else {
                 const nextBoule = this.getNextBoule();
-                
+
                 if (nextBoule !== null) {
                     console.log(nextBoule);
                     sendNextBouleToLobby(nextBoule, this.id);
@@ -112,13 +112,49 @@ export default class Lobby{
     }
 
     private getNextBoule() : string {
-        if (this._nextBoules.length !== 0) {   
+        if (this._nextBoules.length !== 0) {
             const nextNumber = this._nextBoules.pop();
-            this._boulesPiges.push(nextNumber);
+            this._boulesPiges.push(parseInt(nextNumber.slice(1), 10));
             return nextNumber;
         } else {
             return null; // no more numbers
         }
+    }
+
+    validateCardForPlayer(joueurId : number) {
+        const carte = this.joueurs.find(joueur => joueur.id === joueurId).carte;
+
+        // Check rows
+        for (let i = 0; i < Util.TAILLE_BINGO; i++) {
+            const row = carte.getRow(i);
+            if (this.casesValides(row)) {
+                return true;
+            }
+        }
+
+        // Check columns
+        for (let i = 0; i < Util.TAILLE_BINGO; i++) {
+            const col = carte.getColumn(i);
+            if (this.casesValides(col)) {
+                return true;
+            }
+        }
+
+        // Check first diag
+        if (this.casesValides(carte.getFirstDiag())) {
+            return true;
+        }
+
+        // Check second diag
+        if (this.casesValides(carte.getSecondDiag())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private casesValides(cases : number[]) : boolean {
+        return cases.every(c => this._boulesPiges.includes(c));
     }
 
     toJSON(){
