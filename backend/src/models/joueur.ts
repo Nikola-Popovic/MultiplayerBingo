@@ -1,11 +1,13 @@
 import * as database from '../database'
 import Lobby from "./lobby";
+import Carte from './carte';
 
 export default class Joueur{
     readonly id : number;
     private _lobby : Lobby;
     private _token : string;
     private _username : string;
+    private _carte : Carte;
     static nextId : number = 0;
 
     constructor(username : string, token : string) {
@@ -46,6 +48,14 @@ export default class Joueur{
 
     updateUsername(newUsername : string) {
         this._username = newUsername;
+    }
+
+    get carte() {
+        return this._carte;
+    }
+
+    setCarte(carte : Carte) {
+        this._carte = carte;
     }
 
     toJSON(){

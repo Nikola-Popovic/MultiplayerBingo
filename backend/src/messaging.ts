@@ -1,11 +1,10 @@
 import firebase from './firebase-config';
-import Carte from './models/carte';
 import Joueur from './models/joueur';
 
-export function sendCardToTokens(tokens : string[], lobbyId : number) {
-  tokens.forEach(token => {
-    firebase.messaging().sendToDevice(token, {
-      data: formatMessage("carte", JSON.stringify(new Carte(lobbyId).toJSON()))
+export function sendCardToJoueurs(joueurs : Joueur[], lobbyId : number) {
+  joueurs.forEach(joueur => {
+    firebase.messaging().sendToDevice(joueur.token, {
+      data: formatMessage("carte", JSON.stringify(joueur.carte.toJSON()))
     }).then(response => {
       console.log(response);
     })
