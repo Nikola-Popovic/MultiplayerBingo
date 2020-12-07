@@ -111,7 +111,7 @@ router.put("/:id/user", (req : any, res : any, next : any) => {
           joueur.setCarte(new Carte(lobby.id));
           subscribeTokenToLobbyTopic(joueur.token, lobby.id);
           sendAddedPlayerMessageToLobby(joueur, lobby.id);
-          res.send(lobby.id);
+          res.send(lobby.id.toString());
         } else {
           erreur = "Le joueur recu est deja inscrit dans un lobby.";
         }
